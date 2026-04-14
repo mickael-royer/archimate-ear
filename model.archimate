@@ -1,0 +1,1440 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<archimate:model xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:archimate="http://www.archimatetool.com/archimate" name="Unicorn" id="id-1b46ed3ed39f4e5faecbf96f947811fd" version="5.8.0">
+  <folder name="Strategy" id="id-c810df2f258441329efbd1f6202c5c60" type="strategy"/>
+  <folder name="Business" id="id-9d13352d1ae74f77912b1fc0a604172b" type="business">
+    <element xsi:type="archimate:BusinessActor" name="Architects" id="id-b30ed0274e254d92ad91f02640960d5f">
+      <documentation>Use Kindle Scribe to document diagrams and ADRs.</documentation>
+      <property key="Stereotype" value="Person"/>
+    </element>
+  </folder>
+  <folder name="Application" id="id-d1b4f4c8e32944ce9a7fe6aa05c1a520" type="application">
+    <element xsi:type="archimate:ApplicationComponent" name="Zappier" id="id-f772361be26b48bf8fbe9864521287d8">
+      <documentation>Automates the process of moving email attachments from Gmail to a Google Drive folder, eliminating manual steps in the export process.</documentation>
+      <property key="Stereotype" value="System Software"/>
+      <property key="Provider" value="Zapier"/>
+      <property key="URL" value="https://zapier.com/"/>
+    </element>
+    <element xsi:type="archimate:ApplicationFunction" name="ADR" id="id-277cdefd37264f95a0d6736672f13335">
+      <property key="Stereotype" value="Component"/>
+    </element>
+    <element xsi:type="archimate:ApplicationFunction" name="MADR Tools" id="id-34c73242241f42bdaed975a99acf57ec">
+      <documentation>Markdown Architecture Decision Record Tools</documentation>
+      <property key="Stereotype" value="Component"/>
+      <property key="Github" value="https://github.com/butonic/adr-tools"/>
+    </element>
+    <element xsi:type="archimate:ApplicationComponent" name="Pusher" id="id-7c717da220df4d8091d78e0d0a2e5318">
+      <documentation>Cross-platform API for native programmatic push notifications.</documentation>
+      <property key="Stereotype" value="System Software"/>
+      <property key="URL" value="https://dashboard.pusher.com/apps/1920401"/>
+    </element>
+    <element xsi:type="archimate:ApplicationComponent" name="Google Identity" id="id-23cadf2394f844b09ad1203346db6148">
+      <documentation>Identity and Access Management for Authentication (AuthN) and Authorization (AuthZ).</documentation>
+      <property key="Stereotype" value="System Software"/>
+      <property key="Provider" value="Google"/>
+      <property key="URL" value="https://developers.google.com/identity"/>
+    </element>
+    <element xsi:type="archimate:ApplicationInterface" name="Process File" id="id-b2722dd9a3354d719c856c3e3bfd86d5">
+      <documentation>Retrieve the message sent by the publisher
+Extract the data field, which contains the file information
+Extract the file content (base64 encoded) and other info
+If content is base64 encoded, decode it first</documentation>
+      <property key="Stereotype" value="API"/>
+      <property key="Protocole" value="REST"/>
+    </element>
+    <element xsi:type="archimate:ApplicationInterface" name="List Files" id="id-2f75771465a64e258c7cf680b6e19d3d">
+      <property key="Stereotype" value="API"/>
+      <property key="Protocole" value="REST"/>
+    </element>
+    <element xsi:type="archimate:ApplicationFunction" name="FastAPI" id="id-55a0a82acbb149efa2055ed638db5ee5">
+      <documentation>## FastAPI: Technical Analysis in Local Deployment Diagram
+
+**Role:** Within the &quot;Local Deployment Diagram,&quot; FastAPI functions as the core application framework for the **File Process** microservice. It's responsible for defining and serving the API endpoints that allow external services (primarily the internal Dapr instance) to interact with the file processing functionality. Essentially, FastAPI *is* the public face of the File Process microservice.
+
+**Significance:** The choice of FastAPI highlights a commitment to building a modern, efficient, and developer-friendly API. Its significance stems from several factors:
+
+*   **High Performance:** FastAPI is renowned for its speed, leveraging asynchronous programming (ASGI) to handle concurrent requests efficiently. This is crucial for a file processing service that might handle many requests concurrently, ensuring responsiveness and scalability even under load.
+*   **Developer Productivity:** FastAPI's intuitive design, automatic data validation (using Python type hints), and built-in documentation generation significantly improve developer productivity. This allows for faster development cycles and easier maintenance of the File Process microservice.
+*   **Standard Python:** Built on standard Python type hints, FastAPI promotes code readability and reduces the risk of errors. This contributes to the overall robustness and maintainability of the application.
+*   **Integration with ASGI Servers:** FastAPI's reliance on ASGI allows it to be served efficiently by servers like Uvicorn, further enhancing its performance characteristics.
+
+**Key Characteristics:**
+
+*   **API Definition:** FastAPI defines the API endpoints (e.g., `/process-file`, `/get-status`) that allow clients to submit files for processing, check the status of processing jobs, and retrieve processed files. These endpoints are the primary interface for interacting with the File Process service.
+*   **Request Handling:** FastAPI handles incoming HTTP requests, validates the data (e.g., ensuring the uploaded file is of the correct type and size), and routes the requests to the appropriate processing logic.
+*   **Data Serialization/Deserialization:** FastAPI automatically handles the serialization of data into JSON format for API responses and deserialization of JSON data from API requests. This simplifies the process of exchanging data between the File Process service and its clients.
+
+**Relationship Interpretation:**
+
+*   **Assignment (File Process -> FastAPI):** This relationship signifies that FastAPI is the *implementation* of the File Process microservice's API layer. The File Process component *uses* FastAPI to handle API requests and responses.
+*   **Triggering (FastAPI &lt;-> Dapr):** This bidirectional triggering relationship is critical.
+    *   **FastAPI -> Dapr:** When FastAPI receives a request (e.g., to process a file), it might use Dapr to publish a message to a topic indicating that a new file is ready for processing. This allows other microservices to react to the event.
+    *   **Dapr -> FastAPI:** Dapr might invoke FastAPI endpoints directly (using service invocation) to notify the File Process service of events related to processed files (e.g., a file has been successfully processed and is ready to be retrieved from storage). This is how Dapr orchestrates the workflow and informs the File Process service. This also allows other microservices to query about the state of a file.
+
+    The bidirectional nature of this relationship underscores the tight integration between FastAPI and Dapr, where each relies on the other for orchestration and communication.
+*   **Serve (Uvicorn -> File Process):** While not directly related to FastAPI, it's important to note that Uvicorn *serves* the File Process microservice, which *includes* the FastAPI application. This means Uvicorn is the underlying server that handles the HTTP requests and responses for the FastAPI API.
+
+**Impact:**
+
+The selection and integration of FastAPI have a significant impact on the overall architecture:
+
+*   **Improved Scalability and Performance:** FastAPI's asynchronous nature and efficient request handling contribute to the scalability and performance of the file processing system.
+*   **Simplified Microservices Communication:** The integration with Dapr simplifies the communication between the File Process microservice and other services, enabling a loosely coupled and resilient architecture.
+*   **Enhanced Developer Experience:** FastAPI's intuitive design and automatic features improve developer productivity and reduce the risk of errors, leading to faster development cycles and easier maintenance.
+*   **Clear API Definition:** FastAPI provides a clear and well-defined API for the File Process microservice, making it easy for other services to integrate with it.
+
+In conclusion, FastAPI plays a crucial role in the local deployment diagram as the API framework for the File Process microservice. Its performance, developer-friendliness, and seamless integration with Dapr contribute to the overall efficiency, scalability, and maintainability of the application. The relationships highlight the tight integration of FastAPI with other components, particularly Dapr, in orchestrating the file processing workflow.</documentation>
+      <property key="Stereotype" value="Component"/>
+      <property key="URL" value="https://fastapi.tiangolo.com/"/>
+    </element>
+    <element xsi:type="archimate:ApplicationComponent" name="File Publish" id="id-6450a6cfa73e410ba0eee55bb5900e4a">
+      <documentation>Microservice to publish Markdown file</documentation>
+      <property key="Stereotype" value="Container"/>
+    </element>
+    <element xsi:type="archimate:ApplicationFunction" name="React" id="id-3e74630508444118bf671ac2ceff8826">
+      <property key="Stereotype" value="Component"/>
+    </element>
+    <element xsi:type="archimate:ApplicationFunction" name="LangChain" id="id-d631aa6a1a2c403fae343192183f1c69">
+      <property key="Stereotype" value="Component"/>
+      <property key="URL" value="https://fastapi.tiangolo.com/"/>
+    </element>
+    <element xsi:type="archimate:ApplicationComponent" name="Dependabot" id="id-26b14a455f2e4cd8988c463d2c6ef1df">
+      <documentation>Dependency Analysis</documentation>
+      <property key="Stereotype" value="System Software"/>
+    </element>
+    <element xsi:type="archimate:ApplicationComponent" name="Ionos" id="id-34b6952232f94959a809b0821c1b8d80">
+      <documentation>DNS domain and SSL Provider</documentation>
+      <property key="Stereotype" value="System Software"/>
+      <property key="Provider" value="Ionos"/>
+      <property key="URL" value="https://www.ionos.fr/"/>
+    </element>
+    <element xsi:type="archimate:ApplicationInterface" name="Auth Google" id="id-f7efd9624d5345a5bcd6ff2f40cc5250">
+      <property key="Stereotype" value="API"/>
+      <property key="Protocole" value="REST"/>
+    </element>
+    <element xsi:type="archimate:ApplicationComponent" name="Sonar Cloud" id="id-6f7332357bec47689a29e27cc45423b5">
+      <documentation>Software Quality Analysis</documentation>
+      <property key="Stereotype" value="System Software"/>
+      <property key="Provider" value="Sonarsource"/>
+      <property key="URL" value="https://sonarcloud.io/"/>
+    </element>
+    <element xsi:type="archimate:ApplicationInterface" name="Update File Extension" id="id-bfad8d2fbc6b42e3aaebdb415f8cd236">
+      <documentation>Iterate through fileIds and update each file</documentation>
+      <property key="Stereotype" value="API"/>
+      <property key="Protocole" value="REST"/>
+    </element>
+    <element xsi:type="archimate:ApplicationFunction" name="Express" id="id-dd64c49d7c8c448ba1194f1c7fdabd89">
+      <documentation>## Analysis of the 'Express' Element
+
+**Element:** Express (application-function)
+
+**Role:** Express.js serves as the core web application framework within the Backend for Frontend (BFF) microservice. Its primary role is to provide the necessary infrastructure for handling HTTP requests, defining API endpoints, and managing the flow of data between the client (presumably a frontend application) and the underlying microservices (specifically, the File Process microservice).
+
+**Significance:**
+
+*   **Abstraction of Web Server Complexity:** Express abstracts away the low-level details of handling HTTP requests and responses, allowing developers to focus on the application's business logic rather than dealing with socket programming or raw HTTP protocols.
+*   **Routing and Middleware:** Express provides a robust routing mechanism for mapping incoming requests to specific handlers. Its middleware system allows developers to add functionality to the request processing pipeline, such as authentication, authorization, logging, and request body parsing.
+*   **API Development:** Express simplifies the creation of RESTful APIs, enabling the Backend to expose endpoints for the frontend to interact with.
+*   **Ecosystem Integration:** As a widely adopted Node.js framework, Express benefits from a vast ecosystem of plugins and modules, allowing developers to easily integrate with other services and technologies.
+
+**Key Characteristics:**
+
+*   **Minimalist:** Express is a lightweight framework that provides a minimal set of core features, allowing developers to tailor it to their specific needs.
+*   **Flexible:** Express is highly flexible and can be used to build a wide range of web applications, from simple websites to complex APIs.
+*   **Asynchronous:** Express leverages the asynchronous nature of Node.js, enabling it to handle a large number of concurrent requests efficiently.
+*   **Middleware-based:** Express's middleware architecture allows developers to easily extend its functionality by adding custom or pre-built middleware components.
+
+**Relationship Interpretation:**
+
+*   **Assignment (Backend -> Express):** This relationship signifies that Express is *integral* to the Backend's functionality. The Backend *relies* on Express to provide the core web application framework capabilities. Without Express, the Backend would lack the ability to handle HTTP requests, define routes, or manage middleware.
+
+*   **Triggering (Express &lt;-> Dapr):** This bidirectional triggering relationship highlights a *tight integration* between Express and Dapr. This suggests that Express *initiates* requests to Dapr for functionalities like service invocation (calling the File Process microservice) or publishing messages to the &quot;[Topic] Files&quot; topic. Conversely, Dapr may *trigger* Express endpoints, perhaps through service invocation initiated by other microservices or based on events subscribed to via the pub/sub mechanism. This interaction suggests that Express relies on Dapr for abstracting inter-service communication complexities. For example:
+    *   Express receives a request to process a file.  It uses Dapr's service invocation to call the File Process microservice.
+    *   Express publishes a &quot;file uploaded&quot; event to the &quot;[Topic] Files&quot; topic via Dapr.
+
+In summary, Express is a fundamental component of the Backend, providing the necessary web application framework capabilities. Its tight integration with Dapr enables efficient and decoupled communication with other microservices, supporting the overall microservices architecture and promoting scalability and resilience. The relationship highlights the importance of Express for handling client requests, defining APIs, and orchestrating interactions with other components within the system.</documentation>
+      <property key="Stereotype" value="Component"/>
+      <property key="URL" value="https://expressjs.com"/>
+    </element>
+    <element xsi:type="archimate:ApplicationComponent" name="Unicorn" id="id-8677cc5dbc094b55af69912696c1b552">
+      <documentation>Handles the import, conversion, and publication of architecture artifacts.</documentation>
+      <property key="Stereotype" value="System Software"/>
+    </element>
+    <element xsi:type="archimate:ApplicationComponent" name="Google Gemini" id="id-4e007959cd554c56809c72cd6120feb8">
+      <documentation>LLM
+</documentation>
+      <property key="Stereotype" value="System Software"/>
+      <property key="URL" value="https://aistudio.google.com/"/>
+    </element>
+    <element xsi:type="archimate:ApplicationInterface" name="Download File" id="id-42dd2bdae03849258089849206c940a6">
+      <property key="Stereotype" value="API"/>
+      <property key="Protocole" value="REST"/>
+    </element>
+    <element xsi:type="archimate:ApplicationFunction" name="Drive Component" id="id-8fc5d143b92542859f89cc47e50871e8">
+      <property key="Stereotype" value="Component"/>
+    </element>
+    <element xsi:type="archimate:ApplicationInterface" name="Push File" id="id-46546ecfeff9455c9404a6722e70cf71">
+      <property key="Stereotype" value="API"/>
+      <property key="Protocole" value="REST"/>
+    </element>
+    <element xsi:type="archimate:ApplicationFunction" name="Ionic" id="id-b2f2c0e89019494db40cb2c27ae64f8c">
+      <property key="Stereotype" value="Component"/>
+    </element>
+    <element xsi:type="archimate:ApplicationFunction" name="Dapr" id="id-3072a0137067441ea1a1d26641513ba2">
+      <documentation>## Technical Analysis of 'Dapr' (application-function)
+
+Within the &quot;Local Deployment Diagram,&quot; **Dapr (application-function)** plays a crucial role as the glue that binds together the microservices architecture, specifically the Backend and File Process components. It's a key enabler for building a distributed, resilient, and scalable application, abstracting away the complexities normally associated with microservices communication.
+
+**1. Role and Significance:**
+
+*   **Microservices Abstraction:** Dapr's primary role is to simplify the development of microservices by providing a set of building blocks for common distributed system challenges. It hides the underlying infrastructure complexities of service discovery, message brokering (pub/sub), state management, and other distributed patterns. This allows developers to focus on the core business logic of their services rather than the plumbing.
+*   **Inter-Service Communication:** Dapr facilitates seamless communication between the Backend (NodeJS) and File Process (Python) microservices. By leveraging its pub/sub capabilities, Dapr enables asynchronous message exchange, decoupling the services and allowing them to operate independently.
+*   **Portable and Platform-Agnostic:** Dapr is designed to be platform-agnostic, meaning it can run on various environments, including local development setups, cloud platforms, and edge devices. This portability ensures consistency across different stages of the application lifecycle.
+*   **Event-Driven Architecture:** Dapr promotes an event-driven architecture through its pub/sub building block. The &quot;[Topic] Files&quot; topic acts as a central hub for file-related events, allowing services to react to changes in the system in a decoupled and asynchronous manner.
+
+**2. Key Characteristics:**
+
+*   **Sidecar Architecture:** Dapr typically runs as a sidecar process alongside each microservice. This means that each microservice has its own Dapr instance that handles communication and other infrastructure concerns, isolating these concerns from the application code.
+*   **Building Blocks:** Dapr provides a set of pre-built building blocks for common distributed system patterns, such as service invocation, state management, pub/sub, bindings, actors, and secrets management. These building blocks can be easily integrated into applications through APIs or SDKs.
+*   **HTTP/gRPC APIs:** Dapr exposes its building blocks through standard HTTP/gRPC APIs, allowing applications to interact with Dapr regardless of their programming language or framework.
+*   **Configuration:** Dapr's behavior is configured through declarative configuration files, allowing developers to define service discovery, pub/sub topics, and other infrastructure settings.
+
+**3. Interpretation of Relationships:**
+
+*   **Assignment (Backend -> Dapr, File Process -> Dapr):** The *assignment* relationship indicates that both the Backend and File Process microservices are dependent on Dapr for their microservices-related functionalities. They are configured to utilize Dapr's building blocks for inter-service communication and other distributed system needs. Without Dapr, these services would need to implement these functionalities themselves, increasing complexity and maintenance overhead.
+
+*   **Triggering (Express &lt;-> Dapr, FastAPI &lt;-> Dapr):** The bi-directional *triggering* relationship between Express/FastAPI and Dapr suggests a tight integration. Express/FastAPI likely trigger Dapr functions such as publishing messages to topics or invoking other services. Conversely, Dapr might trigger Express/FastAPI endpoints, for example, when a message is received on a subscribed topic or when a service invocation request is handled. This indicates a collaborative interaction where Dapr and application frameworks work together to handle requests and events.
+
+*   **Publish (Dapr -> [Topic] Files):** The *publish* relationship shows that Dapr within the Backend microservice is responsible for publishing messages to the &quot;[Topic] Files&quot; topic. These messages likely represent file-related events, such as file uploads or processing requests. This relationship highlights the Backend's role as a producer of file-related events.
+
+*   **Subscribe (Dapr -> [Topic] Files):** The *subscribe* relationship indicates that Dapr within the File Process microservice is subscribed to the &quot;[Topic] Files&quot; topic. This means that the File Process microservice receives messages published to the topic, allowing it to react to file-related events. This relationship highlights the File Process microservice's role as a consumer of file-related events.
+
+**4. Impact and Benefits:**
+
+The integration of Dapr into the local deployment architecture provides several key benefits:
+
+*   **Simplified Microservices Development:** Dapr significantly reduces the complexity of developing and deploying microservices by abstracting away infrastructure concerns.
+*   **Improved Scalability and Resilience:** The asynchronous communication enabled by Dapr's pub/sub capabilities improves the scalability and resilience of the application.
+*   **Enhanced Portability:** Dapr's platform-agnostic nature ensures that the application can be easily deployed to different environments.
+*   **Faster Development Cycles:** By providing pre-built building blocks and simplifying inter-service communication, Dapr accelerates the development process.
+
+In conclusion, Dapr is a critical component in the &quot;Local Deployment Diagram,&quot; enabling the development of a distributed, resilient, and scalable microservices architecture. Its role in abstracting away infrastructure complexities and facilitating inter-service communication makes it a valuable tool for building modern applications.</documentation>
+      <property key="Stereotype" value="Component"/>
+      <property key="URL" value="https://dapr.io"/>
+    </element>
+    <element xsi:type="archimate:ApplicationComponent" name="NodeJS" id="id-46ed68b732db4637bf8d13a0a4e58c97">
+      <documentation>## Technical Description of NodeJS (application-component)
+
+Within the context of the &quot;Local Deployment Diagram,&quot; the **NodeJS (application-component)** element represents the foundational JavaScript runtime environment upon which the Backend for Frontend (BFF) application operates. Its role is to provide the execution engine for the JavaScript code that constitutes the Backend's logic, handling incoming requests and orchestrating interactions with other components.
+
+**Role and Significance:**
+
+*   **Runtime Environment:** NodeJS serves as the core runtime environment, enabling the execution of JavaScript code outside of a web browser. This allows the Backend application, built using JavaScript, to run as a standalone service on the local development machine.
+*   **Foundation for Backend:** Without NodeJS, the Backend application cannot function. It provides the necessary libraries, APIs, and execution context for the Backend's code to be interpreted and executed.
+*   **Central Point of Execution:** All requests processed by the Backend, including those related to Google Drive access and interactions with the File Process microservice, flow through the NodeJS runtime.
+
+**Key Characteristics:**
+
+*   **Event-Driven, Non-Blocking I/O:** NodeJS utilizes an event-driven, non-blocking I/O model, which makes it highly efficient for handling concurrent requests. This is crucial for the Backend, as it needs to handle multiple requests from the frontend simultaneously.
+*   **JavaScript Ecosystem:** NodeJS benefits from the vast and mature JavaScript ecosystem, providing access to a wide range of libraries and frameworks that simplify development. The use of Express, a popular Node.js framework, highlights this benefit.
+*   **Cross-Platform Compatibility:** NodeJS is cross-platform, meaning it can run on various operating systems (Windows, macOS, Linux). This ensures a consistent development experience across different developer machines.
+*   **Single-Threaded:** While NodeJS is event-driven, it typically operates on a single thread. This necessitates careful handling of computationally intensive tasks to avoid blocking the event loop. This is less of a concern in this diagram as the focus is local deployment and the processing heavy task is handled by the File Processing service.
+
+**Relationship Interpretation:**
+
+*   **Serve (NodeJS -> Backend):** This `Serve` relationship signifies that NodeJS *provides the environment* for the Backend application to run.  It's a fundamental dependency: the Backend is dependent on NodeJS to be operational.  Without NodeJS, the Backend's code would be inert.
+
+*   **Realization (Docker -> NodeJS):** The `Realization` relationship with Docker indicates that the NodeJS environment is containerized. This is critical for achieving a consistent and reproducible development and deployment environment. Docker encapsulates NodeJS, its dependencies, and the Backend application within a container, ensuring that it runs the same way regardless of the underlying infrastructure. This solves the &quot;works on my machine&quot; problem.
+
+**Impact and Implications:**
+
+*   **Technology Stack Decisions:** The choice of NodeJS dictates that the Backend application will be written in JavaScript. This has implications for the skills required of the development team and the choice of libraries and frameworks that can be used.
+*   **Deployment Strategy:** The Docker relationship influences the deployment strategy. Containerizing NodeJS and the Backend simplifies the deployment process and ensures consistency across different environments (development, testing, production).
+*   **Performance Considerations:** The event-driven, non-blocking I/O model of NodeJS can lead to performance benefits, but it also requires careful attention to code design to avoid blocking the event loop.
+
+In summary, NodeJS is a critical element in this architecture, providing the runtime environment for the Backend application. Its characteristics and relationships with other components (particularly Docker) shape the development process, deployment strategy, and overall performance of the system. It's not just a runtime; it's a fundamental building block that enables the entire architecture to function as intended.</documentation>
+      <property key="Stereotype" value="Container"/>
+      <property key="URL" value="https://nodejs.org/"/>
+    </element>
+    <element xsi:type="archimate:ApplicationFunction" name="Gorilla Mux" id="id-842827ca5d7b4accb7774e52dafba063">
+      <documentation>Package gorilla/mux implements a request router and dispatcher for matching incoming requests to their respective handler.</documentation>
+      <property key="Stereotype" value="Component"/>
+      <property key="URL" value="https://github.com/gorilla/mux"/>
+    </element>
+    <element xsi:type="archimate:ApplicationComponent" name="Auth0" id="id-9939812ff3144fa9b26161ea5230b61e">
+      <documentation>Manages secure user authentication and access control.</documentation>
+      <property key="Stereotype" value="System Software"/>
+      <property key="Provider" value="Okta"/>
+      <property key="URL" value="https://auth0.com/"/>
+    </element>
+    <element xsi:type="archimate:ApplicationComponent" name="Github" id="id-9333c021a01049349a8c2cf164c22459">
+      <documentation>Code and Artefact repository with version control.
+</documentation>
+      <property key="Stereotype" value="System Software"/>
+      <property key="URL" value="https://github.com/mickael-royer"/>
+      <property key="Registry" value="https://github.com/mickael-royer?tab=packages"/>
+    </element>
+    <element xsi:type="archimate:ApplicationComponent" name="File Process" id="id-3ba5666df0734eeea832631cb53c15a1">
+      <documentation>Microservice to process and enhance Markdown file.</documentation>
+      <property key="Stereotype" value="Container"/>
+    </element>
+    <element xsi:type="archimate:ApplicationComponent" name="Backend" id="id-ab9ea6b441824d92bba8d5499177cb59">
+      <documentation>Backend for Frontend (BFF) to support Google Drive acces.</documentation>
+      <property key="Stereotype" value="Container"/>
+      <property key="Github" value="https://github.com/mickael-royer/unicorn-express-server"/>
+    </element>
+    <element xsi:type="archimate:ApplicationComponent" name="Podman" id="id-43cf1757be4749cf891bb01bb053a93e">
+      <documentation>## Analysis of the 'Podman' Element in the Local Deployment Diagram
+
+**Element:** Podman (application-component)
+
+**Role:** In this architecture, Podman serves as a container engine responsible for building Docker images. While Docker is the primary runtime environment, Podman takes the lead in image creation.
+
+**Significance:**
+
+*   **Development Workflow Enablement:** Podman plays a crucial role in the local development workflow. It allows developers to easily build and package their applications and microservices (NodeJS, Uvicorn/File Process) into Docker images.
+*   **Image Creation and Management:** Podman simplifies the process of creating Docker images, enabling developers to define the exact dependencies and configurations required for their applications.
+*   **Transition to Docker Runtime:** It bridges the gap between the developer's local machine and the Docker runtime environment. The images built by Podman are then used by Docker to run the applications.
+*   **Daemonless Container Engine:** Podman is a daemonless container engine, meaning it doesn't require a background daemon process to run. This can improve security and resource usage compared to traditional container engines.
+
+**Key Characteristics:**
+
+*   **OCI Compliance:** Podman adheres to the Open Container Initiative (OCI) standards for container images and runtime, ensuring compatibility with other container tools and platforms.
+*   **Rootless Container Support:** Podman supports rootless containers, allowing users to run containers without root privileges, enhancing security.
+*   **Image Building Capabilities:**  Podman provides commands and tools for building container images from Dockerfiles or other container specifications.
+*   **Integration with Docker:** Podman is designed to be compatible with Docker, allowing users to use familiar Docker commands and workflows.
+
+**Interpretation of Relationships:**
+
+*   **Triggering (Podman -> Docker):** This relationship is the most significant for understanding Podman's role. It indicates that Podman is the entity *triggering* the image building process that is then utilised by Docker. This highlights the division of labour: Podman builds the images, and Docker handles the runtime. This approach allows developers to leverage Podman's capabilities without necessarily needing root access for the entire container lifecycle. The relationship emphasizes the dependency of the Docker runtime environment on images prepared by Podman.
+
+**Impact:**
+
+The inclusion of Podman in this local deployment architecture has several key impacts:
+
+*   **Simplified Development:** Developers can easily build and package their applications into Docker images without needing to manage complex containerization processes.
+*   **Improved Security:** Podman's support for rootless containers enhances the security of the development environment.
+*   **Consistent Development Environment:** By using Podman and Docker, developers can ensure that their applications run consistently across different environments.
+*   **Streamlined Deployment:** The Docker images built by Podman can be easily deployed to other environments, such as staging or production.
+
+**In Conclusion:**
+
+Podman is a crucial component in the local deployment architecture, enabling developers to build and manage Docker images efficiently and securely. Its role in triggering the image building process provides a streamlined development workflow and ensures consistent deployment across different environments. The relationship with Docker highlights a clear division of responsibilities, with Podman focusing on image creation and Docker on runtime execution.</documentation>
+      <property key="Stereotype" value="System Software"/>
+      <property key="URL" value="https://podman.io"/>
+    </element>
+    <element xsi:type="archimate:ApplicationComponent" name="Static Website" id="id-24f99b41466d43eb8b0f54b097407765">
+      <documentation>Website to support project documentation and Architecture Decision Record</documentation>
+      <property key="Stereotype" value="Container"/>
+      <property key="Github" value="https://github.com/mickael-royer/unicorn-hugo-website"/>
+    </element>
+    <element xsi:type="archimate:ApplicationFunction" name="Hugo" id="id-88414099f14b4655abbea3c1dd07944b">
+      <property key="Stereotype" value="Component"/>
+      <property key="URL" value="https://gohugo.io/"/>
+    </element>
+    <element xsi:type="archimate:ApplicationComponent" name="Frontend" id="id-7fae6ed943914603a106a54556622377">
+      <documentation>Frontend based on Ionic and Auth0 authentication</documentation>
+      <property key="Stereotype" value="Container"/>
+      <property key="Github" value="https://github.com/mickael-royer/unicorn-ionic"/>
+    </element>
+    <element xsi:type="archimate:ApplicationComponent" name="Google Drive" id="id-ab5a0dc47c36458bbfd6a615b9db6d2c">
+      <documentation>Stores files for further processing, with secure access through Google AuthN.</documentation>
+      <property key="Stereotype" value="System Software"/>
+      <property key="Provider" value="Google"/>
+      <property key="URL" value="https://drive.google.com"/>
+    </element>
+    <element xsi:type="archimate:ApplicationComponent" name="Redis" id="id-7ceea785c13e4ec38ad4b2619709f22a">
+      <documentation>## Technical Analysis of the 'Redis' Application Component
+
+**Role:** Within the &quot;Local Deployment Diagram,&quot; Redis functions as a high-performance, in-memory data store, primarily acting as a cache. Its role is to provide fast and efficient access to frequently requested data, specifically related to files, reducing latency and improving the overall responsiveness of the system.
+
+**Significance:** Redis contributes significantly to the performance of the local deployment by:
+
+*   **Accelerating File Access:** By caching file data, Redis minimizes the need to repeatedly access slower storage mediums (e.g., disk). This is crucial for applications that require rapid retrieval of file content.
+*   **Offloading the File Process Microservice:** By caching data processed by the File Process microservice, Redis reduces the computational load on this service. This allows the File Process service to handle a higher volume of requests and maintain low latency.
+*   **Enabling Scalability:** While this diagram focuses on local deployment, the caching mechanism provided by Redis is essential for scaling the application in a production environment. By reducing the load on the backend services, Redis enables the system to handle a larger number of concurrent users and requests.
+
+**Key Characteristics:**
+
+*   **In-Memory Data Store:** Redis stores data in RAM, enabling extremely fast read and write operations. This is its defining characteristic and the primary reason for its use as a cache.
+*   **Key-Value Data Model:** Redis uses a simple key-value data model, which is well-suited for caching scenarios. This allows developers to quickly store and retrieve data using unique keys.
+*   **Persistence Options:** While primarily an in-memory store, Redis offers persistence options (e.g., snapshots, append-only file) to ensure data durability in case of server restarts. However, in a local development environment, persistence may be less critical.
+*   **Data Structures:** Redis supports various data structures beyond simple key-value pairs, such as lists, sets, and sorted sets. These can be used to implement more complex caching strategies.
+
+**Impact of Relationships:**
+
+*   **Association with [Topic] Files:** The &quot;Association&quot; relationship between Redis and &quot;[Topic] Files&quot; signifies that Redis is used to store information or data related to the files being published and subscribed to via the Dapr pub/sub system.  This suggests that Redis is caching processed file metadata, content, or other related information. This relationship reinforces Redis's role as a performance enhancer in the file processing pipeline.  Without Redis, each request for file information would require re-processing or fetching from a slower data source, significantly impacting performance.
+
+**Overall:**
+
+Redis, as an application component in this local deployment diagram, is a vital element for optimizing performance and enabling scalability. Its role as a high-speed cache for file-related data reduces latency, offloads backend services, and contributes to a more responsive and efficient application. The association with the &quot;[Topic] Files&quot; artifact clearly indicates its participation in the file processing flow, storing and retrieving data that enhances the overall performance of the application.</documentation>
+      <property key="Stereotype" value="System Software"/>
+      <property key="URL" value="https://redis.io"/>
+    </element>
+    <element xsi:type="archimate:ApplicationFunction" name="Bicep" id="id-32eed422369e4bb9be07984b36b11e89">
+      <documentation>Infrastructure as Code (IaC)
+
+https://github.com/Azure-Samples/container-apps-store-api-microservice/blob/main/deploy/main.bicep</documentation>
+      <property key="Stereotype" value="Component"/>
+    </element>
+    <element xsi:type="archimate:ApplicationComponent" name="Google Mail" id="id-c4775bc6a2a24725aefce9b64ce6b69a">
+      <documentation>Sends exported files as email attachments to a designated Gmail account.</documentation>
+      <property key="Stereotype" value="System Software"/>
+      <property key="Provider" value="Google"/>
+      <property key="URL" value="https://mail.google.com"/>
+    </element>
+    <element xsi:type="archimate:ApplicationComponent" name="Uvicorn" id="id-c35ab5f9e5f54a3a88325d3c3d27ccf0">
+      <documentation>## Technical Analysis of the Uvicorn (application-component) Element
+
+**Role:** Uvicorn serves as the primary web server responsible for running and hosting the File Process microservice. It acts as the gateway between incoming HTTP requests and the FastAPI application, handling the low-level details of network communication and request processing.
+
+**Significance:** Uvicorn's presence is crucial for the File Process microservice to function. It enables the microservice to expose its API endpoints and respond to requests from other services or clients. Its key significance lies in its ability to handle asynchronous requests efficiently, allowing the File Process microservice to process multiple file enhancement requests concurrently without blocking. This directly impacts the responsiveness and scalability of the overall system.
+
+**Key Characteristics:**
+
+*   **ASGI Server:** Uvicorn is an ASGI (Asynchronous Server Gateway Interface) server. This is a significant characteristic because ASGI is designed for modern asynchronous Python web applications. This allows Uvicorn to handle concurrent requests more efficiently compared to traditional WSGI (Web Server Gateway Interface) servers, which are synchronous.
+*   **High-Performance:** Uvicorn is known for its high performance, particularly in handling asynchronous workloads. This is critical for the File Process microservice, which might need to handle large files and complex processing tasks. A performant server ensures that the microservice doesn't become a bottleneck.
+*   **Integration with FastAPI:** Uvicorn is a recommended and well-integrated server for FastAPI applications. This means that the two technologies work seamlessly together, allowing developers to leverage the full potential of FastAPI's features.
+*   **Python-Based:** Being a Python implementation, Uvicorn aligns perfectly with the File Process microservice's Python-based FastAPI framework. This simplifies deployment and maintenance, as the entire microservice stack is built on a consistent technology platform.
+
+**Relationship Interpretation:**
+
+*   **Serve (Uvicorn -> File Process):** This `Serve` relationship clearly defines Uvicorn's primary role: it *serves* the File Process microservice. It implies that the File Process microservice depends entirely on Uvicorn to be accessible and operational. Without Uvicorn, the File Process microservice would be unable to receive and process requests.
+*   **Realization (Docker -> Uvicorn):** The `Realization` relationship `Docker -> Uvicorn` signifies that Uvicorn runs within a Docker container. This has several important implications:
+    *   **Consistent Environment:** Docker ensures that Uvicorn runs in a consistent and isolated environment, regardless of the underlying infrastructure.
+    *   **Simplified Deployment:** Docker simplifies the deployment process by packaging Uvicorn and all its dependencies into a single container image.
+    *   **Scalability:** Docker enables easy scaling of the File Process microservice by running multiple Uvicorn containers behind a load balancer.
+*    **Triggering (Podman -> Docker):** The `Triggering` relationship `Podman -> Docker` signifies that Podman is used to build the docker image that runs Uvicorn.
+    *   **Consistent Environment:** Podman ensures that the Docker images are built in a consistent and isolated environment, regardless of the underlying infrastructure.
+
+**Impact on the System:**
+
+Uvicorn's role and characteristics directly influence the overall system's performance, scalability, and maintainability. Its ability to handle asynchronous requests efficiently ensures that the File Process microservice can process files quickly and concurrently. The Docker containerization simplifies deployment and scaling, while the integration with FastAPI streamlines development and maintenance. By providing a robust and performant web server, Uvicorn contributes significantly to the overall reliability and responsiveness of the application. In essence, Uvicorn is the engine that drives the File Process microservice, ensuring it can effectively perform its core function: processing and enhancing Markdown files.</documentation>
+      <property key="Stereotype" value="Container"/>
+      <property key="URL" value="https://www.uvicorn.org/"/>
+    </element>
+  </folder>
+  <folder name="Technology &amp; Physical" id="id-b2b58d05903c4cf784e05add45cfb668" type="technology">
+    <element xsi:type="archimate:Device" name="Mobile App" id="id-7fe80af30be34640977072f17770005a">
+      <property key="Stereotype" value="Deployment Node"/>
+    </element>
+    <element xsi:type="archimate:Node" name="Cosmos DB" id="id-6fd38cb911364c7fb973e5f1dc9d9a20" profiles="id-a45bcee9403148b9b17a1ac87aa1862e">
+      <property key="Stereotype" value="Deployment Node"/>
+    </element>
+    <element xsi:type="archimate:Node" name="Storage Account" id="id-0a3d808230954fdda9c799c165774a1c" profiles="id-e2eb7c9e28bc44b9bbb9501b601f5f5c">
+      <property key="Stereotype" value="Deployment Node"/>
+    </element>
+    <element xsi:type="archimate:Node" name="Container Instance" id="id-28090da84d324eab89d677a0149ebe88" profiles="id-5faf5ad0387b48ea890416bd8ef17663">
+      <property key="Stereotype" value="Deployment Node"/>
+    </element>
+    <element xsi:type="archimate:Device" name="Kindle Scribe" id="id-c60659aa0eea46cd81b28355f0916e37">
+      <documentation>Facilitates export of documents and diagrams.</documentation>
+      <property key="Stereotype" value="Device"/>
+      <property key="Provider" value="Amazon"/>
+      <property key="URL" value="https://www.amazon.fr/gp/help/customer/display.html?nodeId=T4sq0EZZFwu9vvH3Fx"/>
+      <property key="Email" value="royerm_V64O4A@kindle.com"/>
+    </element>
+    <element xsi:type="archimate:Artifact" name="[Topic] Files" id="id-5527f8d0b7054ce9adf15c2be9ddeb91">
+      <documentation>## Technical Analysis of the '[Topic] Files' Artifact
+
+**Role and Significance:**
+
+The '[Topic] Files' artifact, designated as a topic within the Dapr pub/sub messaging system, serves as the central communication channel for events related to file processing within the application architecture. It's not a physical file storage location, but rather a logical construct within Dapr that facilitates asynchronous communication between the Backend and File Process microservices. Its significance lies in enabling loose coupling and independent scalability of these two components.
+
+**Key Characteristics:**
+
+*   **Abstraction:** '[Topic] Files' abstracts away the underlying message broker implementation used by Dapr. The microservices interact with the topic without needing to know the specifics of the message queuing system (e.g., Kafka, RabbitMQ) being used. This promotes portability and allows for easy switching of message broker implementations without impacting the application code.
+*   **Asynchronous Communication:** It embodies asynchronous communication, meaning the Backend publishes file-related events to the topic and continues its operation without waiting for a response from the File Process microservice. The File Process microservice independently subscribes to the topic and processes events as they arrive. This decouples the two services, prevents blocking, and improves overall system responsiveness.
+*   **Event-Driven Architecture:** The topic is at the heart of an event-driven architecture. Changes or actions relating to files are represented as events published to the topic. Subscribing services react to these events, triggering their own logic. This allows for flexible and extensible behavior as new services can be added to subscribe to the topic without modifying existing code.
+*   **Data Contract:** While the diagram itself doesn't explicitly define it, the '[Topic] Files' topic implicitly defines a data contract for the events being published. This contract specifies the structure and content of the messages published to the topic. Maintaining a well-defined data contract is crucial for ensuring interoperability and preventing errors as the system evolves.
+*   **Potential for Multiple Subscribers:** The pub/sub nature of the topic allows for multiple services to subscribe to '[Topic] Files'. This opens the door for adding new functionality to the application without modifying existing microservices. For example, a future microservice could subscribe to the topic to index files for search, or to generate thumbnails.
+
+**Relationship Interpretation:**
+
+*   **Publish (Dapr -> [Topic] Files):** The Backend's Dapr component *publishes* messages to the '[Topic] Files' topic. This signifies that the Backend is responsible for generating and broadcasting events related to file operations. When a user uploads a file, for example, the Backend would publish a message to the topic containing information about the file (e.g., file ID, name, location). This action triggers the processing pipeline.
+*   **Subscribe (Dapr -> [Topic] Files):** The File Process microservice's Dapr component *subscribes* to the '[Topic] Files' topic. This means the File Process microservice is actively listening for new events published to the topic. When a new file event is published, Dapr delivers the message to the File Process microservice, initiating the file processing logic. This enables the File Process microservice to react automatically to new file uploads or changes.
+*   **Association (Redis -> [Topic] Files):** Redis is *associated* to the [Topic] Files. The association with Redis suggests that Redis acts as a cache for the files published to the topic. This allows the application to store the files in a readily accessible in-memory data store. This can improve performance for scenarios where the topic is used to access the files.
+
+**Impact and Benefits:**
+
+By acting as a central communication channel, '[Topic] Files' provides the following benefits:
+
+*   **Decoupling:** The Backend and File Process microservices are decoupled, allowing them to be developed, deployed, and scaled independently.
+*   **Scalability:** Each microservice can be scaled independently based on its specific resource requirements.
+*   **Resilience:** If the File Process microservice is temporarily unavailable, the Backend can continue to publish file events without being blocked. The File Process microservice will catch up on the backlog of events when it becomes available again.
+*   **Extensibility:** New microservices can be added to subscribe to the topic without modifying existing code.
+*   **Maintainability:** The separation of concerns makes the application easier to understand, maintain, and evolve.
+
+In conclusion, the '[Topic] Files' artifact is a critical element in the application's architecture, enabling asynchronous communication, decoupling microservices, and facilitating an event-driven approach to file processing. Its role as a central communication channel provides significant benefits in terms of scalability, resilience, extensibility, and maintainability. The correct implementation and management of this topic, including a well-defined data contract, are essential for the overall success of the application.</documentation>
+    </element>
+    <element xsi:type="archimate:TechnologyService" name="App Insight" id="id-9eb81c061cf14a2bbe52fdae56e5285f"/>
+    <element xsi:type="archimate:TechnologyService" name="Azure Service Bus" id="id-2ef41a27444e4b728478c67050b7b9e2">
+      <documentation>Azure Service Bus is a fully managed enterprise message broker service provided by Microsoft Azure. It supports various messaging patterns like queues, topics, and subscriptions, helping applications communicate asynchronously. </documentation>
+      <property key="Stereotype" value="Component"/>
+    </element>
+    <element xsi:type="archimate:TechnologyService" name="Log Analytics Workspace" id="id-f964528cfbd44134b3fd6ecaad504d2a"/>
+    <element xsi:type="archimate:Node" name="Static Web App" id="id-6e9633d85fde46b192755481b003cd69" profiles="id-e2eb7c9e28bc44b9bbb9501b601f5f5c">
+      <documentation>Managed platform for building and deploying static web applications.</documentation>
+      <property key="Stereotype" value="Deployment Node"/>
+    </element>
+    <element xsi:type="archimate:Artifact" name="Files" id="id-ed23d8bcb29a41488da7e0487f2dc735">
+      <documentation>Queues: Used for one-to-one communication, where a message is sent to a queue and a single consumer reads it.</documentation>
+      <property key="Stereotype" value="Queue"/>
+    </element>
+    <element xsi:type="archimate:Node" name="Managed Environment" id="id-5692782fd78946dd93d7d67056f8fc5e">
+      <documentation>Managed environments are primarily designed for hosting Azure Functions, Web Apps, and other Azure App Services in a more controlled, secure, and scalable way.</documentation>
+      <property key="Stereotype" value="Deployment Node"/>
+    </element>
+    <element xsi:type="archimate:Node" name="Docker" id="id-a4594f7960bb4f6f83b052fceb8c9ea4">
+      <documentation>## Technical Analysis of the 'Docker' Element in the Local Deployment Diagram
+
+**Role:** Docker functions as the foundational infrastructure component responsible for containerizing both the NodeJS-based Backend and the Uvicorn-based File Process microservice. It provides the environment for packaging, distributing, and running these applications in isolated containers.
+
+**Significance:** Its significance lies in its ability to ensure consistency, portability, and reproducibility across different development environments. By encapsulating each service within a Docker container, developers can avoid environment-specific issues, simplify deployment, and guarantee that the application behaves the same way regardless of the underlying infrastructure. Docker also enables efficient resource utilization through containerization, packing multiple services onto a single physical host.
+
+**Key Characteristics:**
+
+*   **Containerization Platform:** Docker is a platform for creating, managing, and running containers. These containers are lightweight, isolated execution environments that bundle an application with all its dependencies.
+*   **Image-Based Deployment:** Docker uses images as blueprints for creating containers. These images contain the application code, runtime, system tools, system libraries, and settings required to run the application.
+*   **Isolation:** Each Docker container runs in its own isolated environment, preventing interference with other containers or the host operating system. This isolation enhances security and stability.
+*   **Portability:** Docker containers are highly portable, meaning they can be easily moved and deployed across different environments, including local development machines, testing servers, and production infrastructure.
+*   **Resource Efficiency:** Docker containers are lightweight and share the host operating system's kernel, making them more resource-efficient than traditional virtual machines.
+
+**Interpretation of Relationships:**
+
+*   **Realization (Docker -> NodeJS, Docker -> Uvicorn):** The &quot;Realization&quot; relationships are crucial. They highlight that Docker *realizes* both NodeJS and Uvicorn. This signifies that both the Backend (NodeJS based) and the File Process microservice (Uvicorn based) *run inside* Docker containers. The impact is profound:
+    *   **Standardized Execution Environment:**  It ensures that regardless of the developer's local environment, the NodeJS and Uvicorn applications will run in the same, predictable manner. This eliminates &quot;works on my machine&quot; issues.
+    *   **Simplified Deployment:** Docker provides a single unit of deployment (the container image) for each service, streamlining the deployment process.
+    *   **Dependency Management:** All necessary dependencies for both NodeJS and Uvicorn are packaged within their respective Docker images, resolving dependency conflicts and simplifying management.
+
+*   **Triggering (Podman -> Docker):** The relationship &quot;Podman triggers Docker&quot; indicates that Podman is used to build the Docker images. This suggests that Podman is the tool of choice for building and managing the Docker images, even though Docker itself is the runtime environment. This is a common setup, as Podman offers daemon-less container builds, which can be more secure and efficient in certain environments.
+
+**Overall Impact:**
+
+The presence and utilization of Docker in this local deployment architecture are fundamental to achieving a consistent, portable, and reproducible development environment. It addresses common challenges related to dependency management, environment inconsistencies, and deployment complexity, enabling developers to focus on building and testing features rather than troubleshooting environmental issues. By containerizing the core services, Docker simplifies the overall development workflow and promotes collaboration among team members.</documentation>
+      <property key="Stereotype" value="Deployment Node"/>
+    </element>
+  </folder>
+  <folder name="Motivation" id="id-1ba6b212a46f40d4b1e14e78efad61db" type="motivation"/>
+  <folder name="Implementation &amp; Migration" id="id-8b9628bd49af449d8a123ddefda9404e" type="implementation_migration"/>
+  <folder name="Other" id="id-00696b64fc564df8a66843f44d6a8354" type="other"/>
+  <folder name="Relations" id="id-44f7dd24f5304f6ea577d0727e8337da" type="relations">
+    <element xsi:type="archimate:AccessRelationship" name="Publish" id="id-d7013486af7b469790fbc6fd1563656c" source="id-3072a0137067441ea1a1d26641513ba2" target="id-ed23d8bcb29a41488da7e0487f2dc735"/>
+    <element xsi:type="archimate:AssignmentRelationship" id="id-1979ce806ef44e84bae4106e04f7e40b" source="id-5692782fd78946dd93d7d67056f8fc5e" target="id-9eb81c061cf14a2bbe52fdae56e5285f"/>
+    <element xsi:type="archimate:AssignmentRelationship" id="id-c8f93b3860e0421b9710c7219e66215f" source="id-ab9ea6b441824d92bba8d5499177cb59" target="id-3072a0137067441ea1a1d26641513ba2"/>
+    <element xsi:type="archimate:TriggeringRelationship" name="Import documents" id="id-f4300ee2df4f43c8b0a12be1a50be59e" source="id-8677cc5dbc094b55af69912696c1b552" target="id-ab5a0dc47c36458bbfd6a615b9db6d2c"/>
+    <element xsi:type="archimate:TriggeringRelationship" name="REST API" id="id-f08b3b62fb89406ab8b7f497ace8691c" source="id-3ba5666df0734eeea832631cb53c15a1" target="id-7c717da220df4d8091d78e0d0a2e5318"/>
+    <element xsi:type="archimate:TriggeringRelationship" id="id-dc96b64936c1409582a540bb1ef0046e" source="id-9333c021a01049349a8c2cf164c22459" target="id-26b14a455f2e4cd8988c463d2c6ef1df"/>
+    <element xsi:type="archimate:AssignmentRelationship" id="id-17b2cf09e1dd4e38bd80d7c1ef62ca5d" source="id-3ba5666df0734eeea832631cb53c15a1" target="id-3072a0137067441ea1a1d26641513ba2"/>
+    <element xsi:type="archimate:AssociationRelationship" id="id-7bb9b0e84b0e441cbfa42dc1bc21a825" source="id-7ceea785c13e4ec38ad4b2619709f22a" target="id-5527f8d0b7054ce9adf15c2be9ddeb91"/>
+    <element xsi:type="archimate:AssignmentRelationship" id="id-db51dbd85bf044a09f806b1360a6615e" source="id-24f99b41466d43eb8b0f54b097407765" target="id-88414099f14b4655abbea3c1dd07944b"/>
+    <element xsi:type="archimate:TriggeringRelationship" name="Export mail attachment to Drive" id="id-dc1d552b456643c5911cb3595b6ba9ae" source="id-f772361be26b48bf8fbe9864521287d8" target="id-ab5a0dc47c36458bbfd6a615b9db6d2c"/>
+    <element xsi:type="archimate:FlowRelationship" id="id-4f06e1a0f4d94df9952ffb31dd31e51e" source="id-34b6952232f94959a809b0821c1b8d80" target="id-7fae6ed943914603a106a54556622377"/>
+    <element xsi:type="archimate:TriggeringRelationship" name="update" id="id-75f4d94debb846248095bf0dbe0e13c4" source="id-9333c021a01049349a8c2cf164c22459" target="id-277cdefd37264f95a0d6736672f13335"/>
+    <element xsi:type="archimate:TriggeringRelationship" id="id-d762b0a5ae6c4d84a56fbea92b975941" source="id-dd64c49d7c8c448ba1194f1c7fdabd89" target="id-3072a0137067441ea1a1d26641513ba2"/>
+    <element xsi:type="archimate:TriggeringRelationship" id="id-f489d048e9cb444f91bfd11e66975a26" source="id-55a0a82acbb149efa2055ed638db5ee5" target="id-3072a0137067441ea1a1d26641513ba2"/>
+    <element xsi:type="archimate:FlowRelationship" id="id-c30e007c55f24dd4a83fbbf097ca791e" source="id-ab9ea6b441824d92bba8d5499177cb59" target="id-3ba5666df0734eeea832631cb53c15a1"/>
+    <element xsi:type="archimate:TriggeringRelationship" name="OIDC" id="id-f41a481c486743f9b0440e23350f59bc" source="id-7fae6ed943914603a106a54556622377" target="id-9939812ff3144fa9b26161ea5230b61e">
+      <documentation>Authorization Code Flow with PKCE
+https://auth0.com/docs/get-started/authentication-and-authorization-flow/authorization-code-flow-with-pkce</documentation>
+    </element>
+    <element xsi:type="archimate:AggregationRelationship" id="id-4935ca671bd34e7a8c4f315d3571efcc" source="id-ab9ea6b441824d92bba8d5499177cb59" target="id-2f75771465a64e258c7cf680b6e19d3d"/>
+    <element xsi:type="archimate:FlowRelationship" name="Write" id="id-ac1a09e5ae934b479107672d28c658a7" source="id-3072a0137067441ea1a1d26641513ba2" target="id-6fd38cb911364c7fb973e5f1dc9d9a20"/>
+    <element xsi:type="archimate:TriggeringRelationship" id="id-01966b5533ca41239c24f038e3b254e8" source="id-3072a0137067441ea1a1d26641513ba2" target="id-842827ca5d7b4accb7774e52dafba063"/>
+    <element xsi:type="archimate:TriggeringRelationship" id="id-7674450232594f6daad6079ce6392d41" source="id-3ba5666df0734eeea832631cb53c15a1" target="id-6450a6cfa73e410ba0eee55bb5900e4a"/>
+    <element xsi:type="archimate:ServingRelationship" name="Serve" id="id-4b3e2220a2d64fe1abd4987128f0b78d" source="id-c35ab5f9e5f54a3a88325d3c3d27ccf0" target="id-3ba5666df0734eeea832631cb53c15a1"/>
+    <element xsi:type="archimate:AccessRelationship" name="Subscribe" id="id-9865a0ed6a234c95b5662c4024b52b47" source="id-3072a0137067441ea1a1d26641513ba2" target="id-ed23d8bcb29a41488da7e0487f2dc735" accessType="1"/>
+    <element xsi:type="archimate:AggregationRelationship" id="id-55931fdc040f44cc9971d851a97809b1" source="id-6450a6cfa73e410ba0eee55bb5900e4a" target="id-46546ecfeff9455c9404a6722e70cf71"/>
+    <element xsi:type="archimate:RealizationRelationship" id="id-1c1730ce374c43ef8cd4f570cc817626" source="id-28090da84d324eab89d677a0149ebe88" target="id-46ed68b732db4637bf8d13a0a4e58c97"/>
+    <element xsi:type="archimate:TriggeringRelationship" name="Create" id="id-09fd2015f4684cd281d24b490fef0076" source="id-9333c021a01049349a8c2cf164c22459" target="id-6e9633d85fde46b192755481b003cd69"/>
+    <element xsi:type="archimate:ServingRelationship" id="id-719da024e9ca4915b167aca70b0e6bcc" source="id-6e9633d85fde46b192755481b003cd69" target="id-24f99b41466d43eb8b0f54b097407765"/>
+    <element xsi:type="archimate:TriggeringRelationship" name="Setup" id="id-01fc9e209a054d4086add4a8db681830" source="id-32eed422369e4bb9be07984b36b11e89" target="id-9eb81c061cf14a2bbe52fdae56e5285f"/>
+    <element xsi:type="archimate:AccessRelationship" name="Subscribe" id="id-cd1bcb63ad494f86b4af9c3190d8d644" source="id-3072a0137067441ea1a1d26641513ba2" target="id-5527f8d0b7054ce9adf15c2be9ddeb91" accessType="1"/>
+    <element xsi:type="archimate:CompositionRelationship" id="id-328619cbc4fe45e792278b236aa53d1c" source="id-ab9ea6b441824d92bba8d5499177cb59" target="id-f7efd9624d5345a5bcd6ff2f40cc5250"/>
+    <element xsi:type="archimate:TriggeringRelationship" name="Create Architecture Diagrams and Decision Records " id="id-95cf9618d75a449c8ee58935c5e6ec65" source="id-b30ed0274e254d92ad91f02640960d5f" target="id-c60659aa0eea46cd81b28355f0916e37"/>
+    <element xsi:type="archimate:TriggeringRelationship" name="Create" id="id-83a389eba29e49318094d7069ed89cd6" source="id-32eed422369e4bb9be07984b36b11e89" target="id-6fd38cb911364c7fb973e5f1dc9d9a20"/>
+    <element xsi:type="archimate:TriggeringRelationship" name="Triger on mail reception" id="id-1a39b744dfa74634a65e88e9427ee927" source="id-c4775bc6a2a24725aefce9b64ce6b69a" target="id-f772361be26b48bf8fbe9864521287d8"/>
+    <element xsi:type="archimate:FlowRelationship" name="prompt" id="id-a1385a28f940460fb216e2c71fdd6fba" source="id-b2722dd9a3354d719c856c3e3bfd86d5" target="id-4e007959cd554c56809c72cd6120feb8"/>
+    <element xsi:type="archimate:TriggeringRelationship" id="id-b146554c5fad424a8c46e4f63c032f82" source="id-3072a0137067441ea1a1d26641513ba2" target="id-dd64c49d7c8c448ba1194f1c7fdabd89"/>
+    <element xsi:type="archimate:TriggeringRelationship" name="Prompt" id="id-770afbce9c494940af277727bb7b6ab2" source="id-3ba5666df0734eeea832631cb53c15a1" target="id-4e007959cd554c56809c72cd6120feb8">
+      <documentation>Generate ADR Synthesis</documentation>
+    </element>
+    <element xsi:type="archimate:ServingRelationship" id="id-26d5a23c35214a049801d17bcaf1b360" source="id-28090da84d324eab89d677a0149ebe88" target="id-6450a6cfa73e410ba0eee55bb5900e4a"/>
+    <element xsi:type="archimate:RealizationRelationship" id="id-be0da7cc5b0a489eb1bcb2e5ee8e7860" source="id-a4594f7960bb4f6f83b052fceb8c9ea4" target="id-46ed68b732db4637bf8d13a0a4e58c97"/>
+    <element xsi:type="archimate:TriggeringRelationship" name="AuthN" id="id-1a082cc0f9b541a0aee3133160bf9d1c" source="id-9939812ff3144fa9b26161ea5230b61e" target="id-23cadf2394f844b09ad1203346db6148"/>
+    <element xsi:type="archimate:CompositionRelationship" id="id-d7ec70a5970545c2b9b811443754e52b" source="id-8677cc5dbc094b55af69912696c1b552" target="id-7fae6ed943914603a106a54556622377"/>
+    <element xsi:type="archimate:TriggeringRelationship" name="Trigger" id="id-5f623aa02cdd49a79dc0e439b04d618d" source="id-9333c021a01049349a8c2cf164c22459" target="id-32eed422369e4bb9be07984b36b11e89"/>
+    <element xsi:type="archimate:CompositionRelationship" id="id-49a4cb28c9384b0d8ff1986ea8c16bc7" source="id-8677cc5dbc094b55af69912696c1b552" target="id-24f99b41466d43eb8b0f54b097407765"/>
+    <element xsi:type="archimate:TriggeringRelationship" name="Create" id="id-00f340435b744e4e84f0bc651656f51a" source="id-32eed422369e4bb9be07984b36b11e89" target="id-0a3d808230954fdda9c799c165774a1c"/>
+    <element xsi:type="archimate:TriggeringRelationship" name="Push" id="id-e5bcdff943d74325925dbd9e410c124c" source="id-6450a6cfa73e410ba0eee55bb5900e4a" target="id-9333c021a01049349a8c2cf164c22459">
+      <documentation>Push change to repository via API</documentation>
+    </element>
+    <element xsi:type="archimate:FlowRelationship" name="update" id="id-d5f6db6c99614a538a0eadf90c752e21" source="id-bfad8d2fbc6b42e3aaebdb415f8cd236" target="id-ab5a0dc47c36458bbfd6a615b9db6d2c"/>
+    <element xsi:type="archimate:FlowRelationship" id="id-dad3468a3ba045ceb3a998edf21f0445" source="id-7fae6ed943914603a106a54556622377" target="id-ab9ea6b441824d92bba8d5499177cb59"/>
+    <element xsi:type="archimate:AssignmentRelationship" id="id-b2f514ae6c4448b48006d049ae44417e" source="id-3ba5666df0734eeea832631cb53c15a1" target="id-d631aa6a1a2c403fae343192183f1c69"/>
+    <element xsi:type="archimate:FlowRelationship" name="Pub/Sub" id="id-28c4974df8604b4bad917047c1403d42" source="id-42dd2bdae03849258089849206c940a6" target="id-b2722dd9a3354d719c856c3e3bfd86d5"/>
+    <element xsi:type="archimate:TriggeringRelationship" name="State store" id="id-d67f5694965e45f8ba02617c41a1c4a0" source="id-b2722dd9a3354d719c856c3e3bfd86d5" target="id-46546ecfeff9455c9404a6722e70cf71">
+      <documentation>https://docs.dapr.io/developing-applications/building-blocks/state-management/howto-get-save-state/</documentation>
+    </element>
+    <element xsi:type="archimate:TriggeringRelationship" name="REST API" id="id-bc86e99a53ec4ad2b59e4c6dba003cc9" source="id-ab9ea6b441824d92bba8d5499177cb59" target="id-23cadf2394f844b09ad1203346db6148">
+      <documentation>Get Access Token via API</documentation>
+    </element>
+    <element xsi:type="archimate:FlowRelationship" name="Read" id="id-b01c4280eb924d6bba01cf6964c4f855" source="id-3072a0137067441ea1a1d26641513ba2" target="id-6fd38cb911364c7fb973e5f1dc9d9a20"/>
+    <element xsi:type="archimate:AssignmentRelationship" id="id-4e9e6207ebf64d5c97a11e3370f91a2c" source="id-7fae6ed943914603a106a54556622377" target="id-8fc5d143b92542859f89cc47e50871e8"/>
+    <element xsi:type="archimate:TriggeringRelationship" name="Deploy" id="id-3861906234cd42b08c3ecfd2f482dfe3" source="id-9333c021a01049349a8c2cf164c22459" target="id-24f99b41466d43eb8b0f54b097407765">
+      <documentation>Deploy Hugo Website to Static Web App</documentation>
+    </element>
+    <element xsi:type="archimate:ServingRelationship" id="id-19213ede2b22454d84cb8c9b57ffb014" source="id-7fe80af30be34640977072f17770005a" target="id-7fae6ed943914603a106a54556622377"/>
+    <element xsi:type="archimate:AssignmentRelationship" id="id-d1aae0117b284b8f9da24d2d79f0d8db" source="id-6450a6cfa73e410ba0eee55bb5900e4a" target="id-3072a0137067441ea1a1d26641513ba2"/>
+    <element xsi:type="archimate:TriggeringRelationship" name="AuthN" id="id-22cf06bdb5c94746b9f93e6547b38d48" source="id-b30ed0274e254d92ad91f02640960d5f" target="id-9939812ff3144fa9b26161ea5230b61e"/>
+    <element xsi:type="archimate:FlowRelationship" name="list" id="id-5fc8f1f205a44b7bb0da12a7d21b697b" source="id-2f75771465a64e258c7cf680b6e19d3d" target="id-ab5a0dc47c36458bbfd6a615b9db6d2c"/>
+    <element xsi:type="archimate:AssignmentRelationship" id="id-e3d4a3b372f54508b0d67c9cbdf6566f" source="id-3ba5666df0734eeea832631cb53c15a1" target="id-55a0a82acbb149efa2055ed638db5ee5"/>
+    <element xsi:type="archimate:TriggeringRelationship" name="Push MADR" id="id-00789383a6c849258ce1f5c92bde6ac0" source="id-34c73242241f42bdaed975a99acf57ec" target="id-24f99b41466d43eb8b0f54b097407765"/>
+    <element xsi:type="archimate:TriggeringRelationship" name="Setup" id="id-526b3002f7d942359e709331fb906191" source="id-32eed422369e4bb9be07984b36b11e89" target="id-f964528cfbd44134b3fd6ecaad504d2a"/>
+    <element xsi:type="archimate:TriggeringRelationship" name="AuthN" id="id-b4fef12efd7f46d4a06dc56649a1b859" source="id-8677cc5dbc094b55af69912696c1b552" target="id-23cadf2394f844b09ad1203346db6148"/>
+    <element xsi:type="archimate:AggregationRelationship" id="id-5d36f1377d0b401a81f96b21996e2e0a" source="id-ab9ea6b441824d92bba8d5499177cb59" target="id-bfad8d2fbc6b42e3aaebdb415f8cd236"/>
+    <element xsi:type="archimate:CompositionRelationship" id="id-04c978555b074dfdb3606b140c75ff82" source="id-8677cc5dbc094b55af69912696c1b552" target="id-ab9ea6b441824d92bba8d5499177cb59"/>
+    <element xsi:type="archimate:AssignmentRelationship" id="id-f3f20fb5d1b64002a7bc292bf1632510" source="id-ab9ea6b441824d92bba8d5499177cb59" target="id-dd64c49d7c8c448ba1194f1c7fdabd89"/>
+    <element xsi:type="archimate:TriggeringRelationship" id="id-a1b699db53604daf9fd46c9098b705d7" source="id-3072a0137067441ea1a1d26641513ba2" target="id-55a0a82acbb149efa2055ed638db5ee5"/>
+    <element xsi:type="archimate:TriggeringRelationship" name="Webb Socket" id="id-97841f48aa9f4cefa5c688242679d8d1" source="id-7c717da220df4d8091d78e0d0a2e5318" target="id-7fae6ed943914603a106a54556622377"/>
+    <element xsi:type="archimate:CompositionRelationship" id="id-8791e692f8934dfe8a3afbe14162dac7" source="id-8677cc5dbc094b55af69912696c1b552" target="id-6450a6cfa73e410ba0eee55bb5900e4a"/>
+    <element xsi:type="archimate:TriggeringRelationship" name="Create" id="id-61c31f8f2de24951954af77db25aefe1" source="id-32eed422369e4bb9be07984b36b11e89" target="id-28090da84d324eab89d677a0149ebe88"/>
+    <element xsi:type="archimate:AggregationRelationship" id="id-c817583e92a841e18402719df500ed9b" source="id-ab9ea6b441824d92bba8d5499177cb59" target="id-42dd2bdae03849258089849206c940a6"/>
+    <element xsi:type="archimate:ServingRelationship" id="id-9d3350ea39494771a563d8a677490814" source="id-6e9633d85fde46b192755481b003cd69" target="id-7fae6ed943914603a106a54556622377"/>
+    <element xsi:type="archimate:AssociationRelationship" id="id-d1b8467f945c4a48b49cdc8b5ef6be4f" source="id-ed23d8bcb29a41488da7e0487f2dc735" target="id-2ef41a27444e4b728478c67050b7b9e2"/>
+    <element xsi:type="archimate:RealizationRelationship" id="id-a0ef5de2183244bda5a2d42541a62e21" source="id-a4594f7960bb4f6f83b052fceb8c9ea4" target="id-c35ab5f9e5f54a3a88325d3c3d27ccf0"/>
+    <element xsi:type="archimate:TriggeringRelationship" name="Export Notebooks" id="id-02da05736d4142d18abe785e6afde37a" source="id-c60659aa0eea46cd81b28355f0916e37" target="id-c4775bc6a2a24725aefce9b64ce6b69a"/>
+    <element xsi:type="archimate:AssignmentRelationship" id="id-afbe59beaf41409894b6bcbed429d492" source="id-7fae6ed943914603a106a54556622377" target="id-3e74630508444118bf671ac2ceff8826"/>
+    <element xsi:type="archimate:FlowRelationship" name="fetch" id="id-c0300d47f971414aa7174760e7a1a9f9" source="id-8fc5d143b92542859f89cc47e50871e8" target="id-ab9ea6b441824d92bba8d5499177cb59"/>
+    <element xsi:type="archimate:TriggeringRelationship" name="REST API" id="id-81cc0fd5e2c64cc5ba11526f7fae01b3" source="id-ab9ea6b441824d92bba8d5499177cb59" target="id-ab5a0dc47c36458bbfd6a615b9db6d2c">
+      <documentation>Access Google Drive via API</documentation>
+    </element>
+    <element xsi:type="archimate:TriggeringRelationship" id="id-6d3cd52e74fb40209b14804c4b7a846c" source="id-9333c021a01049349a8c2cf164c22459" target="id-6f7332357bec47689a29e27cc45423b5"/>
+    <element xsi:type="archimate:CompositionRelationship" id="id-e79a43063a0a479f929c2199a3291bb3" source="id-8677cc5dbc094b55af69912696c1b552" target="id-3ba5666df0734eeea832631cb53c15a1"/>
+    <element xsi:type="archimate:ServingRelationship" name="Serve" id="id-9eb1de313c24467db9c0096a0b73f8de" source="id-46ed68b732db4637bf8d13a0a4e58c97" target="id-ab9ea6b441824d92bba8d5499177cb59"/>
+    <element xsi:type="archimate:AssignmentRelationship" id="id-2a77865f73044ba688325fafcf629c36" source="id-24f99b41466d43eb8b0f54b097407765" target="id-277cdefd37264f95a0d6736672f13335"/>
+    <element xsi:type="archimate:AggregationRelationship" id="id-d91f564950c042bcace44b95257961da" source="id-3ba5666df0734eeea832631cb53c15a1" target="id-b2722dd9a3354d719c856c3e3bfd86d5"/>
+    <element xsi:type="archimate:TriggeringRelationship" name="Consult Architecture Diagrams and Decision Records" id="id-e8084b1435ce475ba93b7c2f005c9d90" source="id-b30ed0274e254d92ad91f02640960d5f" target="id-8677cc5dbc094b55af69912696c1b552"/>
+    <element xsi:type="archimate:TriggeringRelationship" name="List Drive" id="id-d445462d8b1f411497d5978bdd0c7c87" source="id-7fae6ed943914603a106a54556622377" target="id-ab9ea6b441824d92bba8d5499177cb59"/>
+    <element xsi:type="archimate:TriggeringRelationship" id="id-015e6cc09cb44d25a6d0fc2c4603391e" source="id-842827ca5d7b4accb7774e52dafba063" target="id-3072a0137067441ea1a1d26641513ba2"/>
+    <element xsi:type="archimate:FlowRelationship" name="push" id="id-748991bc281049f78474b3f04ba91862" source="id-46546ecfeff9455c9404a6722e70cf71" target="id-9333c021a01049349a8c2cf164c22459">
+      <documentation>https://learn.microsoft.com/en-us/rest/api/azure/devops/git/pushes/create?view=azure-devops-rest-7.1&amp;tabs=HTTP</documentation>
+    </element>
+    <element xsi:type="archimate:AssignmentRelationship" id="id-e5f094eb52684344ab6fc7a2357c0b96" source="id-6450a6cfa73e410ba0eee55bb5900e4a" target="id-842827ca5d7b4accb7774e52dafba063"/>
+    <element xsi:type="archimate:FlowRelationship" name="getToken " id="id-9713cccb368148cbb20a4beb3795ed74" source="id-f7efd9624d5345a5bcd6ff2f40cc5250" target="id-23cadf2394f844b09ad1203346db6148"/>
+    <element xsi:type="archimate:TriggeringRelationship" id="id-317539744b76461c9a6f681366f5bff2" source="id-43cf1757be4749cf891bb01bb053a93e" target="id-a4594f7960bb4f6f83b052fceb8c9ea4"/>
+    <element xsi:type="archimate:RealizationRelationship" id="id-4010b081d3aa401bbcce9c898e9b48bb" source="id-28090da84d324eab89d677a0149ebe88" target="id-c35ab5f9e5f54a3a88325d3c3d27ccf0"/>
+    <element xsi:type="archimate:AssignmentRelationship" id="id-ada9e639478a4553898706a65220a451" source="id-5692782fd78946dd93d7d67056f8fc5e" target="id-f964528cfbd44134b3fd6ecaad504d2a"/>
+    <element xsi:type="archimate:AssignmentRelationship" id="id-f2bd4346e1b040da9268e35f02471b3e" source="id-7fae6ed943914603a106a54556622377" target="id-b2f2c0e89019494db40cb2c27ae64f8c"/>
+    <element xsi:type="archimate:FlowRelationship" name="get" id="id-3ddd29ccda2c4ef887a342ed6ff5ca07" source="id-42dd2bdae03849258089849206c940a6" target="id-ab5a0dc47c36458bbfd6a615b9db6d2c"/>
+    <element xsi:type="archimate:AccessRelationship" name="Publish" id="id-b4cfb39662704a85b3da31ab11e94570" source="id-3072a0137067441ea1a1d26641513ba2" target="id-5527f8d0b7054ce9adf15c2be9ddeb91"/>
+    <element xsi:type="archimate:FlowRelationship" name="notification" id="id-7bea564049a24cd49c9199d1eb236be3" source="id-b2722dd9a3354d719c856c3e3bfd86d5" target="id-7c717da220df4d8091d78e0d0a2e5318"/>
+  </folder>
+  <folder name="Views" id="id-4702cbcb9cec4a37a4f70eda001ca4e6" type="diagrams">
+    <element xsi:type="archimate:ArchimateDiagramModel" name="Infrastructure Diagram" id="id-aa6bba59bedc4902a09863ce94ee46c9">
+      <child xsi:type="archimate:DiagramObject" id="id-65c01b48811d4c26a0f80f54e22fba00" targetConnections="id-85fb5412864f46f6a717b37e456b868b" font="1|Lucida Grande|12.0|1|COCOA|1|LucidaGrande-Bold" fontColor="#f6f4f5" fillColor="#265296" archimateElement="id-28090da84d324eab89d677a0149ebe88">
+        <bounds x="96" y="264" width="193" height="73"/>
+        <feature name="labelExpression" value="${name}&#xA;&#xA;[${property:Stereotype}]&#xA;${documentation}"/>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="id-f6ad890d810742fbbb979bfaad08075c" targetConnections="id-ebb1e49224004abfa29cd6e44df0b893" font="1|Lucida Grande|12.0|1|COCOA|1|LucidaGrande-Bold" fontColor="#f6f4f5" fillColor="#265296" archimateElement="id-6fd38cb911364c7fb973e5f1dc9d9a20">
+        <bounds x="324" y="264" width="193" height="73"/>
+        <feature name="labelExpression" value="${name}&#xA;&#xA;[${property:Stereotype}]&#xA;${documentation}"/>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="id-67d6413ba030476abee2c716b3ac5519" targetConnections="id-b4c56ccb4dc04439b2a2fcfac2fb2a6c" font="1|Lucida Grande|12.0|1|COCOA|1|LucidaGrande-Bold" fontColor="#f6f4f5" fillColor="#265296" archimateElement="id-0a3d808230954fdda9c799c165774a1c">
+        <bounds x="552" y="264" width="193" height="73"/>
+        <feature name="labelExpression" value="${name}&#xA;&#xA;[${property:Stereotype}]&#xA;${documentation}"/>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="id-90fdfc29986b4ee3b18872cb41eb72b7" targetConnections="id-c04109a621f04e5c8f56b13774a1168c" font="1|Lucida Grande|12.0|1|COCOA|1|LucidaGrande-Bold" fillColor="#c3baab" imagePath="images/_dwUY0LunEe-cRtvJaqPkAA.png" archimateElement="id-32eed422369e4bb9be07984b36b11e89">
+        <bounds x="180" y="144" width="457" height="73"/>
+        <feature name="labelExpression" value="${name}&#xA;&#xA;[${property:Stereotype}]&#xA;${documentation}"/>
+        <feature name="imageSource" value="1"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-0f88cb06394e4d32a2d8274082184bef" source="id-90fdfc29986b4ee3b18872cb41eb72b7" target="id-c1453ee5460848d6a0cd5f2168bae2fa" archimateRelationship="id-01fc9e209a054d4086add4a8db681830"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-00660647068a4468a90cd556ab3fcdd5" source="id-90fdfc29986b4ee3b18872cb41eb72b7" target="id-0b047a344ff14d1681840c6474e902a2" archimateRelationship="id-526b3002f7d942359e709331fb906191"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-85fb5412864f46f6a717b37e456b868b" source="id-90fdfc29986b4ee3b18872cb41eb72b7" target="id-65c01b48811d4c26a0f80f54e22fba00" archimateRelationship="id-61c31f8f2de24951954af77db25aefe1"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-ebb1e49224004abfa29cd6e44df0b893" source="id-90fdfc29986b4ee3b18872cb41eb72b7" target="id-f6ad890d810742fbbb979bfaad08075c" archimateRelationship="id-83a389eba29e49318094d7069ed89cd6"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-b4c56ccb4dc04439b2a2fcfac2fb2a6c" source="id-90fdfc29986b4ee3b18872cb41eb72b7" target="id-67d6413ba030476abee2c716b3ac5519" archimateRelationship="id-00f340435b744e4e84f0bc651656f51a"/>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="id-a4d61d6e19554b60a3d4069e484ce5a0" font="1|Lucida Grande|12.0|1|COCOA|1|LucidaGrande-Bold" fontColor="#f6f4f5" fillColor="#265296" archimateElement="id-5692782fd78946dd93d7d67056f8fc5e">
+        <bounds x="180" y="-24" width="445" height="133"/>
+        <feature name="labelExpression" value="${name}&#xA;&#xA;[${property:Stereotype}]&#xA;"/>
+        <feature name="iconColor" value="#f6f4f5"/>
+        <feature name="imageSource" value="1"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-dda83b08e02f4e3b8dc3c74dbe113ddd" source="id-a4d61d6e19554b60a3d4069e484ce5a0" target="id-c1453ee5460848d6a0cd5f2168bae2fa" archimateRelationship="id-1979ce806ef44e84bae4106e04f7e40b"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-baa1c1220eef4034a99d690d84f59258" source="id-a4d61d6e19554b60a3d4069e484ce5a0" target="id-0b047a344ff14d1681840c6474e902a2" archimateRelationship="id-ada9e639478a4553898706a65220a451"/>
+        <child xsi:type="archimate:DiagramObject" id="id-c1453ee5460848d6a0cd5f2168bae2fa" targetConnections="id-0f88cb06394e4d32a2d8274082184bef id-dda83b08e02f4e3b8dc3c74dbe113ddd" font="1|Lucida Grande|12.0|1|COCOA|1|LucidaGrande-Bold" fontColor="#f6f4f5" fillColor="#59abdf" imagePath="images/_hJhz8H_nEe2cRdVGGBa1OQ.png" archimateElement="id-9eb81c061cf14a2bbe52fdae56e5285f">
+          <bounds x="48" y="60" width="144" height="55"/>
+          <feature name="imageSource" value="1"/>
+        </child>
+        <child xsi:type="archimate:DiagramObject" id="id-0b047a344ff14d1681840c6474e902a2" targetConnections="id-00660647068a4468a90cd556ab3fcdd5 id-baa1c1220eef4034a99d690d84f59258" font="1|Lucida Grande|12.0|1|COCOA|1|LucidaGrande-Bold" fontColor="#f6f4f5" fillColor="#59abdf" imagePath="images/_kVPiAH_nEe2cRdVGGBa1OQ.png" archimateElement="id-f964528cfbd44134b3fd6ecaad504d2a">
+          <bounds x="264" y="60" width="144" height="55"/>
+          <feature name="imageSource" value="1"/>
+        </child>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="id-0b7ffd4d75c1493bb02c6590ee4a2574" targetConnections="id-f6f0bf81319a489f81996d279e60f55c" font="1|Lucida Grande|12.0|1|COCOA|1|LucidaGrande-Bold" fontColor="#f6f4f5" fillColor="#265296" imagePath="images/_MA8uALytEe-cRtvJaqPkAA.png" archimateElement="id-6e9633d85fde46b192755481b003cd69">
+        <bounds x="700" y="-12" width="193" height="73"/>
+        <feature name="labelExpression" value="${name}&#xA;&#xA;[${property:Stereotype}]"/>
+        <feature name="imageSource" value="1"/>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="id-5397f78fa5a341d79baccd8219070a02" font="1|Lucida Grande|12.0|1|COCOA|1|LucidaGrande-Bold" fontColor="#f6f4f5" fillColor="#696b3b" imagePath="images/_h_LMQJ4WEe-Bq6D0178Q-g.png" archimateElement="id-9333c021a01049349a8c2cf164c22459">
+        <bounds x="720" y="144" width="154" height="73"/>
+        <feature name="labelExpression" value="${name}&#xA;&#xA;[${property:Stereotype}]"/>
+        <feature name="iconColor" value="#f6f4f5"/>
+        <feature name="imageSource" value="1"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-8ca0e83636cc4c4dae1e438da57cb79d" source="id-5397f78fa5a341d79baccd8219070a02" target="id-f979a06274b8460dbffcc84401695bc1" archimateRelationship="id-6d3cd52e74fb40209b14804c4b7a846c"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-29c6949e37d142118fb2488618d293cf" source="id-5397f78fa5a341d79baccd8219070a02" target="id-6ebc39d43c894954b04dee7f730f561f" archimateRelationship="id-dc96b64936c1409582a540bb1ef0046e"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-c04109a621f04e5c8f56b13774a1168c" source="id-5397f78fa5a341d79baccd8219070a02" target="id-90fdfc29986b4ee3b18872cb41eb72b7" archimateRelationship="id-5f623aa02cdd49a79dc0e439b04d618d"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-f6f0bf81319a489f81996d279e60f55c" source="id-5397f78fa5a341d79baccd8219070a02" target="id-0b7ffd4d75c1493bb02c6590ee4a2574" archimateRelationship="id-09fd2015f4684cd281d24b490fef0076"/>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="id-f979a06274b8460dbffcc84401695bc1" targetConnections="id-8ca0e83636cc4c4dae1e438da57cb79d" font="1|Lucida Grande|12.0|1|COCOA|1|LucidaGrande-Bold" fontColor="#f6f4f5" fillColor="#696b3b" imagePath="images/_XUPTkJ4WEe-Bq6D0178Q-g.png" archimateElement="id-6f7332357bec47689a29e27cc45423b5">
+        <bounds x="929" y="192" width="181" height="85"/>
+        <feature name="labelExpression" value="${name}&#xA;&#xA;[${property:Stereotype}]&#xA;${documentation}"/>
+        <feature name="iconColor" value="#f6f4f5"/>
+        <feature name="imageSource" value="1"/>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="id-6ebc39d43c894954b04dee7f730f561f" targetConnections="id-29c6949e37d142118fb2488618d293cf" font="1|Lucida Grande|12.0|1|COCOA|1|LucidaGrande-Bold" fontColor="#f6f4f5" fillColor="#696b3b" archimateElement="id-26b14a455f2e4cd8988c463d2c6ef1df">
+        <bounds x="929" y="84" width="181" height="85"/>
+        <feature name="labelExpression" value="${name}&#xA;&#xA;[${property:Stereotype}]&#xA;${documentation}"/>
+        <feature name="iconColor" value="#f6f4f5"/>
+      </child>
+      <documentation>Infrastructure diagram with an emphasis on infrastructure as code (IaC), automation, and quality assurance. 
+
+- Bicep (IaC Component)
+Automates the provisioning of infrastructure (Container Instances, Cosmos DB, Storage Account) within a Managed Environment. It ensures repeatability and consistency.
+- Managed Environment
+Provides observability through App Insights and Log Analytics Workspace, addressing monitoring and operational concerns.
+- GitHub
+Acts as the source code repository and orchestrates triggers for creating deployment nodes (e.g., Static Web App) and integrating automated quality and security checks.
+
+DevSecOps Integrations:
+
+- Dependabot
+Performs dependency analysis to identify outdated or vulnerable libraries.
+- SonarCloud
+Conducts software quality analysis, ensuring code adheres to security and quality standards.
+
+This architecture enforces secure, automated deployment practices while maintaining visibility, ensuring infrastructure consistency, and embedding security checks early in the CI/CD pipeline.</documentation>
+    </element>
+    <element xsi:type="archimate:ArchimateDiagramModel" name="Deployement Diagram" id="id-8058272881a4403d98a7eb2749ed3f50">
+      <child xsi:type="archimate:DiagramObject" id="id-b09a91bf927042b3bc70d8ba72203ec0" targetConnections="id-bc54556223ff49b2bc3180b5cc10f149" font="1|Lucida Grande|12.0|1|COCOA|1|LucidaGrande-Bold" fontColor="#f6f4f5" fillColor="#698199" imagePath="images/_NnydwLuhEe-cRtvJaqPkAA.png" archimateElement="id-46ed68b732db4637bf8d13a0a4e58c97">
+        <bounds x="85" y="96" width="180" height="109"/>
+        <feature name="labelExpression" value="${name}&#xA;&#xA;[${property:Stereotype}]&#xA;${documentation}"/>
+        <feature name="imageSource" value="1"/>
+        <feature name="iconColor" value="#f6f4f5"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-74ebe88dec064c2084aedcff500af642" source="id-b09a91bf927042b3bc70d8ba72203ec0" target="id-f3776793ac634360aa7888de0c5d66e3" archimateRelationship="id-9eb1de313c24467db9c0096a0b73f8de"/>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="id-f3776793ac634360aa7888de0c5d66e3" targetConnections="id-74ebe88dec064c2084aedcff500af642 id-96c3d4199e85449bbb096e92f62977f4" font="1|Lucida Grande|12.0|1|COCOA|1|LucidaGrande-Bold" fontColor="#f6f4f5" fillColor="#698199" imagePath="images/_GNMmYLufEe-cRtvJaqPkAA.png" archimateElement="id-ab9ea6b441824d92bba8d5499177cb59">
+        <bounds x="336" y="60" width="409" height="181"/>
+        <feature name="labelExpression" value="${name}&#xA;&#xA;[${property:Stereotype}]&#xA;${documentation}"/>
+        <feature name="imageSource" value="1"/>
+        <feature name="iconColor" value="#f6f4f5"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-e45dad32a6ce4e639140ead8269ec65f" source="id-f3776793ac634360aa7888de0c5d66e3" target="id-5335fbba865b4a3692f6605d8741c71d" archimateRelationship="id-f3f20fb5d1b64002a7bc292bf1632510"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-5977ec06187548938dfcb081f35a6885" source="id-f3776793ac634360aa7888de0c5d66e3" target="id-3b1429205f524dae8d8342913cb6501b" archimateRelationship="id-c8f93b3860e0421b9710c7219e66215f"/>
+        <child xsi:type="archimate:DiagramObject" id="id-5335fbba865b4a3692f6605d8741c71d" targetConnections="id-e45dad32a6ce4e639140ead8269ec65f id-a173e585aa2742e2ac9206e372a29fce" font="1|Lucida Grande|12.0|1|COCOA|1|LucidaGrande-Bold" fillColor="#c3baab" imagePath="images/_B7uUsLugEe-cRtvJaqPkAA.png" archimateElement="id-dd64c49d7c8c448ba1194f1c7fdabd89">
+          <bounds x="216" y="84" width="154" height="73"/>
+          <feature name="labelExpression" value="${name}&#xA;&#xA;[${property:Stereotype}]&#xA;"/>
+          <feature name="imageSource" value="1"/>
+          <sourceConnection xsi:type="archimate:Connection" id="id-a27e4476d26544079c3adcf4cdfadd07" source="id-5335fbba865b4a3692f6605d8741c71d" target="id-3b1429205f524dae8d8342913cb6501b" archimateRelationship="id-d762b0a5ae6c4d84a56fbea92b975941">
+            <bendpoint startX="-89" startY="12" endX="91" endY="12"/>
+          </sourceConnection>
+        </child>
+        <child xsi:type="archimate:DiagramObject" id="id-3b1429205f524dae8d8342913cb6501b" targetConnections="id-5977ec06187548938dfcb081f35a6885 id-a27e4476d26544079c3adcf4cdfadd07" font="1|Lucida Grande|12.0|1|COCOA|1|LucidaGrande-Bold" fillColor="#c3baab" imagePath="images/_da7w8LuiEe-cRtvJaqPkAA.png" archimateElement="id-3072a0137067441ea1a1d26641513ba2">
+          <bounds x="36" y="84" width="154" height="73"/>
+          <feature name="labelExpression" value="${name}&#xA;&#xA;[${property:Stereotype}]&#xA;"/>
+          <feature name="imageSource" value="1"/>
+          <sourceConnection xsi:type="archimate:Connection" id="id-038cea26d60a4b56a69afbe048cab09d" source="id-3b1429205f524dae8d8342913cb6501b" target="id-8b5279c6289e43d389dad91cc655f814" archimateRelationship="id-d7013486af7b469790fbc6fd1563656c">
+            <bendpoint startX="7" startY="72" endY="-48"/>
+          </sourceConnection>
+          <sourceConnection xsi:type="archimate:Connection" id="id-a173e585aa2742e2ac9206e372a29fce" source="id-3b1429205f524dae8d8342913cb6501b" target="id-5335fbba865b4a3692f6605d8741c71d" archimateRelationship="id-b146554c5fad424a8c46e4f63c032f82">
+            <bendpoint startX="91" startY="-12" endX="-89" endY="-12"/>
+          </sourceConnection>
+        </child>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="id-61d909be62184036ac52c9f4042826c8" font="1|Lucida Grande|12.0|1|COCOA|1|LucidaGrande-Bold" fontColor="#f6f4f5" fillColor="#265296" archimateElement="id-28090da84d324eab89d677a0149ebe88">
+        <bounds x="78" y="264" width="193" height="73"/>
+        <feature name="labelExpression" value="${name}&#xA;&#xA;[${property:Stereotype}]&#xA;${documentation}"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-bc54556223ff49b2bc3180b5cc10f149" source="id-61d909be62184036ac52c9f4042826c8" target="id-b09a91bf927042b3bc70d8ba72203ec0" archimateRelationship="id-1c1730ce374c43ef8cd4f570cc817626"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-e08fbc313df44ee2a252f0376a96be1d" source="id-61d909be62184036ac52c9f4042826c8" target="id-2e866f0938fc445da3672e53b80e31e1" archimateRelationship="id-4010b081d3aa401bbcce9c898e9b48bb"/>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="id-cbb6ea7800174c089ba745e326ee6af2" targetConnections="id-331aeec631c148cc9641310a0ddf2878" font="1|Lucida Grande|12.0|1|COCOA|1|LucidaGrande-Bold" fontColor="#f6f4f5" fillColor="#265296" imagePath="images/_GvdsULunEe-cRtvJaqPkAA.png" archimateElement="id-2ef41a27444e4b728478c67050b7b9e2">
+        <bounds x="539" y="273" width="193" height="55"/>
+        <feature name="imageSource" value="1"/>
+        <feature name="labelExpression" value="${name}&#xA;&#xA;[${property:Stereotype}]&#xA;${documentation}"/>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="id-8b5279c6289e43d389dad91cc655f814" targetConnections="id-038cea26d60a4b56a69afbe048cab09d id-2fc1b6840c3c40e19389890e30196bd6" fontColor="#fbfbfb" fillColor="#265296" textPosition="1" archimateElement="id-ed23d8bcb29a41488da7e0487f2dc735">
+        <bounds x="396" y="273" width="120" height="55"/>
+        <feature name="labelExpression" value="${name}&#xA;&#xA;[${property:Stereotype}]&#xA;${documentation}"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-331aeec631c148cc9641310a0ddf2878" source="id-8b5279c6289e43d389dad91cc655f814" target="id-cbb6ea7800174c089ba745e326ee6af2" archimateRelationship="id-d1b8467f945c4a48b49cdc8b5ef6be4f"/>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="id-2e866f0938fc445da3672e53b80e31e1" targetConnections="id-e08fbc313df44ee2a252f0376a96be1d" font="1|Lucida Grande|12.0|1|COCOA|1|LucidaGrande-Bold" fontColor="#f6f4f5" fillColor="#698199" imagePath="images/_xIaBILuiEe-cRtvJaqPkAA.png" archimateElement="id-c35ab5f9e5f54a3a88325d3c3d27ccf0">
+        <bounds x="85" y="408" width="180" height="97"/>
+        <feature name="labelExpression" value="${name}&#xA;&#xA;[${property:Stereotype}]&#xA;${documentation}"/>
+        <feature name="imageSource" value="1"/>
+        <feature name="iconColor" value="#f6f4f5"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-0dd76662449441bf8bf366983e67c2c3" source="id-2e866f0938fc445da3672e53b80e31e1" target="id-d4d300fb17094d8ab3212a1ca4250d0d" archimateRelationship="id-4b3e2220a2d64fe1abd4987128f0b78d"/>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="id-d4d300fb17094d8ab3212a1ca4250d0d" targetConnections="id-0dd76662449441bf8bf366983e67c2c3" font="1|Lucida Grande|12.0|1|COCOA|1|LucidaGrande-Bold" fontColor="#f6f4f5" fillColor="#698199" imagePath="images/_IJtWYLufEe-cRtvJaqPkAA.png" archimateElement="id-3ba5666df0734eeea832631cb53c15a1">
+        <bounds x="336" y="360" width="409" height="169"/>
+        <feature name="labelExpression" value="${name}&#xA;&#xA;[${property:Stereotype}]&#xA;${documentation}"/>
+        <feature name="imageSource" value="1"/>
+        <feature name="iconColor" value="#f6f4f5"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-fe2e7e5ed77f46bf82652536f5d28ef8" source="id-d4d300fb17094d8ab3212a1ca4250d0d" target="id-883620885f294fe3998ae9b6bbf8fbaf" archimateRelationship="id-17b2cf09e1dd4e38bd80d7c1ef62ca5d"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-ffaf3028daab46e6889771c3a36d28e1" source="id-d4d300fb17094d8ab3212a1ca4250d0d" target="id-c585c5bb48a64fe49421b69739622afa" archimateRelationship="id-e3d4a3b372f54508b0d67c9cbdf6566f"/>
+        <child xsi:type="archimate:DiagramObject" id="id-883620885f294fe3998ae9b6bbf8fbaf" targetConnections="id-fe2e7e5ed77f46bf82652536f5d28ef8 id-e51cb8eac3434e52abf88e702d753f49" font="1|Lucida Grande|12.0|1|COCOA|1|LucidaGrande-Bold" fillColor="#c3baab" imagePath="images/_da7w8LuiEe-cRtvJaqPkAA.png" archimateElement="id-3072a0137067441ea1a1d26641513ba2">
+          <bounds x="36" y="72" width="154" height="73"/>
+          <feature name="labelExpression" value="${name}&#xA;&#xA;[${property:Stereotype}]&#xA;"/>
+          <feature name="imageSource" value="1"/>
+          <sourceConnection xsi:type="archimate:Connection" id="id-2fc1b6840c3c40e19389890e30196bd6" source="id-883620885f294fe3998ae9b6bbf8fbaf" target="id-8b5279c6289e43d389dad91cc655f814" archimateRelationship="id-9865a0ed6a234c95b5662c4024b52b47">
+            <bendpoint startX="7" startY="-120" endY="48"/>
+          </sourceConnection>
+          <sourceConnection xsi:type="archimate:Connection" id="id-79c602b3096a41de87ce92d50a410005" source="id-883620885f294fe3998ae9b6bbf8fbaf" target="id-c585c5bb48a64fe49421b69739622afa" archimateRelationship="id-a1b699db53604daf9fd46c9098b705d7">
+            <bendpoint startX="103" startY="-12" endX="-101" endY="-12"/>
+          </sourceConnection>
+          <sourceConnection xsi:type="archimate:Connection" id="id-9951f292580a42399902cd87d9594ec4" source="id-883620885f294fe3998ae9b6bbf8fbaf" target="id-68936988404b488994f7a63e59544222" archimateRelationship="id-ac1a09e5ae934b479107672d28c658a7"/>
+        </child>
+        <child xsi:type="archimate:DiagramObject" id="id-c585c5bb48a64fe49421b69739622afa" targetConnections="id-ffaf3028daab46e6889771c3a36d28e1 id-79c602b3096a41de87ce92d50a410005" font="1|Lucida Grande|12.0|1|COCOA|1|LucidaGrande-Bold" fillColor="#c3baab" imagePath="images/__hkmcLufEe-cRtvJaqPkAA.png" archimateElement="id-55a0a82acbb149efa2055ed638db5ee5">
+          <bounds x="216" y="72" width="154" height="73"/>
+          <feature name="labelExpression" value="${name}&#xA;&#xA;[${property:Stereotype}]&#xA;"/>
+          <feature name="imageSource" value="1"/>
+          <sourceConnection xsi:type="archimate:Connection" id="id-e51cb8eac3434e52abf88e702d753f49" source="id-c585c5bb48a64fe49421b69739622afa" target="id-883620885f294fe3998ae9b6bbf8fbaf" archimateRelationship="id-f489d048e9cb444f91bfd11e66975a26">
+            <bendpoint startX="-89" startY="12" endX="91" endY="12"/>
+          </sourceConnection>
+        </child>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="id-f2b66cc69afd4c20b00df61add343774" targetConnections="id-c4efeb7caeb44329bbd52f564463eccf id-fd582b7a36da4ba98d6a75cc667b6138" font="1|Lucida Grande|12.0|1|COCOA|1|LucidaGrande-Bold" fontColor="#f6f4f5" fillColor="#698199" imagePath="images/_GNMmYLufEe-cRtvJaqPkAA.png" archimateElement="id-7fae6ed943914603a106a54556622377">
+        <bounds x="336" y="-144" width="409" height="181"/>
+        <feature name="labelExpression" value="${name}&#xA;&#xA;[${property:Stereotype}]&#xA;${documentation}"/>
+        <feature name="imageSource" value="1"/>
+        <feature name="iconColor" value="#f6f4f5"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-83ab8ba022ca47e99bfcd637257afb24" source="id-f2b66cc69afd4c20b00df61add343774" target="id-f0028169262a4618996c58eb29d3819b" archimateRelationship="id-f2bd4346e1b040da9268e35f02471b3e"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-6d03290091b74fc38145eb124fc1c222" source="id-f2b66cc69afd4c20b00df61add343774" target="id-a290779c53244f9baff4c57441357e4f" archimateRelationship="id-afbe59beaf41409894b6bcbed429d492"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-96c3d4199e85449bbb096e92f62977f4" source="id-f2b66cc69afd4c20b00df61add343774" target="id-f3776793ac634360aa7888de0c5d66e3" archimateRelationship="id-dad3468a3ba045ceb3a998edf21f0445"/>
+        <child xsi:type="archimate:DiagramObject" id="id-a290779c53244f9baff4c57441357e4f" targetConnections="id-6d03290091b74fc38145eb124fc1c222" font="1|Lucida Grande|12.0|1|COCOA|1|LucidaGrande-Bold" fillColor="#c3baab" imagePath="images/_ZVkmwLyiEe-cRtvJaqPkAA.png" archimateElement="id-3e74630508444118bf671ac2ceff8826">
+          <bounds x="216" y="84" width="154" height="73"/>
+          <feature name="labelExpression" value="${name}&#xA;&#xA;[${property:Stereotype}]&#xA;${documentation}"/>
+          <feature name="imageSource" value="1"/>
+        </child>
+        <child xsi:type="archimate:DiagramObject" id="id-f0028169262a4618996c58eb29d3819b" targetConnections="id-83ab8ba022ca47e99bfcd637257afb24" font="1|Lucida Grande|12.0|1|COCOA|1|LucidaGrande-Bold" fillColor="#c3baab" imagePath="images/_mYo0cLyiEe-cRtvJaqPkAA.png" archimateElement="id-b2f2c0e89019494db40cb2c27ae64f8c">
+          <bounds x="36" y="84" width="154" height="73"/>
+          <feature name="labelExpression" value="${name}&#xA;&#xA;[${property:Stereotype}]&#xA;${documentation}"/>
+          <feature name="imageSource" value="1"/>
+        </child>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="id-9c5240fbd24c415c87172ff625c06271" targetConnections="id-0d8593922bdc4ca19ae93bc7d96bd3c8" font="1|Lucida Grande|12.0|1|COCOA|1|LucidaGrande-Bold" fontColor="#f6f4f5" fillColor="#698199" imagePath="images/_u1FuQLygEe-cRtvJaqPkAA.png" archimateElement="id-24f99b41466d43eb8b0f54b097407765">
+        <bounds x="336" y="-360" width="409" height="193"/>
+        <feature name="labelExpression" value="${name}&#xA;&#xA;[${property:Stereotype}]&#xA;${documentation}"/>
+        <feature name="imageSource" value="1"/>
+        <feature name="iconColor" value="#f6f4f5"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-f9308238f9dd4c308c0ad79c02a35ad2" source="id-9c5240fbd24c415c87172ff625c06271" target="id-ffed5676f790442daca5726457ef1b60" archimateRelationship="id-db51dbd85bf044a09f806b1360a6615e"/>
+        <child xsi:type="archimate:DiagramObject" id="id-ffed5676f790442daca5726457ef1b60" targetConnections="id-f9308238f9dd4c308c0ad79c02a35ad2" font="1|Lucida Grande|12.0|1|COCOA|1|LucidaGrande-Bold" fillColor="#c3baab" imagePath="images/_wwUr4LygEe-cRtvJaqPkAA.png" archimateElement="id-88414099f14b4655abbea3c1dd07944b">
+          <bounds x="132" y="96" width="154" height="73"/>
+          <feature name="labelExpression" value="${name}&#xA;&#xA;[${property:Stereotype}]&#xA;${documentation}"/>
+          <feature name="imageSource" value="1"/>
+        </child>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="id-72888364da264e1886eca48865263894" font="1|Lucida Grande|12.0|1|COCOA|1|LucidaGrande-Bold" fontColor="#f6f4f5" fillColor="#265296" imagePath="images/_MA8uALytEe-cRtvJaqPkAA.png" archimateElement="id-6e9633d85fde46b192755481b003cd69">
+        <bounds x="85" y="-192" width="193" height="73"/>
+        <feature name="labelExpression" value="${name}&#xA;&#xA;[${property:Stereotype}]"/>
+        <feature name="imageSource" value="1"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-c4efeb7caeb44329bbd52f564463eccf" source="id-72888364da264e1886eca48865263894" target="id-f2b66cc69afd4c20b00df61add343774" archimateRelationship="id-9d3350ea39494771a563d8a677490814"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-0d8593922bdc4ca19ae93bc7d96bd3c8" source="id-72888364da264e1886eca48865263894" target="id-9c5240fbd24c415c87172ff625c06271" archimateRelationship="id-719da024e9ca4915b167aca70b0e6bcc"/>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="id-0f76b155ffb1486099e93dd3a46ac5de" font="1|Lucida Grande|12.0|1|COCOA|1|LucidaGrande-Bold" fontColor="#fbfbfb" fillColor="#265296" imagePath="images/_6c_OIL_EEe-lftkFdp9FPA.png" archimateElement="id-7fe80af30be34640977072f17770005a">
+        <bounds x="85" y="-84" width="193" height="73"/>
+        <feature name="labelExpression" value="${name}&#xA;&#xA;[${property:Stereotype}]"/>
+        <feature name="imageSource" value="1"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-fd582b7a36da4ba98d6a75cc667b6138" source="id-0f76b155ffb1486099e93dd3a46ac5de" target="id-f2b66cc69afd4c20b00df61add343774" archimateRelationship="id-19213ede2b22454d84cb8c9b57ffb014"/>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="id-68936988404b488994f7a63e59544222" targetConnections="id-9951f292580a42399902cd87d9594ec4 id-892e70dd27e24847b04a2b8f891077bc" fontColor="#f6f4f5" fillColor="#265296" archimateElement="id-6fd38cb911364c7fb973e5f1dc9d9a20">
+        <bounds x="384" y="564" width="144" height="73"/>
+        <feature name="labelExpression" value="${name}&#xA;&#xA;[${property:Stereotype}]&#xA;${documentation}"/>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="id-0b5fd753a90140bfbae45a29cd6af4fc" targetConnections="id-e3313fc30c53478196613cc32e18ec03" font="1|Lucida Grande|12.0|1|COCOA|1|LucidaGrande-Bold" fontColor="#f6f4f5" fillColor="#698199" imagePath="images/_yWsx8MdjEe-GXIRjuNkhSA.png" archimateElement="id-6450a6cfa73e410ba0eee55bb5900e4a">
+        <bounds x="336" y="660" width="421" height="181"/>
+        <feature name="labelExpression" value="${name}&#xA;&#xA;[${property:Stereotype}]&#xA;${documentation}"/>
+        <feature name="imageSource" value="1"/>
+        <feature name="iconColor" value="#f6f4f5"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-0bc058e2d4134942b85bdced297713b9" source="id-0b5fd753a90140bfbae45a29cd6af4fc" target="id-d82eec5d90c14ec29350786bce92b68f" archimateRelationship="id-d1aae0117b284b8f9da24d2d79f0d8db"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-1fdcfc533fcd481d946c72535a92952a" source="id-0b5fd753a90140bfbae45a29cd6af4fc" target="id-49a2b75f29d245179a6c5a613416ff2f" archimateRelationship="id-e5f094eb52684344ab6fc7a2357c0b96"/>
+        <child xsi:type="archimate:DiagramObject" id="id-d82eec5d90c14ec29350786bce92b68f" targetConnections="id-0bc058e2d4134942b85bdced297713b9 id-cf627c6dc70040a1acce39adb7051d71" font="1|Lucida Grande|12.0|1|COCOA|1|LucidaGrande-Bold" fillColor="#c3baab" imagePath="images/_da7w8LuiEe-cRtvJaqPkAA.png" archimateElement="id-3072a0137067441ea1a1d26641513ba2">
+          <bounds x="48" y="84" width="154" height="73"/>
+          <feature name="labelExpression" value="${name}&#xA;&#xA;[${property:Stereotype}]&#xA;"/>
+          <feature name="imageSource" value="1"/>
+          <sourceConnection xsi:type="archimate:Connection" id="id-892e70dd27e24847b04a2b8f891077bc" source="id-d82eec5d90c14ec29350786bce92b68f" target="id-68936988404b488994f7a63e59544222" archimateRelationship="id-b01c4280eb924d6bba01cf6964c4f855"/>
+          <sourceConnection xsi:type="archimate:Connection" id="id-03d21a2cdb0c44679225ea3460edd095" source="id-d82eec5d90c14ec29350786bce92b68f" target="id-49a2b75f29d245179a6c5a613416ff2f" archimateRelationship="id-01966b5533ca41239c24f038e3b254e8">
+            <bendpoint startX="91" startY="-12" endX="-89" endY="-12"/>
+          </sourceConnection>
+        </child>
+        <child xsi:type="archimate:DiagramObject" id="id-49a2b75f29d245179a6c5a613416ff2f" targetConnections="id-1fdcfc533fcd481d946c72535a92952a id-03d21a2cdb0c44679225ea3460edd095" font="1|Lucida Grande|12.0|1|COCOA|1|LucidaGrande-Bold" fillColor="#c3baab" imagePath="images/_DIpPsMdlEe-GXIRjuNkhSA.png" archimateElement="id-842827ca5d7b4accb7774e52dafba063">
+          <bounds x="228" y="84" width="154" height="73"/>
+          <feature name="labelExpression" value="${name}&#xA;&#xA;[${property:Stereotype}]&#xA;"/>
+          <feature name="imageSource" value="1"/>
+          <sourceConnection xsi:type="archimate:Connection" id="id-cf627c6dc70040a1acce39adb7051d71" source="id-49a2b75f29d245179a6c5a613416ff2f" target="id-d82eec5d90c14ec29350786bce92b68f" archimateRelationship="id-015e6cc09cb44d25a6d0fc2c4603391e">
+            <bendpoint startX="-89" startY="12" endX="91" endY="12"/>
+          </sourceConnection>
+        </child>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="id-93ee7e66654f4901a1320ed1095555a7" font="1|Lucida Grande|12.0|1|COCOA|1|LucidaGrande-Bold" fontColor="#f6f4f5" fillColor="#265296" archimateElement="id-28090da84d324eab89d677a0149ebe88">
+        <bounds x="85" y="720" width="193" height="73"/>
+        <feature name="labelExpression" value="${name}&#xA;&#xA;[${property:Stereotype}]&#xA;${documentation}"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-e3313fc30c53478196613cc32e18ec03" source="id-93ee7e66654f4901a1320ed1095555a7" target="id-0b5fd753a90140bfbae45a29cd6af4fc" archimateRelationship="id-26d5a23c35214a049801d17bcaf1b360"/>
+      </child>
+      <documentation>Static Web App hosted on deployment node. The architecture is composed of two main containers:
+- Frontend Container:
+Built using Ionic and React components.
+Provides a user interface that integrates with Auth0 for secure authentication.
+This container is TypeScript-based, ensuring modern, strongly-typed development.
+- Static Website Container:
+Built using Hugo for generating static content.
+Designed to host project documentation, Archimate diagrams, and Architecture Decision Records (ADRs).
+
+Both containers are deployed under Static Web App deployment node, which serves as the hosting environment for delivering the application and documentation seamlessly. This architecture ensures modularity, security, and ease of deployment.
+
+Container-based architecture integrating multiple components for a backend workflow.
+
+- NodeJS Container serves as a Backend-for-Frontend (BFF) to facilitate Google Drive access. It uses Express for API handling and Dapr (cf. ADR 0017-distributed-application)as a component to publish events/messages.
+- These events are sent to an Azure Service Bus queue named Files (cf. ADR 0018-add-publish-and-subscribe-components).
+- A File Processing Microservice implemented with FastAPI (Python) subscribes to the Azure Service Bus queue to process messages. The microservice runs in a Uvicorn container and leverages Dapr (cf. ADR 0017-distributed-application) for interaction.
+- The containers are deployed on a Container Instance, providing a scalable deployment environment for both NodeJS and Uvicorn services.
+
+This architecture demonstrates a decoupled and event-driven system, where the Backend publishes file events, and the File Processing Microservice asynchronously processes the Markdown files. Dapr facilitates communication between the services.</documentation>
+    </element>
+    <element xsi:type="archimate:ArchimateDiagramModel" name="Components Diagram" id="id-72d47ee950834bf5930cf99261e76cee">
+      <child xsi:type="archimate:DiagramObject" id="id-6c65779351c741f6be8ae9c76979f4fe" targetConnections="id-180c7f3cdef1460fb2d042be8e37867f" font="1|Lucida Grande|12.0|1|COCOA|1|LucidaGrande-Bold" fontColor="#f6f4f5" fillColor="#698199" imagePath="images/_GNMmYLufEe-cRtvJaqPkAA.png" archimateElement="id-ab9ea6b441824d92bba8d5499177cb59">
+        <bounds x="168" y="120" width="157" height="169"/>
+        <feature name="labelExpression" value="${name}&#xA;&#xA;[${property:Stereotype}]&#xA;${documentation}"/>
+        <feature name="imageSource" value="1"/>
+        <feature name="iconColor" value="#f6f4f5"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-23d4d77bd0fa487c8108be91e4a38cee" source="id-6c65779351c741f6be8ae9c76979f4fe" target="id-35e005b893384d6cb4c924b3e0c5462d" archimateRelationship="id-4935ca671bd34e7a8c4f315d3571efcc"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-b3474606e69a416ab30501288055511d" source="id-6c65779351c741f6be8ae9c76979f4fe" target="id-89426e923905407ebcabe18b0336164d" archimateRelationship="id-5d36f1377d0b401a81f96b21996e2e0a"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-4e08ec34ad7b4f099c9000b1895b93ea" source="id-6c65779351c741f6be8ae9c76979f4fe" target="id-63d05a7beee44f50b365f5a2102580f4" archimateRelationship="id-c817583e92a841e18402719df500ed9b"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-6d18051fa7cd4f129c66c945fa65dc72" source="id-6c65779351c741f6be8ae9c76979f4fe" target="id-e06508a531e549f2bb3f4255f705a50c" archimateRelationship="id-328619cbc4fe45e792278b236aa53d1c"/>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="id-35e005b893384d6cb4c924b3e0c5462d" targetConnections="id-23d4d77bd0fa487c8108be91e4a38cee" fillColor="#c3baab" archimateElement="id-2f75771465a64e258c7cf680b6e19d3d">
+        <bounds x="384" y="96" width="143" height="55"/>
+        <feature name="labelExpression" value="${name}&#xA;&#xA;[${property:Stereotype}]&#xA;${documentation}"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-3b583b09687b40e6b3a865f117cafd17" source="id-35e005b893384d6cb4c924b3e0c5462d" target="id-76e6e201913d49c7b8bda221b50febce" archimateRelationship="id-5fc8f1f205a44b7bb0da12a7d21b697b"/>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="id-89426e923905407ebcabe18b0336164d" targetConnections="id-b3474606e69a416ab30501288055511d" fillColor="#c3baab" archimateElement="id-bfad8d2fbc6b42e3aaebdb415f8cd236">
+        <bounds x="384" y="168" width="143" height="67"/>
+        <feature name="labelExpression" value="${name}&#xA;&#xA;[${property:Stereotype}]&#xA;${documentation}"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-68f99bc5a0124973b0f01a43bfdf21bc" source="id-89426e923905407ebcabe18b0336164d" target="id-76e6e201913d49c7b8bda221b50febce" archimateRelationship="id-d5f6db6c99614a538a0eadf90c752e21"/>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="id-63d05a7beee44f50b365f5a2102580f4" targetConnections="id-4e08ec34ad7b4f099c9000b1895b93ea" fillColor="#c3baab" archimateElement="id-42dd2bdae03849258089849206c940a6">
+        <bounds x="384" y="252" width="143" height="55"/>
+        <feature name="labelExpression" value="${name}&#xA;&#xA;[${property:Stereotype}]&#xA;${documentation}"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-ce3005adb82a4befa118c8b57ec237d0" source="id-63d05a7beee44f50b365f5a2102580f4" target="id-1d0339e93baf4d44a3145d452e5f4fd8" archimateRelationship="id-28c4974df8604b4bad917047c1403d42"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-d57780bdcaf842f3970c009a6674d190" source="id-63d05a7beee44f50b365f5a2102580f4" target="id-76e6e201913d49c7b8bda221b50febce" archimateRelationship="id-3ddd29ccda2c4ef887a342ed6ff5ca07"/>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="id-463113bab17748a89181bf19ce08c562" font="1|Lucida Grande|12.0|1|COCOA|1|LucidaGrande-Bold" fontColor="#f6f4f5" fillColor="#698199" imagePath="images/_IJtWYLufEe-cRtvJaqPkAA.png" archimateElement="id-3ba5666df0734eeea832631cb53c15a1">
+        <bounds x="169" y="356" width="156" height="118"/>
+        <feature name="labelExpression" value="${name}&#xA;&#xA;[${property:Stereotype}]&#xA;${documentation}"/>
+        <feature name="imageSource" value="1"/>
+        <feature name="iconColor" value="#f6f4f5"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-85db59391b284e34bbd71133677fe73b" source="id-463113bab17748a89181bf19ce08c562" target="id-1d0339e93baf4d44a3145d452e5f4fd8" archimateRelationship="id-d91f564950c042bcace44b95257961da"/>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="id-1d0339e93baf4d44a3145d452e5f4fd8" targetConnections="id-85db59391b284e34bbd71133677fe73b id-ce3005adb82a4befa118c8b57ec237d0" fillColor="#c3baab" archimateElement="id-b2722dd9a3354d719c856c3e3bfd86d5">
+        <bounds x="384" y="356" width="143" height="113"/>
+        <feature name="labelExpression" value="${name}&#xA;&#xA;[${property:Stereotype}]"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-5e8b7dcaecd149a68ec78bd6f86a3741" source="id-1d0339e93baf4d44a3145d452e5f4fd8" target="id-01ce56731fad4aeb858212df1709c987" archimateRelationship="id-d67f5694965e45f8ba02617c41a1c4a0"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-a220fdd0d24f4b96815ec37b868d5a59" source="id-1d0339e93baf4d44a3145d452e5f4fd8" target="id-4cc93a516a994dcfb82e805acb5bee60" archimateRelationship="id-a1385a28f940460fb216e2c71fdd6fba"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-48b073dc49aa48d38c6f741393d5e044" source="id-1d0339e93baf4d44a3145d452e5f4fd8" target="id-4fc9f818188a4ffabfe1150082b254ed" archimateRelationship="id-7bea564049a24cd49c9199d1eb236be3"/>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="id-e06508a531e549f2bb3f4255f705a50c" targetConnections="id-6d18051fa7cd4f129c66c945fa65dc72" fillColor="#c3baab" archimateElement="id-f7efd9624d5345a5bcd6ff2f40cc5250">
+        <bounds x="175" y="21" width="143" height="55"/>
+        <feature name="labelExpression" value="${name}&#xA;&#xA;[${property:Stereotype}]&#xA;${documentation}"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-de27130b674d45c0b7aa30adbf5e38cb" source="id-e06508a531e549f2bb3f4255f705a50c" target="id-cf186aee170947dcaa27fe1caa335604" archimateRelationship="id-9713cccb368148cbb20a4beb3795ed74"/>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="id-cf186aee170947dcaa27fe1caa335604" targetConnections="id-de27130b674d45c0b7aa30adbf5e38cb" font="1|Lucida Grande|12.0|1|COCOA|1|LucidaGrande-Bold" fontColor="#f6f4f5" fillColor="#696b3b" imagePath="images/_bXv3MJ4UEe-Bq6D0178Q-g.png" archimateElement="id-23cadf2394f844b09ad1203346db6148">
+        <bounds x="600" y="-12" width="145" height="97"/>
+        <feature name="labelExpression" value="${name}&#xA;&#xA;[${property:Stereotype}]&#xA;${documentation}"/>
+        <feature name="iconColor" value="#f6f4f5"/>
+        <feature name="imageSource" value="1"/>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="id-76e6e201913d49c7b8bda221b50febce" targetConnections="id-3b583b09687b40e6b3a865f117cafd17 id-68f99bc5a0124973b0f01a43bfdf21bc id-d57780bdcaf842f3970c009a6674d190" font="1|Lucida Grande|12.0|1|COCOA|1|LucidaGrande-Bold" fontColor="#f6f4f5" fillColor="#696b3b" imagePath="images/_fwmTUJ3_Ee-Bq6D0178Q-g.png" archimateElement="id-ab5a0dc47c36458bbfd6a615b9db6d2c">
+        <bounds x="600" y="119" width="145" height="172"/>
+        <feature name="labelExpression" value="${name}&#xA;&#xA;[${property:Stereotype}]&#xA;${documentation}"/>
+        <feature name="iconColor" value="#f6f4f5"/>
+        <feature name="imageSource" value="1"/>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="id-01ce56731fad4aeb858212df1709c987" targetConnections="id-5e8b7dcaecd149a68ec78bd6f86a3741 id-19a5a678261d4a2b86b5ec607603de3e" fillColor="#c3baab" archimateElement="id-46546ecfeff9455c9404a6722e70cf71">
+        <bounds x="384" y="585" width="143" height="55"/>
+        <feature name="labelExpression" value="${name}&#xA;&#xA;[${property:Stereotype}]&#xA;${documentation}"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-db996d5bb38640aea7ae8fdbb9a3a6bc" source="id-01ce56731fad4aeb858212df1709c987" target="id-7bb0a77fe05140869e03faa8bf73ac55" archimateRelationship="id-748991bc281049f78474b3f04ba91862"/>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="id-7bb0a77fe05140869e03faa8bf73ac55" targetConnections="id-db996d5bb38640aea7ae8fdbb9a3a6bc" font="1|Lucida Grande|12.0|1|COCOA|1|LucidaGrande-Bold" fontColor="#f6f4f5" fillColor="#696b3b" imagePath="images/_h_LMQJ4WEe-Bq6D0178Q-g.png" archimateElement="id-9333c021a01049349a8c2cf164c22459">
+        <bounds x="600" y="540" width="145" height="127"/>
+        <feature name="labelExpression" value="${name}&#xA;&#xA;[${property:Stereotype}]&#xA;${documentation}"/>
+        <feature name="iconColor" value="#f6f4f5"/>
+        <feature name="imageSource" value="1"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-98a9f10bf38a425eba7dd30f8cfe0ba5" source="id-7bb0a77fe05140869e03faa8bf73ac55" target="id-2f87e24aa67a4f4b9cfb48570264a875" archimateRelationship="id-75f4d94debb846248095bf0dbe0e13c4"/>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="id-65c46e03a4494399ba888d64ec937e85" font="1|Lucida Grande|12.0|1|COCOA|1|LucidaGrande-Bold" fontColor="#f6f4f5" fillColor="#698199" imagePath="images/_GNMmYLufEe-cRtvJaqPkAA.png" archimateElement="id-7fae6ed943914603a106a54556622377">
+        <bounds x="-96" y="12" width="202" height="97"/>
+        <feature name="labelExpression" value="${name}&#xA;&#xA;[${property:Stereotype}]&#xA;${documentation}"/>
+        <feature name="imageSource" value="1"/>
+        <feature name="iconColor" value="#f6f4f5"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-575ce2d7450b4b7ba9c5a07247483ab0" source="id-65c46e03a4494399ba888d64ec937e85" target="id-88a7bd5465ca48d9a1b943ecd248d221" archimateRelationship="id-4e9e6207ebf64d5c97a11e3370f91a2c"/>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="id-88a7bd5465ca48d9a1b943ecd248d221" targetConnections="id-575ce2d7450b4b7ba9c5a07247483ab0" font="1|Lucida Grande|12.0|1|COCOA|1|LucidaGrande-Bold" fillColor="#c3baab" archimateElement="id-8fc5d143b92542859f89cc47e50871e8">
+        <bounds x="-72" y="144" width="154" height="73"/>
+        <feature name="labelExpression" value="${name}&#xA;&#xA;[${property:Stereotype}]&#xA;${documentation}"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-180c7f3cdef1460fb2d042be8e37867f" source="id-88a7bd5465ca48d9a1b943ecd248d221" target="id-6c65779351c741f6be8ae9c76979f4fe" archimateRelationship="id-c0300d47f971414aa7174760e7a1a9f9"/>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="id-76544efa2bb44bb1a0389d9d33b605ed" font="1|Lucida Grande|12.0|1|COCOA|1|LucidaGrande-Bold" fontColor="#f6f4f5" fillColor="#698199" imagePath="images/_u1FuQLygEe-cRtvJaqPkAA.png" archimateElement="id-24f99b41466d43eb8b0f54b097407765">
+        <bounds x="792" y="336" width="202" height="121"/>
+        <feature name="labelExpression" value="${name}&#xA;&#xA;[${property:Stereotype}]&#xA;${documentation}"/>
+        <feature name="imageSource" value="1"/>
+        <feature name="iconColor" value="#f6f4f5"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-405eaa47b3774006ac7a93116cbf01ba" source="id-76544efa2bb44bb1a0389d9d33b605ed" target="id-2f87e24aa67a4f4b9cfb48570264a875" archimateRelationship="id-2a77865f73044ba688325fafcf629c36"/>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="id-2f87e24aa67a4f4b9cfb48570264a875" targetConnections="id-405eaa47b3774006ac7a93116cbf01ba id-98a9f10bf38a425eba7dd30f8cfe0ba5" font="1|Lucida Grande|12.0|1|COCOA|1|LucidaGrande-Bold" fillColor="#c3baab" archimateElement="id-277cdefd37264f95a0d6736672f13335">
+        <bounds x="816" y="573" width="154" height="73"/>
+        <feature name="labelExpression" value="${name}&#xA;&#xA;[${property:Stereotype}]&#xA;${documentation}"/>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="id-b36d70dabd374f4b90b5c5c800e68295" font="1|Lucida Grande|12.0|1|COCOA|1|LucidaGrande-Bold" fontColor="#f6f4f5" fillColor="#698199" imagePath="images/_yWsx8MdjEe-GXIRjuNkhSA.png" archimateElement="id-6450a6cfa73e410ba0eee55bb5900e4a">
+        <bounds x="169" y="549" width="156" height="109"/>
+        <feature name="labelExpression" value="${name}&#xA;&#xA;[${property:Stereotype}]&#xA;${documentation}"/>
+        <feature name="imageSource" value="1"/>
+        <feature name="iconColor" value="#f6f4f5"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-19a5a678261d4a2b86b5ec607603de3e" source="id-b36d70dabd374f4b90b5c5c800e68295" target="id-01ce56731fad4aeb858212df1709c987" archimateRelationship="id-55931fdc040f44cc9971d851a97809b1"/>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="id-4cc93a516a994dcfb82e805acb5bee60" targetConnections="id-a220fdd0d24f4b96815ec37b868d5a59" font="1|Lucida Grande|12.0|1|COCOA|1|LucidaGrande-Bold" fontColor="#f6f4f5" fillColor="#696b3b" imagePath="images/_iY5RcMdjEe-GXIRjuNkhSA.png" archimateElement="id-4e007959cd554c56809c72cd6120feb8">
+        <bounds x="600" y="312" width="145" height="73"/>
+        <feature name="labelExpression" value="${name}&#xA;&#xA;[${property:Stereotype}]&#xA;${documentation}"/>
+        <feature name="iconColor" value="#f6f4f5"/>
+        <feature name="imageSource" value="1"/>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="id-4fc9f818188a4ffabfe1150082b254ed" targetConnections="id-48b073dc49aa48d38c6f741393d5e044" font="1|Lucida Grande|12.0|1|COCOA|1|LucidaGrande-Bold" fontColor="#f6f4f5" fillColor="#696b3b" imagePath="images/_68Qo0MnwEe-5n4BlF9oFXQ.png" archimateElement="id-7c717da220df4d8091d78e0d0a2e5318">
+        <bounds x="600" y="408" width="145" height="121"/>
+        <feature name="labelExpression" value="${name}&#xA;&#xA;[${property:Stereotype}]&#xA;${documentation}"/>
+        <feature name="iconColor" value="#f6f4f5"/>
+        <feature name="imageSource" value="1"/>
+      </child>
+      <documentation>Backend for Frontend (BFF) architecture that facilitates secure access to Google Drive and integrates with GitHub for file management. The BFF handles user authentication via Google Identity to interact with Google Drive APIs for listing, updating, and downloading files. A File Process Microservice asynchronously processes Markdown files using a Pub/Sub mechanism and pushes the processed files to GitHub for version control. The architecture ensures separation of concerns, secure access, and scalability for file processing and artifact storage.s</documentation>
+    </element>
+    <element xsi:type="archimate:ArchimateDiagramModel" name="System Context Diagram" id="id-b494a9bb997248aaba3c92be20dd09dd">
+      <child xsi:type="archimate:DiagramModelReference" id="id-5f97196692c14c6b99e2f7daef38538d" fillColor="#ffffff" model="id-a9a7c99b5a2a46fbbd6cf15862f666e6">
+        <bounds x="420" y="456" width="252" height="145"/>
+      </child>
+      <child xsi:type="archimate:Note" id="id-c924090ac0bb4376892097d5429a70fb" font="1|Font Awesome 6 Free|96.0|0|COCOA|1|FontAwesome6Free-Regular" textAlignment="1" borderType="2">
+        <bounds x="172" y="276" width="109" height="97"/>
+        <content>user-circle</content>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="id-30eec9db05424bf6b73a0ac8731c0976" font="1|Lucida Grande|12.0|1|COCOA|1|LucidaGrande-Bold" fontColor="#f6f4f5" fillColor="#443b41" imagePath="images/_YZqVcJ4UEe-Bq6D0178Q-g.png" archimateElement="id-b30ed0274e254d92ad91f02640960d5f">
+        <bounds x="144" y="360" width="166" height="97"/>
+        <feature name="labelExpression" value="${name}&#xA;&#xA;[${property:Stereotype}]&#xA;${documentation}"/>
+        <feature name="iconColor" value="#f6f4f5"/>
+        <feature name="imageSource" value="1"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-008aaa8c2b21412cb984085e95fdd98c" source="id-30eec9db05424bf6b73a0ac8731c0976" target="id-6de74a74a7bf487fbc1b894b4d52d765" archimateRelationship="id-e8084b1435ce475ba93b7c2f005c9d90">
+          <bendpoint startX="314" startY="24" endX="-2" endY="-102"/>
+        </sourceConnection>
+        <sourceConnection xsi:type="archimate:Connection" id="id-82b0cb27899a4dc2b30eec7669bb4d17" source="id-30eec9db05424bf6b73a0ac8731c0976" target="id-771c189dabb645f79c8b63ccb3c136a6" archimateRelationship="id-22cf06bdb5c94746b9f93e6547b38d48"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-fcb5a84f2296485890d01dae8004d876" source="id-30eec9db05424bf6b73a0ac8731c0976" target="id-3e609818f8cb4902a7a82c6a0b447ae4" archimateRelationship="id-95cf9618d75a449c8ee58935c5e6ec65"/>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="id-6de74a74a7bf487fbc1b894b4d52d765" targetConnections="id-008aaa8c2b21412cb984085e95fdd98c" font="1|Lucida Grande|12.0|1|COCOA|1|LucidaGrande-Bold" fontColor="#f6f4f5" fillColor="#755969" imagePath="images/_QJzvMJ4AEe-Bq6D0178Q-g.png" archimateElement="id-8677cc5dbc094b55af69912696c1b552">
+        <bounds x="438" y="480" width="210" height="109"/>
+        <feature name="labelExpression" value="${name}&#xA;&#xA;[${property:Stereotype}]&#xA;${documentation}"/>
+        <feature name="iconColor" value="#f6f4f5"/>
+        <feature name="imageSource" value="1"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-047a03845ea6407a9e1bf98c73224298" source="id-6de74a74a7bf487fbc1b894b4d52d765" target="id-97956dfa30d94184b9dc2fc220428573" archimateRelationship="id-f4300ee2df4f43c8b0a12be1a50be59e"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-6f0f5d5dd19a4a349af084a68b566512" source="id-6de74a74a7bf487fbc1b894b4d52d765" target="id-419627091dbb45d3b72f50f7bb36c2dc" archimateRelationship="id-b4fef12efd7f46d4a06dc56649a1b859">
+          <bendpoint startX="250" startY="6" endX="-18" endY="180"/>
+        </sourceConnection>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="id-97956dfa30d94184b9dc2fc220428573" targetConnections="id-4d4f1300a73b461ba1e629ad43c03dc7 id-047a03845ea6407a9e1bf98c73224298" font="1|Lucida Grande|12.0|1|COCOA|1|LucidaGrande-Bold" fontColor="#f6f4f5" fillColor="#696b3b" imagePath="images/_fwmTUJ3_Ee-Bq6D0178Q-g.png" archimateElement="id-ab5a0dc47c36458bbfd6a615b9db6d2c">
+        <bounds x="444" y="636" width="204" height="97"/>
+        <feature name="labelExpression" value="${name}&#xA;&#xA;[${property:Stereotype}]&#xA;${documentation}"/>
+        <feature name="iconColor" value="#f6f4f5"/>
+        <feature name="imageSource" value="1"/>
+        <sourceConnection id="id-e7fe65600dc240d4bda09f1a95fedc09" source="id-97956dfa30d94184b9dc2fc220428573" target="id-6cceb7a35f594d26a3c1ce954ce99be7"/>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="id-4f64fa32085e4bcebc31e689bf528abd" targetConnections="id-59ca62d513f546838909ec816686d5cf" font="1|Lucida Grande|12.0|1|COCOA|1|LucidaGrande-Bold" fontColor="#f6f4f5" fillColor="#696b3b" imagePath="images/_Pg-DAJ3_Ee-Bq6D0178Q-g.png" archimateElement="id-c4775bc6a2a24725aefce9b64ce6b69a">
+        <bounds x="134" y="636" width="190" height="97"/>
+        <feature name="labelExpression" value="${name}&#xA;&#xA;[${property:Stereotype}]&#xA;${documentation}"/>
+        <feature name="iconColor" value="#f6f4f5"/>
+        <feature name="imageSource" value="1"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-2b9d9709af564dccb6adfdde2a4f174b" source="id-4f64fa32085e4bcebc31e689bf528abd" target="id-42d212b6adc9424a8901a010b189032a" archimateRelationship="id-1a39b744dfa74634a65e88e9427ee927"/>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="id-42d212b6adc9424a8901a010b189032a" targetConnections="id-2b9d9709af564dccb6adfdde2a4f174b id-cd68761203f042f09cb1ed881e926b53" font="1|Lucida Grande|12.0|1|COCOA|1|LucidaGrande-Bold" fontColor="#f6f4f5" fillColor="#696b3b" imagePath="images/_HRe5EJ3_Ee-Bq6D0178Q-g.png" archimateElement="id-f772361be26b48bf8fbe9864521287d8">
+        <bounds x="262" y="792" width="240" height="121"/>
+        <feature name="labelExpression" value="${name}&#xA;&#xA;[${property:Stereotype}]&#xA;${documentation}"/>
+        <feature name="iconColor" value="#f6f4f5"/>
+        <feature name="imageSource" value="1"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-4d4f1300a73b461ba1e629ad43c03dc7" source="id-42d212b6adc9424a8901a010b189032a" target="id-97956dfa30d94184b9dc2fc220428573" archimateRelationship="id-dc1d552b456643c5911cb3595b6ba9ae"/>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="id-771c189dabb645f79c8b63ccb3c136a6" targetConnections="id-82b0cb27899a4dc2b30eec7669bb4d17 id-32cb8323451647cf93569236e148eca3" font="1|Lucida Grande|12.0|1|COCOA|1|LucidaGrande-Bold" fontColor="#f6f4f5" fillColor="#696b3b" imagePath="images/_H0eUkJ4DEe-Bq6D0178Q-g.png" archimateElement="id-9939812ff3144fa9b26161ea5230b61e">
+        <bounds x="438" y="312" width="204" height="97"/>
+        <feature name="labelExpression" value="${name}&#xA;&#xA;[${property:Stereotype}]&#xA;${documentation}"/>
+        <feature name="iconColor" value="#f6f4f5"/>
+        <feature name="imageSource" value="1"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-9404f944b6c440b5829f28fb24069bf9" source="id-771c189dabb645f79c8b63ccb3c136a6" target="id-419627091dbb45d3b72f50f7bb36c2dc" archimateRelationship="id-1a082cc0f9b541a0aee3133160bf9d1c"/>
+      </child>
+      <child xsi:type="archimate:Note" id="id-87e432f7ed704b3aa7835782327baf42" textAlignment="1">
+        <bounds x="528" y="799" width="434" height="108"/>
+        <content>The Unicorn project is designed to streamline the documentation and sharing of architecture artifacts created on a Kindle Scribe. Its primary objective is to enable users to export diagrams and Architecture Decision Records (ADRs) from Kindle Scribe, convert them into Markdown format, and host them on a secure, static website for easy access and collaboration.</content>
+        <property key="URL" value="https://hugo.royerm.fr/adr/0002-architecture-decision-repository/"/>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="id-419627091dbb45d3b72f50f7bb36c2dc" targetConnections="id-9404f944b6c440b5829f28fb24069bf9 id-6f0f5d5dd19a4a349af084a68b566512 id-772fb46528a548cba818b8d0ce1be3de" font="1|Lucida Grande|12.0|1|COCOA|1|LucidaGrande-Bold" fontColor="#f6f4f5" fillColor="#696b3b" imagePath="images/_bXv3MJ4UEe-Bq6D0178Q-g.png" archimateElement="id-23cadf2394f844b09ad1203346db6148">
+        <bounds x="708" y="300" width="204" height="121"/>
+        <feature name="labelExpression" value="${name}&#xA;&#xA;[${property:Stereotype}]&#xA;${documentation}"/>
+        <feature name="iconColor" value="#f6f4f5"/>
+        <feature name="imageSource" value="1"/>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="id-3e609818f8cb4902a7a82c6a0b447ae4" targetConnections="id-fcb5a84f2296485890d01dae8004d876 id-ef41e2001ae7494fac146c65d5b8498f" fontColor="#fbfbfb" fillColor="#315191" imagePath="images/_aKzvgJ3_Ee-Bq6D0178Q-g.png" archimateElement="id-c60659aa0eea46cd81b28355f0916e37">
+        <bounds x="137" y="505" width="180" height="96"/>
+        <feature name="imageSource" value="1"/>
+        <feature name="labelExpression" value="${name}&#xA;&#xA;[${property:Stereotype}]&#xA;${documentation}"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-59ca62d513f546838909ec816686d5cf" source="id-3e609818f8cb4902a7a82c6a0b447ae4" target="id-4f64fa32085e4bcebc31e689bf528abd" archimateRelationship="id-02da05736d4142d18abe785e6afde37a"/>
+      </child>
+      <child xsi:type="archimate:Note" id="id-a315185469b14f6c925ba7123de2c9e2" textAlignment="1">
+        <bounds x="-24" y="513" width="137" height="80"/>
+        <sourceConnection id="id-ef41e2001ae7494fac146c65d5b8498f" source="id-a315185469b14f6c925ba7123de2c9e2" target="id-3e609818f8cb4902a7a82c6a0b447ae4"/>
+        <content>Kindle Scribe is used as a Personal Device
+cf. ADR 0006-scribe-personal-device</content>
+        <property key="URL" value="https://hugo.royerm.fr/adr/0006-scribe-personal-device/"/>
+      </child>
+      <child xsi:type="archimate:Note" id="id-e034939923fa4c19ac190d244a29e6b8" textAlignment="1">
+        <bounds x="48" y="813" width="161" height="80"/>
+        <sourceConnection id="id-cd68761203f042f09cb1ed881e926b53" source="id-e034939923fa4c19ac190d244a29e6b8" target="id-42d212b6adc9424a8901a010b189032a"/>
+        <content>Zapier is used to automate export process
+cf. ADR 0007-automate-action</content>
+        <property key="URL" value="https://hugo.royerm.fr/adr/0007-automate-action/"/>
+      </child>
+      <child xsi:type="archimate:Note" id="id-6cceb7a35f594d26a3c1ce954ce99be7" targetConnections="id-e7fe65600dc240d4bda09f1a95fedc09" textAlignment="1">
+        <bounds x="708" y="645" width="181" height="80"/>
+        <content>Google Drive is used as file storage account
+cf. ADR 0008-file-storage</content>
+        <property key="URL" value="https://hugo.royerm.fr/adr/0008-file-storage/"/>
+      </child>
+      <child xsi:type="archimate:Note" id="id-36c92639e45a410a9aed80653e2f633f" textAlignment="1">
+        <bounds x="528" y="240" width="288" height="48"/>
+        <sourceConnection id="id-32cb8323451647cf93569236e148eca3" source="id-36c92639e45a410a9aed80653e2f633f" target="id-771c189dabb645f79c8b63ccb3c136a6"/>
+        <sourceConnection id="id-772fb46528a548cba818b8d0ce1be3de" source="id-36c92639e45a410a9aed80653e2f633f" target="id-419627091dbb45d3b72f50f7bb36c2dc"/>
+        <content>Auth0 and Google Identity serve IAM purpose
+cf. 0014-identity-and-access-management</content>
+        <property key="URL" value="https://hugo.royerm.fr/adr/0014-identity-and-access-management/"/>
+      </child>
+    </element>
+    <element xsi:type="archimate:ArchimateDiagramModel" name="Local Deployement Diagram" id="id-2743a6f80b174adaa581ebe6ba396be5">
+      <child xsi:type="archimate:DiagramObject" id="id-22b28260c7b747c9883c5419866be33b" targetConnections="id-897d3e15da6a4974a2fab657ef802843" font="1|Lucida Grande|12.0|1|COCOA|1|LucidaGrande-Bold" fontColor="#f6f4f5" fillColor="#698199" imagePath="images/_NnydwLuhEe-cRtvJaqPkAA.png" archimateElement="id-46ed68b732db4637bf8d13a0a4e58c97">
+        <bounds x="265" y="96" width="180" height="109"/>
+        <feature name="labelExpression" value="${name}&#xA;&#xA;[${property:Stereotype}]"/>
+        <feature name="imageSource" value="1"/>
+        <feature name="iconColor" value="#f6f4f5"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-a6b33ef9283a4e868dda50982e4e1c83" source="id-22b28260c7b747c9883c5419866be33b" target="id-8116d357ae11494a835deee660af6b3e" archimateRelationship="id-9eb1de313c24467db9c0096a0b73f8de"/>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="id-8116d357ae11494a835deee660af6b3e" targetConnections="id-a6b33ef9283a4e868dda50982e4e1c83" font="1|Lucida Grande|12.0|1|COCOA|1|LucidaGrande-Bold" fontColor="#f6f4f5" fillColor="#698199" imagePath="images/_GNMmYLufEe-cRtvJaqPkAA.png" archimateElement="id-ab9ea6b441824d92bba8d5499177cb59">
+        <bounds x="504" y="36" width="409" height="193"/>
+        <feature name="labelExpression" value="${name}&#xA;&#xA;[${property:Stereotype}]"/>
+        <feature name="imageSource" value="1"/>
+        <feature name="iconColor" value="#f6f4f5"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-a78ceb8075d44d6a881925e7d779dd2d" source="id-8116d357ae11494a835deee660af6b3e" target="id-aa3fcf230974412288b914cb8e6c8941" archimateRelationship="id-f3f20fb5d1b64002a7bc292bf1632510"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-378aa6ce434b41c3ae45f4d3fea69135" source="id-8116d357ae11494a835deee660af6b3e" target="id-1c8641f845a44556affcc75e69dfe6d8" archimateRelationship="id-c8f93b3860e0421b9710c7219e66215f"/>
+        <child xsi:type="archimate:DiagramObject" id="id-aa3fcf230974412288b914cb8e6c8941" targetConnections="id-a78ceb8075d44d6a881925e7d779dd2d id-09c0edc41ac94ec2a219296e9083aba1" font="1|Lucida Grande|12.0|1|COCOA|1|LucidaGrande-Bold" fillColor="#c3baab" imagePath="images/_B7uUsLugEe-cRtvJaqPkAA.png" archimateElement="id-dd64c49d7c8c448ba1194f1c7fdabd89">
+          <bounds x="228" y="96" width="154" height="73"/>
+          <feature name="labelExpression" value="${name}&#xA;&#xA;[${property:Stereotype}]&#xA;"/>
+          <feature name="imageSource" value="1"/>
+          <sourceConnection xsi:type="archimate:Connection" id="id-1f1d8b8bff3844348d2fea620c46ea4a" source="id-aa3fcf230974412288b914cb8e6c8941" target="id-1c8641f845a44556affcc75e69dfe6d8" archimateRelationship="id-d762b0a5ae6c4d84a56fbea92b975941">
+            <bendpoint startX="-101" startY="12" endX="91" endY="12"/>
+          </sourceConnection>
+        </child>
+        <child xsi:type="archimate:DiagramObject" id="id-1c8641f845a44556affcc75e69dfe6d8" targetConnections="id-378aa6ce434b41c3ae45f4d3fea69135 id-1f1d8b8bff3844348d2fea620c46ea4a" font="1|Lucida Grande|12.0|1|COCOA|1|LucidaGrande-Bold" fillColor="#c3baab" imagePath="images/_da7w8LuiEe-cRtvJaqPkAA.png" archimateElement="id-3072a0137067441ea1a1d26641513ba2">
+          <bounds x="36" y="96" width="154" height="73"/>
+          <feature name="labelExpression" value="${name}&#xA;&#xA;[${property:Stereotype}]"/>
+          <feature name="imageSource" value="1"/>
+          <sourceConnection xsi:type="archimate:Connection" id="id-09c0edc41ac94ec2a219296e9083aba1" source="id-1c8641f845a44556affcc75e69dfe6d8" target="id-aa3fcf230974412288b914cb8e6c8941" archimateRelationship="id-b146554c5fad424a8c46e4f63c032f82">
+            <bendpoint startX="91" startY="-12" endX="-101" endY="-12"/>
+          </sourceConnection>
+          <sourceConnection xsi:type="archimate:Connection" id="id-191d8e1d5c8b41d2b7f1c733c12ce799" source="id-1c8641f845a44556affcc75e69dfe6d8" target="id-f3a01ff2b0324f22bbf29f862436c516" archimateRelationship="id-b4cfb39662704a85b3da31ab11e94570"/>
+        </child>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="id-5d4fe832a7104136946a9102b9a260e3" targetConnections="id-dc693eee0b504317bcaa12c25ab58270" font="1|Lucida Grande|12.0|1|COCOA|1|LucidaGrande-Bold" fontColor="#f6f4f5" fillColor="#265296" imagePath="images/_ptkmQIBjEe2cRdVGGBa1OQ.png" archimateElement="id-a4594f7960bb4f6f83b052fceb8c9ea4">
+        <bounds x="276" y="279" width="157" height="73"/>
+        <feature name="labelExpression" value="${name}&#xA;&#xA;[${property:Stereotype}]"/>
+        <feature name="iconColor" value="#f6f4f5"/>
+        <feature name="imageSource" value="1"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-897d3e15da6a4974a2fab657ef802843" source="id-5d4fe832a7104136946a9102b9a260e3" target="id-22b28260c7b747c9883c5419866be33b" archimateRelationship="id-be0da7cc5b0a489eb1bcb2e5ee8e7860"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-9846dd84d28947f3a6a61289c7fe6a6e" source="id-5d4fe832a7104136946a9102b9a260e3" target="id-569fd277a01b41149c872066d22ee9e2" archimateRelationship="id-a0ef5de2183244bda5a2d42541a62e21"/>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="id-f24bcf870c6744d08e5f4b742fd5778d" font="1|Lucida Grande|12.0|1|COCOA|1|LucidaGrande-Bold" fontColor="#f6f4f5" fillColor="#696b3b" imagePath="images/_EZq90LugEe-cRtvJaqPkAA.png" archimateElement="id-43cf1757be4749cf891bb01bb053a93e">
+        <bounds x="60" y="273" width="169" height="85"/>
+        <feature name="labelExpression" value="${name}&#xA;&#xA;[${property:Stereotype}]"/>
+        <feature name="iconColor" value="#f6f4f5"/>
+        <feature name="imageSource" value="1"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-dc693eee0b504317bcaa12c25ab58270" source="id-f24bcf870c6744d08e5f4b742fd5778d" target="id-5d4fe832a7104136946a9102b9a260e3" archimateRelationship="id-317539744b76461c9a6f681366f5bff2"/>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="id-569fd277a01b41149c872066d22ee9e2" targetConnections="id-9846dd84d28947f3a6a61289c7fe6a6e" font="1|Lucida Grande|12.0|1|COCOA|1|LucidaGrande-Bold" fontColor="#f6f4f5" fillColor="#698199" imagePath="images/_xIaBILuiEe-cRtvJaqPkAA.png" archimateElement="id-c35ab5f9e5f54a3a88325d3c3d27ccf0">
+        <bounds x="265" y="438" width="180" height="97"/>
+        <feature name="labelExpression" value="${name}&#xA;&#xA;[${property:Stereotype}]"/>
+        <feature name="imageSource" value="1"/>
+        <feature name="iconColor" value="#f6f4f5"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-f1cdc3ac24c74e24b60bfef06db72b39" source="id-569fd277a01b41149c872066d22ee9e2" target="id-0ce523f4ce9f46f8bed1c255a7fac6c5" archimateRelationship="id-4b3e2220a2d64fe1abd4987128f0b78d"/>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="id-30137418683e4e4493634462ba93e5bc" font="1|Lucida Grande|12.0|1|COCOA|1|LucidaGrande-Bold" fontColor="#f6f4f5" fillColor="#696b3b" imagePath="images/_9AtzQLufEe-cRtvJaqPkAA.png" archimateElement="id-7ceea785c13e4ec38ad4b2619709f22a">
+        <bounds x="708" y="252" width="217" height="121"/>
+        <feature name="labelExpression" value="${name}&#xA;&#xA;[${property:Stereotype}]"/>
+        <feature name="iconColor" value="#f6f4f5"/>
+        <feature name="imageSource" value="1"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-32f7fcea30214dc69d7a473fab2750d2" source="id-30137418683e4e4493634462ba93e5bc" target="id-f3a01ff2b0324f22bbf29f862436c516" archimateRelationship="id-7bb9b0e84b0e441cbfa42dc1bc21a825"/>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="id-0ce523f4ce9f46f8bed1c255a7fac6c5" targetConnections="id-f1cdc3ac24c74e24b60bfef06db72b39" font="1|Lucida Grande|12.0|1|COCOA|1|LucidaGrande-Bold" fontColor="#f6f4f5" fillColor="#698199" imagePath="images/_IJtWYLufEe-cRtvJaqPkAA.png" archimateElement="id-3ba5666df0734eeea832631cb53c15a1">
+        <bounds x="504" y="402" width="409" height="169"/>
+        <feature name="labelExpression" value="${name}&#xA;&#xA;[${property:Stereotype}]"/>
+        <feature name="imageSource" value="1"/>
+        <feature name="iconColor" value="#f6f4f5"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-be233a25e8b6479cacc971786ef96a81" source="id-0ce523f4ce9f46f8bed1c255a7fac6c5" target="id-c0e54ff4392a497186ad9ef36f22fd95" archimateRelationship="id-e3d4a3b372f54508b0d67c9cbdf6566f"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-90532540bb8d4a7d86ac0df5638620f5" source="id-0ce523f4ce9f46f8bed1c255a7fac6c5" target="id-0eab8c7ad7de49aeae363c224b7415e9" archimateRelationship="id-17b2cf09e1dd4e38bd80d7c1ef62ca5d"/>
+        <child xsi:type="archimate:DiagramObject" id="id-0eab8c7ad7de49aeae363c224b7415e9" targetConnections="id-0cccaf016baa4e53b412118234045f9e id-90532540bb8d4a7d86ac0df5638620f5" font="1|Lucida Grande|12.0|1|COCOA|1|LucidaGrande-Bold" fillColor="#c3baab" imagePath="images/_da7w8LuiEe-cRtvJaqPkAA.png" archimateElement="id-3072a0137067441ea1a1d26641513ba2">
+          <bounds x="36" y="84" width="154" height="73"/>
+          <feature name="labelExpression" value="${name}&#xA;&#xA;[${property:Stereotype}]&#xA;"/>
+          <feature name="imageSource" value="1"/>
+          <sourceConnection xsi:type="archimate:Connection" id="id-81401b898b0b4c77a5b42904541c7fa4" source="id-0eab8c7ad7de49aeae363c224b7415e9" target="id-c0e54ff4392a497186ad9ef36f22fd95" archimateRelationship="id-a1b699db53604daf9fd46c9098b705d7">
+            <bendpoint startX="103" startY="-12" endX="-101" endY="-12"/>
+          </sourceConnection>
+          <sourceConnection xsi:type="archimate:Connection" id="id-bc188235adc64892b5a315e84f78225d" source="id-0eab8c7ad7de49aeae363c224b7415e9" target="id-f3a01ff2b0324f22bbf29f862436c516" archimateRelationship="id-cd1bcb63ad494f86b4af9c3190d8d644">
+            <bendpoint startX="-5" startY="-132" endY="69"/>
+          </sourceConnection>
+        </child>
+        <child xsi:type="archimate:DiagramObject" id="id-c0e54ff4392a497186ad9ef36f22fd95" targetConnections="id-be233a25e8b6479cacc971786ef96a81 id-81401b898b0b4c77a5b42904541c7fa4" font="1|Lucida Grande|12.0|1|COCOA|1|LucidaGrande-Bold" fillColor="#c3baab" imagePath="images/__hkmcLufEe-cRtvJaqPkAA.png" archimateElement="id-55a0a82acbb149efa2055ed638db5ee5">
+          <bounds x="228" y="84" width="154" height="73"/>
+          <feature name="labelExpression" value="${name}&#xA;&#xA;[${property:Stereotype}]&#xA;"/>
+          <feature name="imageSource" value="1"/>
+          <sourceConnection xsi:type="archimate:Connection" id="id-0cccaf016baa4e53b412118234045f9e" source="id-c0e54ff4392a497186ad9ef36f22fd95" target="id-0eab8c7ad7de49aeae363c224b7415e9" archimateRelationship="id-f489d048e9cb444f91bfd11e66975a26">
+            <bendpoint startX="-89" startY="12" endX="91" endY="12"/>
+          </sourceConnection>
+        </child>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="id-f3a01ff2b0324f22bbf29f862436c516" targetConnections="id-191d8e1d5c8b41d2b7f1c733c12ce799 id-32f7fcea30214dc69d7a473fab2750d2 id-bc188235adc64892b5a315e84f78225d" fontColor="#fbfbfb" fillColor="#696b3b" archimateElement="id-5527f8d0b7054ce9adf15c2be9ddeb91">
+        <bounds x="552" y="288" width="120" height="55"/>
+      </child>
+      <documentation>## Local Deployment Diagram: Refined and Comprehensive Documentation
+
+This Local Deployment Diagram depicts a microservices-based application designed for local development and testing. It showcases the key components, their responsibilities, and how they interact to provide a complete file processing workflow. The diagram highlights the use of modern technologies like NodeJS, Express, Python/FastAPI, Uvicorn, Dapr, Redis, and Docker/Podman to achieve a scalable, resilient, and maintainable architecture, even within a local development context.
+
+**Overall Purpose and Architecture:**
+
+The primary purpose of this local deployment setup is to provide developers with an isolated and reproducible environment for building, testing, and debugging a file processing application. The architecture follows a Backend for Frontend (BFF) pattern, where a NodeJS-based backend provides a tailored API for the frontend (not explicitly shown, but implicitly its consumer) and orchestrates interactions with a dedicated File Process microservice. This setup leverages a microservices approach, enabling independent development, scaling, and deployment of individual components. The use of Dapr facilitates inter-service communication and abstracts away the complexities of distributed systems. Docker/Podman ensures consistency across developer environments by encapsulating each component within a container.
+
+**Key Insights and Patterns:**
+
+*   **Microservices with BFF:** The diagram clearly demonstrates a microservices architecture with a dedicated Backend for Frontend (BFF). This pattern allows for a customized API tailored to the specific needs of the frontend, improving the user experience and simplifying the frontend's responsibilities.
+*   **Asynchronous Communication:** The use of Dapr's pub/sub functionality with the &quot;[Topic] Files&quot; topic indicates a commitment to asynchronous communication. This decouples the Backend and File Process microservices, improving scalability and resilience. The Backend can publish file processing requests without waiting for a response, and the File Process microservice can process files as they become available.
+*   **Polyglot Architecture:** The combination of NodeJS (Backend) and Python/FastAPI (File Process) demonstrates a polyglot architecture. This allows each microservice to be built using the most appropriate technology stack for its specific task.
+*   **Containerization:** The use of Docker/Podman for containerization ensures a consistent and reproducible development environment. This eliminates the &quot;works on my machine&quot; problem and simplifies deployment.
+*   **Caching:** Redis is used as a cache, likely to store processed files or metadata. This significantly improves performance by reducing the need to repeatedly process or retrieve data from slower storage.
+
+**How Elements Work Together:**
+
+1.  **User Interaction (Implicit):** A user interacts with a frontend application (not shown), which sends a request to the NodeJS Backend to process a file.
+2.  **Backend Orchestration:** The NodeJS Backend, using Express, receives the request and orchestrates the process.
+3.  **Event Publication:** The Backend, leveraging Dapr, publishes a message to the &quot;[Topic] Files&quot; topic, indicating that a new file needs to be processed. This message likely contains metadata about the file, such as its ID, name, and location.
+4.  **File Process Consumption:** The File Process microservice, using Dapr, subscribes to the &quot;[Topic] Files&quot; topic and receives the message.
+5.  **File Processing:** The File Process microservice, implemented with FastAPI and served by Uvicorn, retrieves the file (presumably from a storage location - not explicitly shown) and performs the necessary processing or enhancement tasks.
+6.  **Result Caching (Optional):** The processed file or metadata might be stored in Redis for faster retrieval in the future.
+7.  **Notification (Potential):** Dapr might invoke an endpoint on the Backend or publish another message to a different topic to notify the Backend that the file processing is complete.
+8.  **Delivery to Frontend:** The Backend retrieves the processed file or metadata and delivers it to the frontend application, responding to the user's initial request.
+
+**Critical Paths and Core Processes:**
+
+The core process represented in this diagram is the file processing workflow. The critical path involves the following steps:
+
+1.  File upload request received by the NodeJS Backend.
+2.  Publication of a &quot;file uploaded&quot; event to the &quot;[Topic] Files&quot; topic via Dapr.
+3.  Consumption of the event by the File Process microservice.
+4.  File processing performed by the File Process microservice (FastAPI/Uvicorn).
+5.  Caching of the processed file (or metadata) in Redis (optional).
+6.  Notification to the Backend (potential, via Dapr).
+7.  Delivery of the processed file to the frontend.
+
+Any delays or failures along this path will directly impact the user experience.
+
+**Potential Areas of Concern and Opportunity:**
+
+*   **Data Consistency:** Ensuring data consistency between Redis and the underlying file storage (not explicitly shown) is crucial. Strategies for cache invalidation and synchronization need to be carefully considered.
+*   **Error Handling:** Robust error handling is essential to prevent failures in one microservice from cascading to others. The architecture should include mechanisms for retries, circuit breakers, and graceful degradation.
+*   **Monitoring and Logging:** Comprehensive monitoring and logging are necessary to track the performance and health of each microservice. This will enable developers to quickly identify and resolve issues.
+*   **Security:** Securing the communication between microservices and protecting sensitive data is paramount. This requires implementing appropriate authentication, authorization, and encryption mechanisms.
+*   **Lack of Storage representation:** The diagram is unclear about the file storage mechanism. It's unclear how files are retrieved by the File Process microservice.
+
+**Business Impact and Technical Implications:**
+
+*   **Faster Development:** The microservices architecture, combined with the use of modern technologies and containerization, enables faster development cycles and easier maintenance.
+*   **Improved Scalability and Resilience:** The asynchronous communication and independent scalability of the microservices improve the overall scalability and resilience of the application.
+*   **Enhanced User Experience:** The BFF pattern and caching mechanism contribute to a better user experience by providing a tailored API and reducing latency.
+*   **Technology Specialization:** The polyglot architecture allows developers to choose the best technology for each microservice, improving efficiency and maintainability.
+*   **Increased Complexity:** The microservices architecture introduces additional complexity compared to a monolithic application. Careful planning and coordination are required to manage the distributed system.
+
+**Potential Extensions and Refinements:**
+
+*   **Explicit File Storage:** The diagram should explicitly include a file storage component (e.g., cloud storage, object storage) to clarify how files are stored and retrieved by the File Process microservice.
+*   **API Gateway:** Adding an API gateway in front of the NodeJS Backend could provide additional benefits, such as request routing, authentication, and rate limiting.
+*   **Service Mesh:** Integrating a service mesh (e.g., Istio) could provide advanced features for traffic management, security, and observability.
+*   **Detailed Data Contract:** The diagram could include a description of the data contract for the &quot;[Topic] Files&quot; topic, specifying the structure and content of the messages.
+*   **Monitoring and Logging:** Adding elements to represent monitoring and logging infrastructure.
+*   **Security Components:** Explicit representation of security components, such as authentication and authorization services.
+
+**Conclusion:**
+
+This Local Deployment Diagram provides a valuable overview of a microservices-based file processing application. It highlights the key components, their responsibilities, and how they interact to provide a complete workflow. The diagram showcases the use of modern technologies and design patterns to achieve a scalable, resilient, and maintainable architecture. By understanding the relationships and dependencies between the elements, developers can effectively build, test, and debug the application in a local development environment. The identified areas of concern and opportunity provide a roadmap for further improvements and enhancements to the architecture. Its value lies in providing a shared understanding for technical teams, architects, and business stakeholders alike.</documentation>
+    </element>
+    <element xsi:type="archimate:ArchimateDiagramModel" name="Container Diagram" id="id-a9a7c99b5a2a46fbbd6cf15862f666e6">
+      <child xsi:type="archimate:DiagramObject" id="id-e8b3d712a459492b8ce7656507d8113e" font="1|Lucida Grande|12.0|1|COCOA|1|LucidaGrande-Bold" fontColor="#000000" fillColor="#fbfbfb" imagePath="images/_QJzvMJ4AEe-Bq6D0178Q-g.png" archimateElement="id-8677cc5dbc094b55af69912696c1b552">
+        <bounds x="168" y="-132" width="529" height="877"/>
+        <feature name="labelExpression" value="${name}&#xA;&#xA;[${property:Stereotype}]&#xA;"/>
+        <feature name="iconColor" value="#f6f4f5"/>
+        <feature name="imageSource" value="1"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-7a82b83772b84f2d989ae59ab92faa17" source="id-e8b3d712a459492b8ce7656507d8113e" target="id-d21c0ea9e6cf426082a0f84c013302a2" archimateRelationship="id-d7ec70a5970545c2b9b811443754e52b"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-329bde42940441f79b0cbbf3b1c7c10a" source="id-e8b3d712a459492b8ce7656507d8113e" target="id-4716fda390ac4451ad378781996fa81a" archimateRelationship="id-04c978555b074dfdb3606b140c75ff82"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-997ea749a8e8402aa32e8b471e9a2065" source="id-e8b3d712a459492b8ce7656507d8113e" target="id-6b2b0480a4044996912ac5c60eafe425" archimateRelationship="id-49a4cb28c9384b0d8ff1986ea8c16bc7"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-65a006fe61d2410db9adb0ffe5e03e1a" source="id-e8b3d712a459492b8ce7656507d8113e" target="id-23a9d3b515c8450684d6ef77934dc933" archimateRelationship="id-e79a43063a0a479f929c2199a3291bb3"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-5115fbd2a3b34124b27d21a162c94fdc" source="id-e8b3d712a459492b8ce7656507d8113e" target="id-c099ae2a3c46474284066c4f28d92241" archimateRelationship="id-8791e692f8934dfe8a3afbe14162dac7"/>
+        <child xsi:type="archimate:DiagramModelReference" id="id-8292e90b2e8241c9aff04286c9e8eb80" fillColor="#fbfbfb" model="id-72d47ee950834bf5930cf99261e76cee">
+          <bounds x="24" y="60" width="493" height="805"/>
+        </child>
+        <child xsi:type="archimate:DiagramObject" id="id-d21c0ea9e6cf426082a0f84c013302a2" targetConnections="id-7a82b83772b84f2d989ae59ab92faa17 id-a8e7261be31e4420b8a6f5c0f719e805 id-ec5ed53b7f0d4a1f9f829edeaad82b81" font="1|Lucida Grande|12.0|1|COCOA|1|LucidaGrande-Bold" fontColor="#f6f4f5" fillColor="#698199" imagePath="images/_GNMmYLufEe-cRtvJaqPkAA.png" archimateElement="id-7fae6ed943914603a106a54556622377">
+          <bounds x="38" y="84" width="202" height="265"/>
+          <feature name="labelExpression" value="${name}&#xA;&#xA;[${property:Stereotype}]&#xA;${documentation}"/>
+          <feature name="imageSource" value="1"/>
+          <feature name="iconColor" value="#f6f4f5"/>
+          <sourceConnection xsi:type="archimate:Connection" id="id-7bafe4f7a1974c2c8675c784314c2648" source="id-d21c0ea9e6cf426082a0f84c013302a2" target="id-9e7dc66c2fb64ac3b5faca09a6e19dfd" archimateRelationship="id-afbe59beaf41409894b6bcbed429d492"/>
+          <sourceConnection xsi:type="archimate:Connection" id="id-1046ed919b50490cbdbc92dafd498d0b" source="id-d21c0ea9e6cf426082a0f84c013302a2" target="id-894323c542414ea79254ed72d508f632" archimateRelationship="id-f2bd4346e1b040da9268e35f02471b3e"/>
+          <sourceConnection xsi:type="archimate:Connection" id="id-cdbbe80f9d9c4ca69c6f9ce8e882f650" source="id-d21c0ea9e6cf426082a0f84c013302a2" target="id-350a89784f9543d785a605f8f080c301" archimateRelationship="id-f41a481c486743f9b0440e23350f59bc"/>
+          <sourceConnection xsi:type="archimate:Connection" id="id-3cbde54c91b64bb79caf8ec749d2d45d" source="id-d21c0ea9e6cf426082a0f84c013302a2" target="id-4716fda390ac4451ad378781996fa81a" archimateRelationship="id-d445462d8b1f411497d5978bdd0c7c87"/>
+          <child xsi:type="archimate:DiagramObject" id="id-9e7dc66c2fb64ac3b5faca09a6e19dfd" targetConnections="id-7bafe4f7a1974c2c8675c784314c2648" font="1|Lucida Grande|12.0|1|COCOA|1|LucidaGrande-Bold" fillColor="#c3baab" imagePath="images/_ZVkmwLyiEe-cRtvJaqPkAA.png" archimateElement="id-3e74630508444118bf671ac2ceff8826">
+            <bounds x="24" y="180" width="154" height="73"/>
+            <feature name="labelExpression" value="${name}&#xA;&#xA;[${property:Stereotype}]&#xA;${documentation}"/>
+            <feature name="imageSource" value="1"/>
+          </child>
+          <child xsi:type="archimate:DiagramObject" id="id-894323c542414ea79254ed72d508f632" targetConnections="id-1046ed919b50490cbdbc92dafd498d0b" font="1|Lucida Grande|12.0|1|COCOA|1|LucidaGrande-Bold" fillColor="#c3baab" imagePath="images/_mYo0cLyiEe-cRtvJaqPkAA.png" archimateElement="id-b2f2c0e89019494db40cb2c27ae64f8c">
+            <bounds x="24" y="96" width="154" height="73"/>
+            <feature name="labelExpression" value="${name}&#xA;&#xA;[${property:Stereotype}]&#xA;${documentation}"/>
+            <feature name="imageSource" value="1"/>
+          </child>
+        </child>
+        <child xsi:type="archimate:DiagramObject" id="id-4716fda390ac4451ad378781996fa81a" targetConnections="id-329bde42940441f79b0cbbf3b1c7c10a id-3cbde54c91b64bb79caf8ec749d2d45d" font="1|Lucida Grande|12.0|1|COCOA|1|LucidaGrande-Bold" fontColor="#f6f4f5" fillColor="#698199" imagePath="images/_GNMmYLufEe-cRtvJaqPkAA.png" archimateElement="id-ab9ea6b441824d92bba8d5499177cb59">
+          <bounds x="36" y="384" width="205" height="223"/>
+          <feature name="labelExpression" value="${name}&#xA;&#xA;[${property:Stereotype}]&#xA;${documentation}&#xA;"/>
+          <feature name="imageSource" value="1"/>
+          <feature name="iconColor" value="#f6f4f5"/>
+          <sourceConnection xsi:type="archimate:Connection" id="id-c4386ec1fffe45feb166d7e2d3d27cc6" source="id-4716fda390ac4451ad378781996fa81a" target="id-6a7f0f22bff9496699885f1c45801958" archimateRelationship="id-f3f20fb5d1b64002a7bc292bf1632510"/>
+          <sourceConnection xsi:type="archimate:Connection" id="id-9af5440b3f194c92b0488bcd8cea334f" source="id-4716fda390ac4451ad378781996fa81a" target="id-849078bea0314fadae82eae0afb7bb50" archimateRelationship="id-81cc0fd5e2c64cc5ba11526f7fae01b3"/>
+          <sourceConnection xsi:type="archimate:Connection" id="id-b04dc6afa0a0485ba7286de7c3724641" source="id-4716fda390ac4451ad378781996fa81a" target="id-105fcd0c0bc04a23ade9498c6f90b2ce" archimateRelationship="id-bc86e99a53ec4ad2b59e4c6dba003cc9"/>
+          <sourceConnection xsi:type="archimate:Connection" id="id-58accf61f1724d599b219870f1695565" source="id-4716fda390ac4451ad378781996fa81a" target="id-23a9d3b515c8450684d6ef77934dc933" archimateRelationship="id-c30e007c55f24dd4a83fbbf097ca791e"/>
+          <child xsi:type="archimate:DiagramObject" id="id-6a7f0f22bff9496699885f1c45801958" targetConnections="id-c4386ec1fffe45feb166d7e2d3d27cc6" font="1|Lucida Grande|12.0|1|COCOA|1|LucidaGrande-Bold" fillColor="#c3baab" imagePath="images/_B7uUsLugEe-cRtvJaqPkAA.png" archimateElement="id-dd64c49d7c8c448ba1194f1c7fdabd89">
+            <bounds x="24" y="108" width="154" height="73"/>
+            <feature name="labelExpression" value="${name}&#xA;&#xA;[${property:Stereotype}]&#xA;"/>
+            <feature name="imageSource" value="1"/>
+          </child>
+        </child>
+        <child xsi:type="archimate:DiagramObject" id="id-6b2b0480a4044996912ac5c60eafe425" targetConnections="id-997ea749a8e8402aa32e8b471e9a2065 id-37cf9120fa7e4c6c94f3d74b3c8f8b60 id-8770058a069a47208e6e3da157c4671e" font="1|Lucida Grande|12.0|1|COCOA|1|LucidaGrande-Bold" fontColor="#f6f4f5" fillColor="#698199" imagePath="images/_u1FuQLygEe-cRtvJaqPkAA.png" archimateElement="id-24f99b41466d43eb8b0f54b097407765">
+          <bounds x="38" y="636" width="202" height="217"/>
+          <feature name="labelExpression" value="${name}&#xA;&#xA;[${property:Stereotype}]&#xA;&#xA;${documentation}&#xA;"/>
+          <feature name="imageSource" value="1"/>
+          <feature name="iconColor" value="#f6f4f5"/>
+          <sourceConnection xsi:type="archimate:Connection" id="id-f07a90bd5585469bb60e1eca1b068052" source="id-6b2b0480a4044996912ac5c60eafe425" target="id-e5d405446c074dca9bf5d6c565038fbf" archimateRelationship="id-db51dbd85bf044a09f806b1360a6615e"/>
+          <child xsi:type="archimate:DiagramObject" id="id-e5d405446c074dca9bf5d6c565038fbf" targetConnections="id-f07a90bd5585469bb60e1eca1b068052" font="1|Lucida Grande|12.0|1|COCOA|1|LucidaGrande-Bold" fillColor="#c3baab" imagePath="images/_wwUr4LygEe-cRtvJaqPkAA.png" archimateElement="id-88414099f14b4655abbea3c1dd07944b">
+            <bounds x="24" y="120" width="154" height="73"/>
+            <feature name="labelExpression" value="${name}&#xA;&#xA;[${property:Stereotype}]&#xA;${documentation}"/>
+            <feature name="imageSource" value="1"/>
+          </child>
+        </child>
+        <child xsi:type="archimate:DiagramObject" id="id-23a9d3b515c8450684d6ef77934dc933" targetConnections="id-65a006fe61d2410db9adb0ffe5e03e1a id-58accf61f1724d599b219870f1695565" font="1|Lucida Grande|12.0|1|COCOA|1|LucidaGrande-Bold" fontColor="#f6f4f5" fillColor="#698199" imagePath="images/_IJtWYLufEe-cRtvJaqPkAA.png" archimateElement="id-3ba5666df0734eeea832631cb53c15a1">
+          <bounds x="276" y="336" width="205" height="301"/>
+          <feature name="labelExpression" value="${name}&#xA;&#xA;[${property:Stereotype}]&#xA;${documentation}&#xA;&#xA;"/>
+          <feature name="imageSource" value="1"/>
+          <feature name="iconColor" value="#f6f4f5"/>
+          <sourceConnection xsi:type="archimate:Connection" id="id-f43a74d1af7447fe8fa4657fb5501600" source="id-23a9d3b515c8450684d6ef77934dc933" target="id-aa828ea09eb44c17a660459129332f5d" archimateRelationship="id-e3d4a3b372f54508b0d67c9cbdf6566f"/>
+          <sourceConnection xsi:type="archimate:Connection" id="id-1cfe1bf3ee6d41e787a9f6ea6863ee11" source="id-23a9d3b515c8450684d6ef77934dc933" target="id-c099ae2a3c46474284066c4f28d92241" archimateRelationship="id-7674450232594f6daad6079ce6392d41"/>
+          <sourceConnection xsi:type="archimate:Connection" id="id-3b9367adcd464dee873fd32162c6ca9b" source="id-23a9d3b515c8450684d6ef77934dc933" target="id-04ed11d5eac04cfb97b5d9bfc499ef40" archimateRelationship="id-f08b3b62fb89406ab8b7f497ace8691c"/>
+          <sourceConnection xsi:type="archimate:Connection" id="id-4a45d8529d414cabac6a0beb51d13042" source="id-23a9d3b515c8450684d6ef77934dc933" target="id-b7e2fcf3e62f4d3d89deaa01b5803bd9" archimateRelationship="id-b2f514ae6c4448b48006d049ae44417e"/>
+          <sourceConnection xsi:type="archimate:Connection" id="id-0e7ea5fe116c448c802264fa4dc6cdd1" source="id-23a9d3b515c8450684d6ef77934dc933" target="id-87056da354b84e52bceadd8d452e1e76" archimateRelationship="id-770afbce9c494940af277727bb7b6ab2"/>
+          <child xsi:type="archimate:DiagramObject" id="id-b7e2fcf3e62f4d3d89deaa01b5803bd9" targetConnections="id-4a45d8529d414cabac6a0beb51d13042" font="1|Lucida Grande|12.0|1|COCOA|1|LucidaGrande-Bold" fillColor="#c3baab" imagePath="images/_tTPrcPFuEe-b7dZE7J6hOA.png" archimateElement="id-d631aa6a1a2c403fae343192183f1c69">
+            <bounds x="24" y="204" width="154" height="73"/>
+            <feature name="labelExpression" value="${name}&#xA;&#xA;[${property:Stereotype}]&#xA;"/>
+            <feature name="imageSource" value="1"/>
+          </child>
+          <child xsi:type="archimate:DiagramObject" id="id-aa828ea09eb44c17a660459129332f5d" targetConnections="id-f43a74d1af7447fe8fa4657fb5501600" font="1|Lucida Grande|12.0|1|COCOA|1|LucidaGrande-Bold" fillColor="#c3baab" imagePath="images/__hkmcLufEe-cRtvJaqPkAA.png" archimateElement="id-55a0a82acbb149efa2055ed638db5ee5">
+            <bounds x="24" y="108" width="154" height="73"/>
+            <feature name="labelExpression" value="${name}&#xA;&#xA;[${property:Stereotype}]&#xA;"/>
+            <feature name="imageSource" value="1"/>
+          </child>
+        </child>
+        <child xsi:type="archimate:DiagramObject" id="id-c099ae2a3c46474284066c4f28d92241" targetConnections="id-5115fbd2a3b34124b27d21a162c94fdc id-1cfe1bf3ee6d41e787a9f6ea6863ee11" font="1|Lucida Grande|12.0|1|COCOA|1|LucidaGrande-Bold" fontColor="#f6f4f5" fillColor="#698199" imagePath="images/_yWsx8MdjEe-GXIRjuNkhSA.png" archimateElement="id-6450a6cfa73e410ba0eee55bb5900e4a">
+          <bounds x="276" y="660" width="205" height="193"/>
+          <feature name="labelExpression" value="${name}&#xA;&#xA;[${property:Stereotype}]&#xA;${documentation}"/>
+          <feature name="imageSource" value="1"/>
+          <feature name="iconColor" value="#f6f4f5"/>
+          <sourceConnection xsi:type="archimate:Connection" id="id-e62f64d44c4b480bbaf6379a2f30ff43" source="id-c099ae2a3c46474284066c4f28d92241" target="id-a2012ce2ec25432db6257fe18d7a4ec1" archimateRelationship="id-e5f094eb52684344ab6fc7a2357c0b96"/>
+          <sourceConnection xsi:type="archimate:Connection" id="id-1031dbd7a46d4be3a6e37a9527c135c7" source="id-c099ae2a3c46474284066c4f28d92241" target="id-37e44c94732c4f438d164615f652c13f" archimateRelationship="id-e5bcdff943d74325925dbd9e410c124c"/>
+          <child xsi:type="archimate:DiagramObject" id="id-a2012ce2ec25432db6257fe18d7a4ec1" targetConnections="id-e62f64d44c4b480bbaf6379a2f30ff43" font="1|Lucida Grande|12.0|1|COCOA|1|LucidaGrande-Bold" fillColor="#c3baab" imagePath="images/_DIpPsMdlEe-GXIRjuNkhSA.png" archimateElement="id-842827ca5d7b4accb7774e52dafba063">
+            <bounds x="24" y="96" width="154" height="73"/>
+            <feature name="labelExpression" value="${name}&#xA;&#xA;[${property:Stereotype}]&#xA;"/>
+            <feature name="imageSource" value="1"/>
+          </child>
+        </child>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="id-849078bea0314fadae82eae0afb7bb50" targetConnections="id-9af5440b3f194c92b0488bcd8cea334f" font="1|Lucida Grande|12.0|1|COCOA|1|LucidaGrande-Bold" fontColor="#f6f4f5" fillColor="#696b3b" imagePath="images/_fwmTUJ3_Ee-Bq6D0178Q-g.png" archimateElement="id-ab5a0dc47c36458bbfd6a615b9db6d2c">
+        <bounds x="-145" y="420" width="204" height="109"/>
+        <feature name="labelExpression" value="${name}&#xA;&#xA;[${property:Stereotype}]&#xA;${documentation}"/>
+        <feature name="iconColor" value="#f6f4f5"/>
+        <feature name="imageSource" value="1"/>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="id-105fcd0c0bc04a23ade9498c6f90b2ce" targetConnections="id-b04dc6afa0a0485ba7286de7c3724641 id-9dcf53f2e4384823b1b29b659075a355" font="1|Lucida Grande|12.0|1|COCOA|1|LucidaGrande-Bold" fontColor="#f6f4f5" fillColor="#696b3b" imagePath="images/_bXv3MJ4UEe-Bq6D0178Q-g.png" archimateElement="id-23cadf2394f844b09ad1203346db6148">
+        <bounds x="-144" y="276" width="204" height="121"/>
+        <feature name="labelExpression" value="${name}&#xA;&#xA;[${property:Stereotype}]&#xA;${documentation}"/>
+        <feature name="iconColor" value="#f6f4f5"/>
+        <feature name="imageSource" value="1"/>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="id-350a89784f9543d785a605f8f080c301" targetConnections="id-cdbbe80f9d9c4ca69c6f9ce8e882f650" font="1|Lucida Grande|12.0|1|COCOA|1|LucidaGrande-Bold" fontColor="#f6f4f5" fillColor="#696b3b" imagePath="images/_H0eUkJ4DEe-Bq6D0178Q-g.png" archimateElement="id-9939812ff3144fa9b26161ea5230b61e">
+        <bounds x="-146" y="132" width="205" height="109"/>
+        <feature name="labelExpression" value="${name}&#xA;&#xA;[${property:Stereotype}]&#xA;${documentation}"/>
+        <feature name="iconColor" value="#f6f4f5"/>
+        <feature name="imageSource" value="1"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-9dcf53f2e4384823b1b29b659075a355" source="id-350a89784f9543d785a605f8f080c301" target="id-105fcd0c0bc04a23ade9498c6f90b2ce" archimateRelationship="id-1a082cc0f9b541a0aee3133160bf9d1c"/>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="id-ff5a2981c3ee4e9d9cca9e7a18e4f586" font="1|Lucida Grande|12.0|1|COCOA|1|LucidaGrande-Bold" fillColor="#c3baab" imagePath="images/_u1FuQLygEe-cRtvJaqPkAA.png" archimateElement="id-34c73242241f42bdaed975a99acf57ec">
+        <bounds x="-131" y="576" width="176" height="109"/>
+        <feature name="labelExpression" value="${name}&#xA;&#xA;[${property:Stereotype}]&#xA;${documentation}"/>
+        <feature name="imageSource" value="1"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-37cf9120fa7e4c6c94f3d74b3c8f8b60" source="id-ff5a2981c3ee4e9d9cca9e7a18e4f586" target="id-6b2b0480a4044996912ac5c60eafe425" archimateRelationship="id-00789383a6c849258ce1f5c92bde6ac0"/>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="id-cbb30f787fea4a2099e5c9c3d2d22f40" font="1|Lucida Grande|12.0|1|COCOA|1|LucidaGrande-Bold" fontColor="#f6f4f5" fillColor="#696b3b" imagePath="images/_ZtjpcJ4YEe-Bq6D0178Q-g.png" archimateElement="id-34b6952232f94959a809b0821c1b8d80">
+        <bounds x="-145" width="205" height="85"/>
+        <feature name="labelExpression" value="${name}&#xA;&#xA;[${property:Stereotype}]&#xA;${documentation}"/>
+        <feature name="iconColor" value="#f6f4f5"/>
+        <feature name="imageSource" value="1"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-a8e7261be31e4420b8a6f5c0f719e805" source="id-cbb30f787fea4a2099e5c9c3d2d22f40" target="id-d21c0ea9e6cf426082a0f84c013302a2" archimateRelationship="id-4f06e1a0f4d94df9952ffb31dd31e51e"/>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="id-37e44c94732c4f438d164615f652c13f" targetConnections="id-1031dbd7a46d4be3a6e37a9527c135c7" font="1|Lucida Grande|12.0|1|COCOA|1|LucidaGrande-Bold" fontColor="#f6f4f5" fillColor="#696b3b" imagePath="images/_h_LMQJ4WEe-Bq6D0178Q-g.png" archimateElement="id-9333c021a01049349a8c2cf164c22459">
+        <bounds x="336" y="780" width="180" height="85"/>
+        <feature name="labelExpression" value="${name}&#xA;&#xA;[${property:Stereotype}]&#xA;${documentation}"/>
+        <feature name="iconColor" value="#f6f4f5"/>
+        <feature name="imageSource" value="1"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-8770058a069a47208e6e3da157c4671e" source="id-37e44c94732c4f438d164615f652c13f" target="id-6b2b0480a4044996912ac5c60eafe425" archimateRelationship="id-3861906234cd42b08c3ecfd2f482dfe3"/>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="id-87056da354b84e52bceadd8d452e1e76" targetConnections="id-0e7ea5fe116c448c802264fa4dc6cdd1" font="1|Lucida Grande|12.0|1|COCOA|1|LucidaGrande-Bold" fontColor="#f6f4f5" fillColor="#696b3b" imagePath="images/_iY5RcMdjEe-GXIRjuNkhSA.png" archimateElement="id-4e007959cd554c56809c72cd6120feb8">
+        <bounds x="768" y="420" width="192" height="85"/>
+        <feature name="labelExpression" value="${name}&#xA;&#xA;[${property:Stereotype}]&#xA;${documentation}"/>
+        <feature name="iconColor" value="#f6f4f5"/>
+        <feature name="imageSource" value="1"/>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="id-04ed11d5eac04cfb97b5d9bfc499ef40" targetConnections="id-3b9367adcd464dee873fd32162c6ca9b" font="1|Lucida Grande|12.0|1|COCOA|1|LucidaGrande-Bold" fontColor="#f6f4f5" fillColor="#696b3b" imagePath="images/_68Qo0MnwEe-5n4BlF9oFXQ.png" archimateElement="id-7c717da220df4d8091d78e0d0a2e5318">
+        <bounds x="756" y="180" width="192" height="109"/>
+        <feature name="labelExpression" value="${name}&#xA;&#xA;[${property:Stereotype}]&#xA;${documentation}"/>
+        <feature name="iconColor" value="#f6f4f5"/>
+        <feature name="imageSource" value="1"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-ec5ed53b7f0d4a1f9f829edeaad82b81" source="id-04ed11d5eac04cfb97b5d9bfc499ef40" target="id-d21c0ea9e6cf426082a0f84c013302a2" archimateRelationship="id-97841f48aa9f4cefa5c688242679d8d1">
+          <bendpoint startY="-246" endX="545" endY="-96"/>
+        </sourceConnection>
+      </child>
+      <documentation>System architecture for the Unicorn project, which follows a Frontend/Backend pattern. The Frontend uses an Ionic framework with React (cf. ADR 0013-frontend-framework) and integrates Auth0 for secure user authentication via Authorization Code Flow with PKCE. It connects to Google Identity to obtain access tokens, enabling access to Google Drive for file storage and management.
+
+The Backend consists of:A Backend for Frontend (BFF) implemented using Express (cf. ADR 0015-backend-framework) to interact with Google Drive via APIs.
+A File Process microservice, implemented with FastAPI, to process Markdown files.
+The system also supports a Static Website, built with Hugo, to display project documentation, Archimate diagrams, and Architecture Decision Records (ADRs). Processed Markdown files are pushed to a GitHub repository via API, ensuring version control. MADR Tools facilitate the creation and management of ADRs.</documentation>
+    </element>
+  </folder>
+  <profile name="Container Instance" id="id-5faf5ad0387b48ea890416bd8ef17663" imagePath="images/_5aIjAH_lEe2cRdVGGBa1OQ.png" conceptType="Node"/>
+  <profile name="Cosmos DB" id="id-a45bcee9403148b9b17a1ac87aa1862e" imagePath="images/_zYqd4H_nEe2cRdVGGBa1OQ.png" conceptType="Node"/>
+  <profile name="Storage" id="id-e2eb7c9e28bc44b9bbb9501b601f5f5c" imagePath="images/__hf38H_nEe2cRdVGGBa1OQ.png" conceptType="Node"/>
+  <profile name="Software System" id="id-4a78d6e4703742b58daf99c639ece7d1" conceptType="ApplicationComponent"/>
+</archimate:model>
