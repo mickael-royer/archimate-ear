@@ -540,7 +540,6 @@ The presence and utilization of Docker in this local deployment architecture are
     <element xsi:type="archimate:TriggeringRelationship" name="update" id="id-75f4d94debb846248095bf0dbe0e13c4" source="id-9333c021a01049349a8c2cf164c22459" target="id-277cdefd37264f95a0d6736672f13335"/>
     <element xsi:type="archimate:TriggeringRelationship" id="id-d762b0a5ae6c4d84a56fbea92b975941" source="id-dd64c49d7c8c448ba1194f1c7fdabd89" target="id-3072a0137067441ea1a1d26641513ba2"/>
     <element xsi:type="archimate:TriggeringRelationship" id="id-f489d048e9cb444f91bfd11e66975a26" source="id-55a0a82acbb149efa2055ed638db5ee5" target="id-3072a0137067441ea1a1d26641513ba2"/>
-    <element xsi:type="archimate:FlowRelationship" id="id-c30e007c55f24dd4a83fbbf097ca791e" source="id-ab9ea6b441824d92bba8d5499177cb59" target="id-3ba5666df0734eeea832631cb53c15a1"/>
     <element xsi:type="archimate:AggregationRelationship" id="id-4935ca671bd34e7a8c4f315d3571efcc" source="id-ab9ea6b441824d92bba8d5499177cb59" target="id-2f75771465a64e258c7cf680b6e19d3d"/>
     <element xsi:type="archimate:FlowRelationship" name="Write" id="id-ac1a09e5ae934b479107672d28c658a7" source="id-3072a0137067441ea1a1d26641513ba2" target="id-6fd38cb911364c7fb973e5f1dc9d9a20"/>
     <element xsi:type="archimate:TriggeringRelationship" id="id-01966b5533ca41239c24f038e3b254e8" source="id-3072a0137067441ea1a1d26641513ba2" target="id-842827ca5d7b4accb7774e52dafba063"/>
@@ -632,6 +631,7 @@ The presence and utilization of Docker in this local deployment architecture are
     <element xsi:type="archimate:FlowRelationship" name="REST API" id="id-b34d93d458ce4a2f98dac975c58fc16c" source="id-ab9ea6b441824d92bba8d5499177cb59" target="id-23cadf2394f844b09ad1203346db6148"/>
     <element xsi:type="archimate:FlowRelationship" name="REST API" id="id-c7eb4915c62440f7aa19d97a2decc994" source="id-ab9ea6b441824d92bba8d5499177cb59" target="id-ab5a0dc47c36458bbfd6a615b9db6d2c"/>
     <element xsi:type="archimate:FlowRelationship" name="Publish MADR" id="id-aded24c5ddf14dbeaa4df1b0d28f5e6a" source="id-34c73242241f42bdaed975a99acf57ec" target="id-24f99b41466d43eb8b0f54b097407765"/>
+    <element xsi:type="archimate:TriggeringRelationship" name="pub/sub" id="id-340a20307fd546309620d0e3c57ef91e" source="id-ab9ea6b441824d92bba8d5499177cb59" target="id-3ba5666df0734eeea832631cb53c15a1"/>
   </folder>
   <folder name="Views" id="id-4702cbcb9cec4a37a4f70eda001ca4e6" type="diagrams">
     <element xsi:type="archimate:ArchimateDiagramModel" name="Infrastructure Diagram" id="id-aa6bba59bedc4902a09863ce94ee46c9">
@@ -1282,7 +1282,7 @@ This Local Deployment Diagram provides a valuable overview of a microservices-ba
     </element>
     <element xsi:type="archimate:ArchimateDiagramModel" name="Container Diagram" id="id-a9a7c99b5a2a46fbbd6cf15862f666e6">
       <child xsi:type="archimate:DiagramObject" id="id-e8b3d712a459492b8ce7656507d8113e" font="1|Lucida Grande|12.0|1|COCOA|1|LucidaGrande-Bold" fontColor="#000000" fillColor="#fbfbfb" imagePath="images/_QJzvMJ4AEe-Bq6D0178Q-g.png" archimateElement="id-8677cc5dbc094b55af69912696c1b552">
-        <bounds x="168" y="-132" width="529" height="877"/>
+        <bounds x="168" y="-132" width="553" height="877"/>
         <feature name="labelExpression" value="${name}&#xA;&#xA;[${property:Stereotype}]&#xA;"/>
         <feature name="iconColor" value="#f6f4f5"/>
         <feature name="imageSource" value="1"/>
@@ -1293,7 +1293,7 @@ This Local Deployment Diagram provides a valuable overview of a microservices-ba
         <sourceConnection xsi:type="archimate:Connection" id="id-5115fbd2a3b34124b27d21a162c94fdc" source="id-e8b3d712a459492b8ce7656507d8113e" target="id-c099ae2a3c46474284066c4f28d92241" archimateRelationship="id-8791e692f8934dfe8a3afbe14162dac7"/>
         <sourceConnection xsi:type="archimate:Connection" id="id-ff47270d913c4968894de1a2eae38461" source="id-e8b3d712a459492b8ce7656507d8113e" target="id-7a54dd4bd03248fba10cc3de6a45f702" archimateRelationship="id-c70815726d214925b9d59ed35bee4996"/>
         <child xsi:type="archimate:DiagramModelReference" id="id-8292e90b2e8241c9aff04286c9e8eb80" fillColor="#fbfbfb" model="id-72d47ee950834bf5930cf99261e76cee">
-          <bounds x="24" y="60" width="493" height="805"/>
+          <bounds x="24" y="60" width="517" height="805"/>
         </child>
         <child xsi:type="archimate:DiagramObject" id="id-d21c0ea9e6cf426082a0f84c013302a2" targetConnections="id-7a82b83772b84f2d989ae59ab92faa17 id-a8e7261be31e4420b8a6f5c0f719e805 id-ec5ed53b7f0d4a1f9f829edeaad82b81" font="1|Lucida Grande|12.0|1|COCOA|1|LucidaGrande-Bold" fontColor="#f6f4f5" fillColor="#698199" imagePath="images/_GNMmYLufEe-cRtvJaqPkAA.png" archimateElement="id-7fae6ed943914603a106a54556622377">
           <bounds x="38" y="84" width="202" height="265"/>
@@ -1321,9 +1321,9 @@ This Local Deployment Diagram provides a valuable overview of a microservices-ba
           <feature name="imageSource" value="1"/>
           <feature name="iconColor" value="#f6f4f5"/>
           <sourceConnection xsi:type="archimate:Connection" id="id-c4386ec1fffe45feb166d7e2d3d27cc6" source="id-4716fda390ac4451ad378781996fa81a" target="id-6a7f0f22bff9496699885f1c45801958" archimateRelationship="id-f3f20fb5d1b64002a7bc292bf1632510"/>
-          <sourceConnection xsi:type="archimate:Connection" id="id-58accf61f1724d599b219870f1695565" source="id-4716fda390ac4451ad378781996fa81a" target="id-23a9d3b515c8450684d6ef77934dc933" archimateRelationship="id-c30e007c55f24dd4a83fbbf097ca791e"/>
           <sourceConnection xsi:type="archimate:Connection" id="id-eeebbd66103c4517897101c4dd0280cb" source="id-4716fda390ac4451ad378781996fa81a" target="id-105fcd0c0bc04a23ade9498c6f90b2ce" archimateRelationship="id-b34d93d458ce4a2f98dac975c58fc16c"/>
           <sourceConnection xsi:type="archimate:Connection" id="id-d13e0c3767cf400fa28ddbaf366f3fd1" source="id-4716fda390ac4451ad378781996fa81a" target="id-849078bea0314fadae82eae0afb7bb50" archimateRelationship="id-c7eb4915c62440f7aa19d97a2decc994"/>
+          <sourceConnection xsi:type="archimate:Connection" id="id-554875af899f4b43a6bb254aa8372101" source="id-4716fda390ac4451ad378781996fa81a" target="id-23a9d3b515c8450684d6ef77934dc933" archimateRelationship="id-340a20307fd546309620d0e3c57ef91e"/>
           <child xsi:type="archimate:DiagramObject" id="id-6a7f0f22bff9496699885f1c45801958" targetConnections="id-c4386ec1fffe45feb166d7e2d3d27cc6" font="1|Lucida Grande|12.0|1|COCOA|1|LucidaGrande-Bold" fillColor="#c3baab" imagePath="images/_B7uUsLugEe-cRtvJaqPkAA.png" archimateElement="id-dd64c49d7c8c448ba1194f1c7fdabd89">
             <bounds x="24" y="108" width="154" height="73"/>
             <feature name="labelExpression" value="${name}&#xA;&#xA;[${property:Stereotype}]&#xA;"/>
@@ -1332,7 +1332,7 @@ This Local Deployment Diagram provides a valuable overview of a microservices-ba
         </child>
         <child xsi:type="archimate:DiagramObject" id="id-6b2b0480a4044996912ac5c60eafe425" targetConnections="id-997ea749a8e8402aa32e8b471e9a2065 id-8770058a069a47208e6e3da157c4671e id-e1dab8739fdb430d9d3170c3d0a06714" font="1|Lucida Grande|12.0|1|COCOA|1|LucidaGrande-Bold" fontColor="#f6f4f5" fillColor="#698199" imagePath="images/_u1FuQLygEe-cRtvJaqPkAA.png" archimateElement="id-24f99b41466d43eb8b0f54b097407765">
           <bounds x="38" y="636" width="202" height="217"/>
-          <feature name="labelExpression" value="${name}&#xA;&#xA;[${property:Stereotype}]&#xA;&#xA;${documentation}&#xA;"/>
+          <feature name="labelExpression" value="${name}&#xA;&#xA;[${property:Stereotype}]&#xA;${documentation}&#xA;"/>
           <feature name="imageSource" value="1"/>
           <feature name="iconColor" value="#f6f4f5"/>
           <sourceConnection xsi:type="archimate:Connection" id="id-f07a90bd5585469bb60e1eca1b068052" source="id-6b2b0480a4044996912ac5c60eafe425" target="id-e5d405446c074dca9bf5d6c565038fbf" archimateRelationship="id-db51dbd85bf044a09f806b1360a6615e"/>
@@ -1342,8 +1342,8 @@ This Local Deployment Diagram provides a valuable overview of a microservices-ba
             <feature name="imageSource" value="1"/>
           </child>
         </child>
-        <child xsi:type="archimate:DiagramObject" id="id-23a9d3b515c8450684d6ef77934dc933" targetConnections="id-65a006fe61d2410db9adb0ffe5e03e1a id-58accf61f1724d599b219870f1695565" font="1|Lucida Grande|12.0|1|COCOA|1|LucidaGrande-Bold" fontColor="#f6f4f5" fillColor="#698199" imagePath="images/_IJtWYLufEe-cRtvJaqPkAA.png" archimateElement="id-3ba5666df0734eeea832631cb53c15a1">
-          <bounds x="276" y="132" width="205" height="301"/>
+        <child xsi:type="archimate:DiagramObject" id="id-23a9d3b515c8450684d6ef77934dc933" targetConnections="id-65a006fe61d2410db9adb0ffe5e03e1a id-554875af899f4b43a6bb254aa8372101" font="1|Lucida Grande|12.0|1|COCOA|1|LucidaGrande-Bold" fontColor="#f6f4f5" fillColor="#698199" imagePath="images/_IJtWYLufEe-cRtvJaqPkAA.png" archimateElement="id-3ba5666df0734eeea832631cb53c15a1">
+          <bounds x="312" y="132" width="205" height="277"/>
           <feature name="labelExpression" value="${name}&#xA;&#xA;[${property:Stereotype}]&#xA;${documentation}&#xA;&#xA;"/>
           <feature name="imageSource" value="1"/>
           <feature name="iconColor" value="#f6f4f5"/>
@@ -1353,18 +1353,18 @@ This Local Deployment Diagram provides a valuable overview of a microservices-ba
           <sourceConnection xsi:type="archimate:Connection" id="id-0e7ea5fe116c448c802264fa4dc6cdd1" source="id-23a9d3b515c8450684d6ef77934dc933" target="id-87056da354b84e52bceadd8d452e1e76" archimateRelationship="id-770afbce9c494940af277727bb7b6ab2"/>
           <sourceConnection xsi:type="archimate:Connection" id="id-063d1e88017540bd993065949810841d" source="id-23a9d3b515c8450684d6ef77934dc933" target="id-04ed11d5eac04cfb97b5d9bfc499ef40" archimateRelationship="id-b1fcbf9254c84fbebee2e92079dc0bc1"/>
           <child xsi:type="archimate:DiagramObject" id="id-b7e2fcf3e62f4d3d89deaa01b5803bd9" targetConnections="id-4a45d8529d414cabac6a0beb51d13042" font="1|Lucida Grande|12.0|1|COCOA|1|LucidaGrande-Bold" fillColor="#c3baab" imagePath="images/_tTPrcPFuEe-b7dZE7J6hOA.png" archimateElement="id-d631aa6a1a2c403fae343192183f1c69">
-            <bounds x="24" y="204" width="154" height="73"/>
+            <bounds x="24" y="168" width="154" height="73"/>
             <feature name="labelExpression" value="${name}&#xA;&#xA;[${property:Stereotype}]&#xA;"/>
             <feature name="imageSource" value="1"/>
           </child>
           <child xsi:type="archimate:DiagramObject" id="id-aa828ea09eb44c17a660459129332f5d" targetConnections="id-f43a74d1af7447fe8fa4657fb5501600" font="1|Lucida Grande|12.0|1|COCOA|1|LucidaGrande-Bold" fillColor="#c3baab" imagePath="images/__hkmcLufEe-cRtvJaqPkAA.png" archimateElement="id-55a0a82acbb149efa2055ed638db5ee5">
-            <bounds x="24" y="108" width="154" height="73"/>
+            <bounds x="24" y="84" width="154" height="73"/>
             <feature name="labelExpression" value="${name}&#xA;&#xA;[${property:Stereotype}]&#xA;"/>
             <feature name="imageSource" value="1"/>
           </child>
         </child>
         <child xsi:type="archimate:DiagramObject" id="id-c099ae2a3c46474284066c4f28d92241" targetConnections="id-5115fbd2a3b34124b27d21a162c94fdc id-1cfe1bf3ee6d41e787a9f6ea6863ee11" font="1|Lucida Grande|12.0|1|COCOA|1|LucidaGrande-Bold" fontColor="#f6f4f5" fillColor="#698199" imagePath="images/_yWsx8MdjEe-GXIRjuNkhSA.png" archimateElement="id-6450a6cfa73e410ba0eee55bb5900e4a">
-          <bounds x="276" y="456" width="205" height="193"/>
+          <bounds x="312" y="444" width="205" height="181"/>
           <feature name="labelExpression" value="${name}&#xA;&#xA;[${property:Stereotype}]&#xA;${documentation}"/>
           <feature name="imageSource" value="1"/>
           <feature name="iconColor" value="#f6f4f5"/>
@@ -1377,7 +1377,7 @@ This Local Deployment Diagram provides a valuable overview of a microservices-ba
           </child>
         </child>
         <child xsi:type="archimate:DiagramObject" id="id-7a54dd4bd03248fba10cc3de6a45f702" targetConnections="id-ff47270d913c4968894de1a2eae38461" font="1|Lucida Grande|12.0|1|COCOA|1|LucidaGrande-Bold" fontColor="#f6f4f5" fillColor="#698199" imagePath="images/_IJtWYLufEe-cRtvJaqPkAA.png" archimateElement="id-cfa8d811c97746f6a0d7ab8e231c2b0c">
-          <bounds x="276" y="672" width="205" height="181"/>
+          <bounds x="312" y="672" width="205" height="181"/>
           <feature name="labelExpression" value="${name}&#xA;&#xA;[${property:Stereotype}]&#xA;${documentation}&#xA;&#xA;"/>
           <feature name="imageSource" value="1"/>
           <feature name="iconColor" value="#f6f4f5"/>
@@ -1423,22 +1423,22 @@ This Local Deployment Diagram provides a valuable overview of a microservices-ba
         <sourceConnection xsi:type="archimate:Connection" id="id-a8e7261be31e4420b8a6f5c0f719e805" source="id-cbb30f787fea4a2099e5c9c3d2d22f40" target="id-d21c0ea9e6cf426082a0f84c013302a2" archimateRelationship="id-4f06e1a0f4d94df9952ffb31dd31e51e"/>
       </child>
       <child xsi:type="archimate:DiagramObject" id="id-37e44c94732c4f438d164615f652c13f" targetConnections="id-42f366d7c926426083655bfaeeee2062 id-e5a50a4092194a2ab4ad3bace2f4127f id-100a4a5d76824811b24eb3e2ff151ed8" font="1|Lucida Grande|12.0|1|COCOA|1|LucidaGrande-Bold" fontColor="#f6f4f5" fillColor="#696b3b" imagePath="images/_h_LMQJ4WEe-Bq6D0178Q-g.png" archimateElement="id-9333c021a01049349a8c2cf164c22459">
-        <bounds x="768" y="480" width="180" height="85"/>
+        <bounds x="786" y="456" width="180" height="109"/>
         <feature name="labelExpression" value="${name}&#xA;&#xA;[${property:Stereotype}]&#xA;${documentation}"/>
         <feature name="iconColor" value="#f6f4f5"/>
         <feature name="imageSource" value="1"/>
         <sourceConnection xsi:type="archimate:Connection" id="id-8770058a069a47208e6e3da157c4671e" source="id-37e44c94732c4f438d164615f652c13f" target="id-6b2b0480a4044996912ac5c60eafe425" archimateRelationship="id-3861906234cd42b08c3ecfd2f482dfe3">
-          <bendpoint startX="-246" startY="6" endX="257" endY="-84"/>
+          <bendpoint startX="-270" startY="-6" endX="281" endY="-96"/>
         </sourceConnection>
       </child>
       <child xsi:type="archimate:DiagramObject" id="id-87056da354b84e52bceadd8d452e1e76" targetConnections="id-0e7ea5fe116c448c802264fa4dc6cdd1" font="1|Lucida Grande|12.0|1|COCOA|1|LucidaGrande-Bold" fontColor="#f6f4f5" fillColor="#696b3b" imagePath="images/_iY5RcMdjEe-GXIRjuNkhSA.png" archimateElement="id-4e007959cd554c56809c72cd6120feb8">
-        <bounds x="780" y="84" width="192" height="85"/>
+        <bounds x="786" y="84" width="192" height="85"/>
         <feature name="labelExpression" value="${name}&#xA;&#xA;[${property:Stereotype}]&#xA;${documentation}"/>
         <feature name="iconColor" value="#f6f4f5"/>
         <feature name="imageSource" value="1"/>
       </child>
       <child xsi:type="archimate:DiagramObject" id="id-04ed11d5eac04cfb97b5d9bfc499ef40" targetConnections="id-063d1e88017540bd993065949810841d" font="1|Lucida Grande|12.0|1|COCOA|1|LucidaGrande-Bold" fontColor="#f6f4f5" fillColor="#696b3b" imagePath="images/_68Qo0MnwEe-5n4BlF9oFXQ.png" archimateElement="id-7c717da220df4d8091d78e0d0a2e5318">
-        <bounds x="780" y="-60" width="192" height="109"/>
+        <bounds x="786" y="-60" width="192" height="109"/>
         <feature name="labelExpression" value="${name}&#xA;&#xA;[${property:Stereotype}]&#xA;${documentation}"/>
         <feature name="iconColor" value="#f6f4f5"/>
         <feature name="imageSource" value="1"/>
@@ -1447,7 +1447,7 @@ This Local Deployment Diagram provides a valuable overview of a microservices-ba
         </sourceConnection>
       </child>
       <child xsi:type="archimate:DiagramObject" id="id-0e7b67162a5048b09a6cac9486da6f74" font="1|Lucida Grande|12.0|1|COCOA|1|LucidaGrande-Bold" fontColor="#f6f4f5" fillColor="#696b3b" imagePath="images/_TSl0QDkIEfGzPfrBEugpqg.png" archimateElement="id-da0fb7f511e54164ada5ac3b209b45d3">
-        <bounds x="768" y="624" width="180" height="85"/>
+        <bounds x="786" y="624" width="180" height="85"/>
         <feature name="labelExpression" value="${name}&#xA;&#xA;[${property:Stereotype}]&#xA;${documentation}"/>
         <feature name="iconColor" value="#f6f4f5"/>
         <feature name="imageSource" value="1"/>
