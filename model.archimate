@@ -412,6 +412,20 @@ Uvicorn's role and characteristics directly influence the overall system's perfo
       <property key="Stereotype" value="Container"/>
       <property key="URL" value="https://www.uvicorn.org/"/>
     </element>
+    <element xsi:type="archimate:ApplicationComponent" name="Architecture Toolset" id="id-cfa8d811c97746f6a0d7ab8e231c2b0c">
+      <documentation>Microservice to evaluate Architecture Models.</documentation>
+      <property key="Stereotype" value="Container"/>
+    </element>
+    <element xsi:type="archimate:ApplicationComponent" name="Archi" id="id-9da10e13aa924424976832d325d73b28">
+      <documentation>Archimate Tool</documentation>
+      <property key="Stereotype" value="System Software"/>
+      <property key="URL" value="https://aistudio.google.com/"/>
+    </element>
+    <element xsi:type="archimate:ApplicationComponent" name="Archi" id="id-da0fb7f511e54164ada5ac3b209b45d3">
+      <documentation>Archimate Tool</documentation>
+      <property key="Stereotype" value="System Software"/>
+      <property key="URL" value="https://aistudio.google.com/"/>
+    </element>
   </folder>
   <folder name="Technology &amp; Physical" id="id-b2b58d05903c4cf784e05add45cfb668" type="technology">
     <element xsi:type="archimate:Device" name="Mobile App" id="id-7fe80af30be34640977072f17770005a">
@@ -522,7 +536,6 @@ The presence and utilization of Docker in this local deployment architecture are
     <element xsi:type="archimate:AssignmentRelationship" id="id-1979ce806ef44e84bae4106e04f7e40b" source="id-5692782fd78946dd93d7d67056f8fc5e" target="id-9eb81c061cf14a2bbe52fdae56e5285f"/>
     <element xsi:type="archimate:AssignmentRelationship" id="id-c8f93b3860e0421b9710c7219e66215f" source="id-ab9ea6b441824d92bba8d5499177cb59" target="id-3072a0137067441ea1a1d26641513ba2"/>
     <element xsi:type="archimate:TriggeringRelationship" name="Import documents" id="id-f4300ee2df4f43c8b0a12be1a50be59e" source="id-8677cc5dbc094b55af69912696c1b552" target="id-ab5a0dc47c36458bbfd6a615b9db6d2c"/>
-    <element xsi:type="archimate:TriggeringRelationship" name="REST API" id="id-f08b3b62fb89406ab8b7f497ace8691c" source="id-3ba5666df0734eeea832631cb53c15a1" target="id-7c717da220df4d8091d78e0d0a2e5318"/>
     <element xsi:type="archimate:TriggeringRelationship" id="id-dc96b64936c1409582a540bb1ef0046e" source="id-9333c021a01049349a8c2cf164c22459" target="id-26b14a455f2e4cd8988c463d2c6ef1df"/>
     <element xsi:type="archimate:AssignmentRelationship" id="id-17b2cf09e1dd4e38bd80d7c1ef62ca5d" source="id-3ba5666df0734eeea832631cb53c15a1" target="id-3072a0137067441ea1a1d26641513ba2"/>
     <element xsi:type="archimate:AssociationRelationship" id="id-7bb9b0e84b0e441cbfa42dc1bc21a825" source="id-7ceea785c13e4ec38ad4b2619709f22a" target="id-5527f8d0b7054ce9adf15c2be9ddeb91"/>
@@ -533,10 +546,6 @@ The presence and utilization of Docker in this local deployment architecture are
     <element xsi:type="archimate:TriggeringRelationship" id="id-d762b0a5ae6c4d84a56fbea92b975941" source="id-dd64c49d7c8c448ba1194f1c7fdabd89" target="id-3072a0137067441ea1a1d26641513ba2"/>
     <element xsi:type="archimate:TriggeringRelationship" id="id-f489d048e9cb444f91bfd11e66975a26" source="id-55a0a82acbb149efa2055ed638db5ee5" target="id-3072a0137067441ea1a1d26641513ba2"/>
     <element xsi:type="archimate:FlowRelationship" id="id-c30e007c55f24dd4a83fbbf097ca791e" source="id-ab9ea6b441824d92bba8d5499177cb59" target="id-3ba5666df0734eeea832631cb53c15a1"/>
-    <element xsi:type="archimate:TriggeringRelationship" name="OIDC" id="id-f41a481c486743f9b0440e23350f59bc" source="id-7fae6ed943914603a106a54556622377" target="id-9939812ff3144fa9b26161ea5230b61e">
-      <documentation>Authorization Code Flow with PKCE
-https://auth0.com/docs/get-started/authentication-and-authorization-flow/authorization-code-flow-with-pkce</documentation>
-    </element>
     <element xsi:type="archimate:AggregationRelationship" id="id-4935ca671bd34e7a8c4f315d3571efcc" source="id-ab9ea6b441824d92bba8d5499177cb59" target="id-2f75771465a64e258c7cf680b6e19d3d"/>
     <element xsi:type="archimate:FlowRelationship" name="Write" id="id-ac1a09e5ae934b479107672d28c658a7" source="id-3072a0137067441ea1a1d26641513ba2" target="id-6fd38cb911364c7fb973e5f1dc9d9a20"/>
     <element xsi:type="archimate:TriggeringRelationship" id="id-01966b5533ca41239c24f038e3b254e8" source="id-3072a0137067441ea1a1d26641513ba2" target="id-842827ca5d7b4accb7774e52dafba063"/>
@@ -565,9 +574,6 @@ https://auth0.com/docs/get-started/authentication-and-authorization-flow/authori
     <element xsi:type="archimate:TriggeringRelationship" name="Trigger" id="id-5f623aa02cdd49a79dc0e439b04d618d" source="id-9333c021a01049349a8c2cf164c22459" target="id-32eed422369e4bb9be07984b36b11e89"/>
     <element xsi:type="archimate:CompositionRelationship" id="id-49a4cb28c9384b0d8ff1986ea8c16bc7" source="id-8677cc5dbc094b55af69912696c1b552" target="id-24f99b41466d43eb8b0f54b097407765"/>
     <element xsi:type="archimate:TriggeringRelationship" name="Create" id="id-00f340435b744e4e84f0bc651656f51a" source="id-32eed422369e4bb9be07984b36b11e89" target="id-0a3d808230954fdda9c799c165774a1c"/>
-    <element xsi:type="archimate:TriggeringRelationship" name="Push" id="id-e5bcdff943d74325925dbd9e410c124c" source="id-6450a6cfa73e410ba0eee55bb5900e4a" target="id-9333c021a01049349a8c2cf164c22459">
-      <documentation>Push change to repository via API</documentation>
-    </element>
     <element xsi:type="archimate:FlowRelationship" name="update" id="id-d5f6db6c99614a538a0eadf90c752e21" source="id-bfad8d2fbc6b42e3aaebdb415f8cd236" target="id-ab5a0dc47c36458bbfd6a615b9db6d2c"/>
     <element xsi:type="archimate:FlowRelationship" id="id-dad3468a3ba045ceb3a998edf21f0445" source="id-7fae6ed943914603a106a54556622377" target="id-ab9ea6b441824d92bba8d5499177cb59"/>
     <element xsi:type="archimate:AssignmentRelationship" id="id-b2f514ae6c4448b48006d049ae44417e" source="id-3ba5666df0734eeea832631cb53c15a1" target="id-d631aa6a1a2c403fae343192183f1c69"/>
@@ -575,12 +581,9 @@ https://auth0.com/docs/get-started/authentication-and-authorization-flow/authori
     <element xsi:type="archimate:TriggeringRelationship" name="State store" id="id-d67f5694965e45f8ba02617c41a1c4a0" source="id-b2722dd9a3354d719c856c3e3bfd86d5" target="id-46546ecfeff9455c9404a6722e70cf71">
       <documentation>https://docs.dapr.io/developing-applications/building-blocks/state-management/howto-get-save-state/</documentation>
     </element>
-    <element xsi:type="archimate:TriggeringRelationship" name="REST API" id="id-bc86e99a53ec4ad2b59e4c6dba003cc9" source="id-ab9ea6b441824d92bba8d5499177cb59" target="id-23cadf2394f844b09ad1203346db6148">
-      <documentation>Get Access Token via API</documentation>
-    </element>
     <element xsi:type="archimate:FlowRelationship" name="Read" id="id-b01c4280eb924d6bba01cf6964c4f855" source="id-3072a0137067441ea1a1d26641513ba2" target="id-6fd38cb911364c7fb973e5f1dc9d9a20"/>
     <element xsi:type="archimate:AssignmentRelationship" id="id-4e9e6207ebf64d5c97a11e3370f91a2c" source="id-7fae6ed943914603a106a54556622377" target="id-8fc5d143b92542859f89cc47e50871e8"/>
-    <element xsi:type="archimate:TriggeringRelationship" name="Deploy" id="id-3861906234cd42b08c3ecfd2f482dfe3" source="id-9333c021a01049349a8c2cf164c22459" target="id-24f99b41466d43eb8b0f54b097407765">
+    <element xsi:type="archimate:TriggeringRelationship" name="Deploy Website" id="id-3861906234cd42b08c3ecfd2f482dfe3" source="id-9333c021a01049349a8c2cf164c22459" target="id-24f99b41466d43eb8b0f54b097407765">
       <documentation>Deploy Hugo Website to Static Web App</documentation>
     </element>
     <element xsi:type="archimate:ServingRelationship" id="id-19213ede2b22454d84cb8c9b57ffb014" source="id-7fe80af30be34640977072f17770005a" target="id-7fae6ed943914603a106a54556622377"/>
@@ -588,7 +591,6 @@ https://auth0.com/docs/get-started/authentication-and-authorization-flow/authori
     <element xsi:type="archimate:TriggeringRelationship" name="AuthN" id="id-22cf06bdb5c94746b9f93e6547b38d48" source="id-b30ed0274e254d92ad91f02640960d5f" target="id-9939812ff3144fa9b26161ea5230b61e"/>
     <element xsi:type="archimate:FlowRelationship" name="list" id="id-5fc8f1f205a44b7bb0da12a7d21b697b" source="id-2f75771465a64e258c7cf680b6e19d3d" target="id-ab5a0dc47c36458bbfd6a615b9db6d2c"/>
     <element xsi:type="archimate:AssignmentRelationship" id="id-e3d4a3b372f54508b0d67c9cbdf6566f" source="id-3ba5666df0734eeea832631cb53c15a1" target="id-55a0a82acbb149efa2055ed638db5ee5"/>
-    <element xsi:type="archimate:TriggeringRelationship" name="Push MADR" id="id-00789383a6c849258ce1f5c92bde6ac0" source="id-34c73242241f42bdaed975a99acf57ec" target="id-24f99b41466d43eb8b0f54b097407765"/>
     <element xsi:type="archimate:TriggeringRelationship" name="Setup" id="id-526b3002f7d942359e709331fb906191" source="id-32eed422369e4bb9be07984b36b11e89" target="id-f964528cfbd44134b3fd6ecaad504d2a"/>
     <element xsi:type="archimate:TriggeringRelationship" name="AuthN" id="id-b4fef12efd7f46d4a06dc56649a1b859" source="id-8677cc5dbc094b55af69912696c1b552" target="id-23cadf2394f844b09ad1203346db6148"/>
     <element xsi:type="archimate:AggregationRelationship" id="id-5d36f1377d0b401a81f96b21996e2e0a" source="id-ab9ea6b441824d92bba8d5499177cb59" target="id-bfad8d2fbc6b42e3aaebdb415f8cd236"/>
@@ -605,9 +607,6 @@ https://auth0.com/docs/get-started/authentication-and-authorization-flow/authori
     <element xsi:type="archimate:TriggeringRelationship" name="Export Notebooks" id="id-02da05736d4142d18abe785e6afde37a" source="id-c60659aa0eea46cd81b28355f0916e37" target="id-c4775bc6a2a24725aefce9b64ce6b69a"/>
     <element xsi:type="archimate:AssignmentRelationship" id="id-afbe59beaf41409894b6bcbed429d492" source="id-7fae6ed943914603a106a54556622377" target="id-3e74630508444118bf671ac2ceff8826"/>
     <element xsi:type="archimate:FlowRelationship" name="fetch" id="id-c0300d47f971414aa7174760e7a1a9f9" source="id-8fc5d143b92542859f89cc47e50871e8" target="id-ab9ea6b441824d92bba8d5499177cb59"/>
-    <element xsi:type="archimate:TriggeringRelationship" name="REST API" id="id-81cc0fd5e2c64cc5ba11526f7fae01b3" source="id-ab9ea6b441824d92bba8d5499177cb59" target="id-ab5a0dc47c36458bbfd6a615b9db6d2c">
-      <documentation>Access Google Drive via API</documentation>
-    </element>
     <element xsi:type="archimate:TriggeringRelationship" id="id-6d3cd52e74fb40209b14804c4b7a846c" source="id-9333c021a01049349a8c2cf164c22459" target="id-6f7332357bec47689a29e27cc45423b5"/>
     <element xsi:type="archimate:CompositionRelationship" id="id-e79a43063a0a479f929c2199a3291bb3" source="id-8677cc5dbc094b55af69912696c1b552" target="id-3ba5666df0734eeea832631cb53c15a1"/>
     <element xsi:type="archimate:ServingRelationship" name="Serve" id="id-9eb1de313c24467db9c0096a0b73f8de" source="id-46ed68b732db4637bf8d13a0a4e58c97" target="id-ab9ea6b441824d92bba8d5499177cb59"/>
@@ -628,6 +627,16 @@ https://auth0.com/docs/get-started/authentication-and-authorization-flow/authori
     <element xsi:type="archimate:FlowRelationship" name="get" id="id-3ddd29ccda2c4ef887a342ed6ff5ca07" source="id-42dd2bdae03849258089849206c940a6" target="id-ab5a0dc47c36458bbfd6a615b9db6d2c"/>
     <element xsi:type="archimate:AccessRelationship" name="Publish" id="id-b4cfb39662704a85b3da31ab11e94570" source="id-3072a0137067441ea1a1d26641513ba2" target="id-5527f8d0b7054ce9adf15c2be9ddeb91"/>
     <element xsi:type="archimate:FlowRelationship" name="notification" id="id-7bea564049a24cd49c9199d1eb236be3" source="id-b2722dd9a3354d719c856c3e3bfd86d5" target="id-7c717da220df4d8091d78e0d0a2e5318"/>
+    <element xsi:type="archimate:AssignmentRelationship" id="id-ad5606942f5e44289306e1ba1b714ce0" source="id-cfa8d811c97746f6a0d7ab8e231c2b0c" target="id-55a0a82acbb149efa2055ed638db5ee5"/>
+    <element xsi:type="archimate:FlowRelationship" name="REST API" id="id-b1fcbf9254c84fbebee2e92079dc0bc1" source="id-3ba5666df0734eeea832631cb53c15a1" target="id-7c717da220df4d8091d78e0d0a2e5318"/>
+    <element xsi:type="archimate:CompositionRelationship" id="id-c70815726d214925b9d59ed35bee4996" source="id-8677cc5dbc094b55af69912696c1b552" target="id-cfa8d811c97746f6a0d7ab8e231c2b0c"/>
+    <element xsi:type="archimate:FlowRelationship" name="Publish Model" id="id-14bea3b3fcb4409e8a3962b3aaf61590" source="id-da0fb7f511e54164ada5ac3b209b45d3" target="id-9333c021a01049349a8c2cf164c22459"/>
+    <element xsi:type="archimate:FlowRelationship" name="Retrieve Model" id="id-f791d6b2780744b39fe0ebf29457ce90" source="id-cfa8d811c97746f6a0d7ab8e231c2b0c" target="id-9333c021a01049349a8c2cf164c22459"/>
+    <element xsi:type="archimate:FlowRelationship" name="Push" id="id-4ceb7ffd58ff46a9a632fefb34297fff" source="id-6450a6cfa73e410ba0eee55bb5900e4a" target="id-9333c021a01049349a8c2cf164c22459"/>
+    <element xsi:type="archimate:FlowRelationship" name="OIDC" id="id-e28cd888419b4c3199251af05549b8da" source="id-7fae6ed943914603a106a54556622377" target="id-9939812ff3144fa9b26161ea5230b61e"/>
+    <element xsi:type="archimate:FlowRelationship" name="REST API" id="id-b34d93d458ce4a2f98dac975c58fc16c" source="id-ab9ea6b441824d92bba8d5499177cb59" target="id-23cadf2394f844b09ad1203346db6148"/>
+    <element xsi:type="archimate:FlowRelationship" name="REST API" id="id-c7eb4915c62440f7aa19d97a2decc994" source="id-ab9ea6b441824d92bba8d5499177cb59" target="id-ab5a0dc47c36458bbfd6a615b9db6d2c"/>
+    <element xsi:type="archimate:FlowRelationship" name="Publish MADR" id="id-aded24c5ddf14dbeaa4df1b0d28f5e6a" source="id-34c73242241f42bdaed975a99acf57ec" target="id-24f99b41466d43eb8b0f54b097407765"/>
   </folder>
   <folder name="Views" id="id-4702cbcb9cec4a37a4f70eda001ca4e6" type="diagrams">
     <element xsi:type="archimate:ArchimateDiagramModel" name="Infrastructure Diagram" id="id-aa6bba59bedc4902a09863ce94ee46c9">
@@ -1287,6 +1296,7 @@ This Local Deployment Diagram provides a valuable overview of a microservices-ba
         <sourceConnection xsi:type="archimate:Connection" id="id-997ea749a8e8402aa32e8b471e9a2065" source="id-e8b3d712a459492b8ce7656507d8113e" target="id-6b2b0480a4044996912ac5c60eafe425" archimateRelationship="id-49a4cb28c9384b0d8ff1986ea8c16bc7"/>
         <sourceConnection xsi:type="archimate:Connection" id="id-65a006fe61d2410db9adb0ffe5e03e1a" source="id-e8b3d712a459492b8ce7656507d8113e" target="id-23a9d3b515c8450684d6ef77934dc933" archimateRelationship="id-e79a43063a0a479f929c2199a3291bb3"/>
         <sourceConnection xsi:type="archimate:Connection" id="id-5115fbd2a3b34124b27d21a162c94fdc" source="id-e8b3d712a459492b8ce7656507d8113e" target="id-c099ae2a3c46474284066c4f28d92241" archimateRelationship="id-8791e692f8934dfe8a3afbe14162dac7"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-ff47270d913c4968894de1a2eae38461" source="id-e8b3d712a459492b8ce7656507d8113e" target="id-7a54dd4bd03248fba10cc3de6a45f702" archimateRelationship="id-c70815726d214925b9d59ed35bee4996"/>
         <child xsi:type="archimate:DiagramModelReference" id="id-8292e90b2e8241c9aff04286c9e8eb80" fillColor="#fbfbfb" model="id-72d47ee950834bf5930cf99261e76cee">
           <bounds x="24" y="60" width="493" height="805"/>
         </child>
@@ -1297,8 +1307,8 @@ This Local Deployment Diagram provides a valuable overview of a microservices-ba
           <feature name="iconColor" value="#f6f4f5"/>
           <sourceConnection xsi:type="archimate:Connection" id="id-7bafe4f7a1974c2c8675c784314c2648" source="id-d21c0ea9e6cf426082a0f84c013302a2" target="id-9e7dc66c2fb64ac3b5faca09a6e19dfd" archimateRelationship="id-afbe59beaf41409894b6bcbed429d492"/>
           <sourceConnection xsi:type="archimate:Connection" id="id-1046ed919b50490cbdbc92dafd498d0b" source="id-d21c0ea9e6cf426082a0f84c013302a2" target="id-894323c542414ea79254ed72d508f632" archimateRelationship="id-f2bd4346e1b040da9268e35f02471b3e"/>
-          <sourceConnection xsi:type="archimate:Connection" id="id-cdbbe80f9d9c4ca69c6f9ce8e882f650" source="id-d21c0ea9e6cf426082a0f84c013302a2" target="id-350a89784f9543d785a605f8f080c301" archimateRelationship="id-f41a481c486743f9b0440e23350f59bc"/>
           <sourceConnection xsi:type="archimate:Connection" id="id-3cbde54c91b64bb79caf8ec749d2d45d" source="id-d21c0ea9e6cf426082a0f84c013302a2" target="id-4716fda390ac4451ad378781996fa81a" archimateRelationship="id-d445462d8b1f411497d5978bdd0c7c87"/>
+          <sourceConnection xsi:type="archimate:Connection" id="id-4e9fe9dbedd349669d15fa6ca8631ddc" source="id-d21c0ea9e6cf426082a0f84c013302a2" target="id-350a89784f9543d785a605f8f080c301" archimateRelationship="id-e28cd888419b4c3199251af05549b8da"/>
           <child xsi:type="archimate:DiagramObject" id="id-9e7dc66c2fb64ac3b5faca09a6e19dfd" targetConnections="id-7bafe4f7a1974c2c8675c784314c2648" font="1|Lucida Grande|12.0|1|COCOA|1|LucidaGrande-Bold" fillColor="#c3baab" imagePath="images/_ZVkmwLyiEe-cRtvJaqPkAA.png" archimateElement="id-3e74630508444118bf671ac2ceff8826">
             <bounds x="24" y="180" width="154" height="73"/>
             <feature name="labelExpression" value="${name}&#xA;&#xA;[${property:Stereotype}]&#xA;${documentation}"/>
@@ -1316,16 +1326,16 @@ This Local Deployment Diagram provides a valuable overview of a microservices-ba
           <feature name="imageSource" value="1"/>
           <feature name="iconColor" value="#f6f4f5"/>
           <sourceConnection xsi:type="archimate:Connection" id="id-c4386ec1fffe45feb166d7e2d3d27cc6" source="id-4716fda390ac4451ad378781996fa81a" target="id-6a7f0f22bff9496699885f1c45801958" archimateRelationship="id-f3f20fb5d1b64002a7bc292bf1632510"/>
-          <sourceConnection xsi:type="archimate:Connection" id="id-9af5440b3f194c92b0488bcd8cea334f" source="id-4716fda390ac4451ad378781996fa81a" target="id-849078bea0314fadae82eae0afb7bb50" archimateRelationship="id-81cc0fd5e2c64cc5ba11526f7fae01b3"/>
-          <sourceConnection xsi:type="archimate:Connection" id="id-b04dc6afa0a0485ba7286de7c3724641" source="id-4716fda390ac4451ad378781996fa81a" target="id-105fcd0c0bc04a23ade9498c6f90b2ce" archimateRelationship="id-bc86e99a53ec4ad2b59e4c6dba003cc9"/>
           <sourceConnection xsi:type="archimate:Connection" id="id-58accf61f1724d599b219870f1695565" source="id-4716fda390ac4451ad378781996fa81a" target="id-23a9d3b515c8450684d6ef77934dc933" archimateRelationship="id-c30e007c55f24dd4a83fbbf097ca791e"/>
+          <sourceConnection xsi:type="archimate:Connection" id="id-eeebbd66103c4517897101c4dd0280cb" source="id-4716fda390ac4451ad378781996fa81a" target="id-105fcd0c0bc04a23ade9498c6f90b2ce" archimateRelationship="id-b34d93d458ce4a2f98dac975c58fc16c"/>
+          <sourceConnection xsi:type="archimate:Connection" id="id-d13e0c3767cf400fa28ddbaf366f3fd1" source="id-4716fda390ac4451ad378781996fa81a" target="id-849078bea0314fadae82eae0afb7bb50" archimateRelationship="id-c7eb4915c62440f7aa19d97a2decc994"/>
           <child xsi:type="archimate:DiagramObject" id="id-6a7f0f22bff9496699885f1c45801958" targetConnections="id-c4386ec1fffe45feb166d7e2d3d27cc6" font="1|Lucida Grande|12.0|1|COCOA|1|LucidaGrande-Bold" fillColor="#c3baab" imagePath="images/_B7uUsLugEe-cRtvJaqPkAA.png" archimateElement="id-dd64c49d7c8c448ba1194f1c7fdabd89">
             <bounds x="24" y="108" width="154" height="73"/>
             <feature name="labelExpression" value="${name}&#xA;&#xA;[${property:Stereotype}]&#xA;"/>
             <feature name="imageSource" value="1"/>
           </child>
         </child>
-        <child xsi:type="archimate:DiagramObject" id="id-6b2b0480a4044996912ac5c60eafe425" targetConnections="id-997ea749a8e8402aa32e8b471e9a2065 id-37cf9120fa7e4c6c94f3d74b3c8f8b60 id-8770058a069a47208e6e3da157c4671e" font="1|Lucida Grande|12.0|1|COCOA|1|LucidaGrande-Bold" fontColor="#f6f4f5" fillColor="#698199" imagePath="images/_u1FuQLygEe-cRtvJaqPkAA.png" archimateElement="id-24f99b41466d43eb8b0f54b097407765">
+        <child xsi:type="archimate:DiagramObject" id="id-6b2b0480a4044996912ac5c60eafe425" targetConnections="id-997ea749a8e8402aa32e8b471e9a2065 id-8770058a069a47208e6e3da157c4671e id-e1dab8739fdb430d9d3170c3d0a06714" font="1|Lucida Grande|12.0|1|COCOA|1|LucidaGrande-Bold" fontColor="#f6f4f5" fillColor="#698199" imagePath="images/_u1FuQLygEe-cRtvJaqPkAA.png" archimateElement="id-24f99b41466d43eb8b0f54b097407765">
           <bounds x="38" y="636" width="202" height="217"/>
           <feature name="labelExpression" value="${name}&#xA;&#xA;[${property:Stereotype}]&#xA;&#xA;${documentation}&#xA;"/>
           <feature name="imageSource" value="1"/>
@@ -1338,15 +1348,15 @@ This Local Deployment Diagram provides a valuable overview of a microservices-ba
           </child>
         </child>
         <child xsi:type="archimate:DiagramObject" id="id-23a9d3b515c8450684d6ef77934dc933" targetConnections="id-65a006fe61d2410db9adb0ffe5e03e1a id-58accf61f1724d599b219870f1695565" font="1|Lucida Grande|12.0|1|COCOA|1|LucidaGrande-Bold" fontColor="#f6f4f5" fillColor="#698199" imagePath="images/_IJtWYLufEe-cRtvJaqPkAA.png" archimateElement="id-3ba5666df0734eeea832631cb53c15a1">
-          <bounds x="276" y="336" width="205" height="301"/>
+          <bounds x="276" y="132" width="205" height="301"/>
           <feature name="labelExpression" value="${name}&#xA;&#xA;[${property:Stereotype}]&#xA;${documentation}&#xA;&#xA;"/>
           <feature name="imageSource" value="1"/>
           <feature name="iconColor" value="#f6f4f5"/>
           <sourceConnection xsi:type="archimate:Connection" id="id-f43a74d1af7447fe8fa4657fb5501600" source="id-23a9d3b515c8450684d6ef77934dc933" target="id-aa828ea09eb44c17a660459129332f5d" archimateRelationship="id-e3d4a3b372f54508b0d67c9cbdf6566f"/>
           <sourceConnection xsi:type="archimate:Connection" id="id-1cfe1bf3ee6d41e787a9f6ea6863ee11" source="id-23a9d3b515c8450684d6ef77934dc933" target="id-c099ae2a3c46474284066c4f28d92241" archimateRelationship="id-7674450232594f6daad6079ce6392d41"/>
-          <sourceConnection xsi:type="archimate:Connection" id="id-3b9367adcd464dee873fd32162c6ca9b" source="id-23a9d3b515c8450684d6ef77934dc933" target="id-04ed11d5eac04cfb97b5d9bfc499ef40" archimateRelationship="id-f08b3b62fb89406ab8b7f497ace8691c"/>
           <sourceConnection xsi:type="archimate:Connection" id="id-4a45d8529d414cabac6a0beb51d13042" source="id-23a9d3b515c8450684d6ef77934dc933" target="id-b7e2fcf3e62f4d3d89deaa01b5803bd9" archimateRelationship="id-b2f514ae6c4448b48006d049ae44417e"/>
           <sourceConnection xsi:type="archimate:Connection" id="id-0e7ea5fe116c448c802264fa4dc6cdd1" source="id-23a9d3b515c8450684d6ef77934dc933" target="id-87056da354b84e52bceadd8d452e1e76" archimateRelationship="id-770afbce9c494940af277727bb7b6ab2"/>
+          <sourceConnection xsi:type="archimate:Connection" id="id-063d1e88017540bd993065949810841d" source="id-23a9d3b515c8450684d6ef77934dc933" target="id-04ed11d5eac04cfb97b5d9bfc499ef40" archimateRelationship="id-b1fcbf9254c84fbebee2e92079dc0bc1"/>
           <child xsi:type="archimate:DiagramObject" id="id-b7e2fcf3e62f4d3d89deaa01b5803bd9" targetConnections="id-4a45d8529d414cabac6a0beb51d13042" font="1|Lucida Grande|12.0|1|COCOA|1|LucidaGrande-Bold" fillColor="#c3baab" imagePath="images/_tTPrcPFuEe-b7dZE7J6hOA.png" archimateElement="id-d631aa6a1a2c403fae343192183f1c69">
             <bounds x="24" y="204" width="154" height="73"/>
             <feature name="labelExpression" value="${name}&#xA;&#xA;[${property:Stereotype}]&#xA;"/>
@@ -1359,32 +1369,45 @@ This Local Deployment Diagram provides a valuable overview of a microservices-ba
           </child>
         </child>
         <child xsi:type="archimate:DiagramObject" id="id-c099ae2a3c46474284066c4f28d92241" targetConnections="id-5115fbd2a3b34124b27d21a162c94fdc id-1cfe1bf3ee6d41e787a9f6ea6863ee11" font="1|Lucida Grande|12.0|1|COCOA|1|LucidaGrande-Bold" fontColor="#f6f4f5" fillColor="#698199" imagePath="images/_yWsx8MdjEe-GXIRjuNkhSA.png" archimateElement="id-6450a6cfa73e410ba0eee55bb5900e4a">
-          <bounds x="276" y="660" width="205" height="193"/>
+          <bounds x="276" y="456" width="205" height="193"/>
           <feature name="labelExpression" value="${name}&#xA;&#xA;[${property:Stereotype}]&#xA;${documentation}"/>
           <feature name="imageSource" value="1"/>
           <feature name="iconColor" value="#f6f4f5"/>
           <sourceConnection xsi:type="archimate:Connection" id="id-e62f64d44c4b480bbaf6379a2f30ff43" source="id-c099ae2a3c46474284066c4f28d92241" target="id-a2012ce2ec25432db6257fe18d7a4ec1" archimateRelationship="id-e5f094eb52684344ab6fc7a2357c0b96"/>
-          <sourceConnection xsi:type="archimate:Connection" id="id-1031dbd7a46d4be3a6e37a9527c135c7" source="id-c099ae2a3c46474284066c4f28d92241" target="id-37e44c94732c4f438d164615f652c13f" archimateRelationship="id-e5bcdff943d74325925dbd9e410c124c"/>
+          <sourceConnection xsi:type="archimate:Connection" id="id-100a4a5d76824811b24eb3e2ff151ed8" source="id-c099ae2a3c46474284066c4f28d92241" target="id-37e44c94732c4f438d164615f652c13f" archimateRelationship="id-4ceb7ffd58ff46a9a632fefb34297fff"/>
           <child xsi:type="archimate:DiagramObject" id="id-a2012ce2ec25432db6257fe18d7a4ec1" targetConnections="id-e62f64d44c4b480bbaf6379a2f30ff43" font="1|Lucida Grande|12.0|1|COCOA|1|LucidaGrande-Bold" fillColor="#c3baab" imagePath="images/_DIpPsMdlEe-GXIRjuNkhSA.png" archimateElement="id-842827ca5d7b4accb7774e52dafba063">
             <bounds x="24" y="96" width="154" height="73"/>
             <feature name="labelExpression" value="${name}&#xA;&#xA;[${property:Stereotype}]&#xA;"/>
             <feature name="imageSource" value="1"/>
           </child>
         </child>
+        <child xsi:type="archimate:DiagramObject" id="id-7a54dd4bd03248fba10cc3de6a45f702" targetConnections="id-ff47270d913c4968894de1a2eae38461" font="1|Lucida Grande|12.0|1|COCOA|1|LucidaGrande-Bold" fontColor="#f6f4f5" fillColor="#698199" imagePath="images/_IJtWYLufEe-cRtvJaqPkAA.png" archimateElement="id-cfa8d811c97746f6a0d7ab8e231c2b0c">
+          <bounds x="276" y="672" width="205" height="181"/>
+          <feature name="labelExpression" value="${name}&#xA;&#xA;[${property:Stereotype}]&#xA;${documentation}&#xA;&#xA;"/>
+          <feature name="imageSource" value="1"/>
+          <feature name="iconColor" value="#f6f4f5"/>
+          <sourceConnection xsi:type="archimate:Connection" id="id-65576980a32a4db2bf46fe628ec3565b" source="id-7a54dd4bd03248fba10cc3de6a45f702" target="id-43e8b0e4dedf4f8da3ed139ae42e63e3" archimateRelationship="id-ad5606942f5e44289306e1ba1b714ce0"/>
+          <sourceConnection xsi:type="archimate:Connection" id="id-e5a50a4092194a2ab4ad3bace2f4127f" source="id-7a54dd4bd03248fba10cc3de6a45f702" target="id-37e44c94732c4f438d164615f652c13f" archimateRelationship="id-f791d6b2780744b39fe0ebf29457ce90"/>
+          <child xsi:type="archimate:DiagramObject" id="id-43e8b0e4dedf4f8da3ed139ae42e63e3" targetConnections="id-65576980a32a4db2bf46fe628ec3565b" font="1|Lucida Grande|12.0|1|COCOA|1|LucidaGrande-Bold" fillColor="#c3baab" imagePath="images/__hkmcLufEe-cRtvJaqPkAA.png" archimateElement="id-55a0a82acbb149efa2055ed638db5ee5">
+            <bounds x="24" y="84" width="154" height="73"/>
+            <feature name="labelExpression" value="${name}&#xA;&#xA;[${property:Stereotype}]&#xA;"/>
+            <feature name="imageSource" value="1"/>
+          </child>
+        </child>
       </child>
-      <child xsi:type="archimate:DiagramObject" id="id-849078bea0314fadae82eae0afb7bb50" targetConnections="id-9af5440b3f194c92b0488bcd8cea334f" font="1|Lucida Grande|12.0|1|COCOA|1|LucidaGrande-Bold" fontColor="#f6f4f5" fillColor="#696b3b" imagePath="images/_fwmTUJ3_Ee-Bq6D0178Q-g.png" archimateElement="id-ab5a0dc47c36458bbfd6a615b9db6d2c">
+      <child xsi:type="archimate:DiagramObject" id="id-849078bea0314fadae82eae0afb7bb50" targetConnections="id-d13e0c3767cf400fa28ddbaf366f3fd1" font="1|Lucida Grande|12.0|1|COCOA|1|LucidaGrande-Bold" fontColor="#f6f4f5" fillColor="#696b3b" imagePath="images/_fwmTUJ3_Ee-Bq6D0178Q-g.png" archimateElement="id-ab5a0dc47c36458bbfd6a615b9db6d2c">
         <bounds x="-145" y="420" width="204" height="109"/>
         <feature name="labelExpression" value="${name}&#xA;&#xA;[${property:Stereotype}]&#xA;${documentation}"/>
         <feature name="iconColor" value="#f6f4f5"/>
         <feature name="imageSource" value="1"/>
       </child>
-      <child xsi:type="archimate:DiagramObject" id="id-105fcd0c0bc04a23ade9498c6f90b2ce" targetConnections="id-b04dc6afa0a0485ba7286de7c3724641 id-9dcf53f2e4384823b1b29b659075a355" font="1|Lucida Grande|12.0|1|COCOA|1|LucidaGrande-Bold" fontColor="#f6f4f5" fillColor="#696b3b" imagePath="images/_bXv3MJ4UEe-Bq6D0178Q-g.png" archimateElement="id-23cadf2394f844b09ad1203346db6148">
+      <child xsi:type="archimate:DiagramObject" id="id-105fcd0c0bc04a23ade9498c6f90b2ce" targetConnections="id-9dcf53f2e4384823b1b29b659075a355 id-eeebbd66103c4517897101c4dd0280cb" font="1|Lucida Grande|12.0|1|COCOA|1|LucidaGrande-Bold" fontColor="#f6f4f5" fillColor="#696b3b" imagePath="images/_bXv3MJ4UEe-Bq6D0178Q-g.png" archimateElement="id-23cadf2394f844b09ad1203346db6148">
         <bounds x="-144" y="276" width="204" height="121"/>
         <feature name="labelExpression" value="${name}&#xA;&#xA;[${property:Stereotype}]&#xA;${documentation}"/>
         <feature name="iconColor" value="#f6f4f5"/>
         <feature name="imageSource" value="1"/>
       </child>
-      <child xsi:type="archimate:DiagramObject" id="id-350a89784f9543d785a605f8f080c301" targetConnections="id-cdbbe80f9d9c4ca69c6f9ce8e882f650" font="1|Lucida Grande|12.0|1|COCOA|1|LucidaGrande-Bold" fontColor="#f6f4f5" fillColor="#696b3b" imagePath="images/_H0eUkJ4DEe-Bq6D0178Q-g.png" archimateElement="id-9939812ff3144fa9b26161ea5230b61e">
+      <child xsi:type="archimate:DiagramObject" id="id-350a89784f9543d785a605f8f080c301" targetConnections="id-4e9fe9dbedd349669d15fa6ca8631ddc" font="1|Lucida Grande|12.0|1|COCOA|1|LucidaGrande-Bold" fontColor="#f6f4f5" fillColor="#696b3b" imagePath="images/_H0eUkJ4DEe-Bq6D0178Q-g.png" archimateElement="id-9939812ff3144fa9b26161ea5230b61e">
         <bounds x="-146" y="132" width="205" height="109"/>
         <feature name="labelExpression" value="${name}&#xA;&#xA;[${property:Stereotype}]&#xA;${documentation}"/>
         <feature name="iconColor" value="#f6f4f5"/>
@@ -1395,7 +1418,7 @@ This Local Deployment Diagram provides a valuable overview of a microservices-ba
         <bounds x="-131" y="576" width="176" height="109"/>
         <feature name="labelExpression" value="${name}&#xA;&#xA;[${property:Stereotype}]&#xA;${documentation}"/>
         <feature name="imageSource" value="1"/>
-        <sourceConnection xsi:type="archimate:Connection" id="id-37cf9120fa7e4c6c94f3d74b3c8f8b60" source="id-ff5a2981c3ee4e9d9cca9e7a18e4f586" target="id-6b2b0480a4044996912ac5c60eafe425" archimateRelationship="id-00789383a6c849258ce1f5c92bde6ac0"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-e1dab8739fdb430d9d3170c3d0a06714" source="id-ff5a2981c3ee4e9d9cca9e7a18e4f586" target="id-6b2b0480a4044996912ac5c60eafe425" archimateRelationship="id-aded24c5ddf14dbeaa4df1b0d28f5e6a"/>
       </child>
       <child xsi:type="archimate:DiagramObject" id="id-cbb30f787fea4a2099e5c9c3d2d22f40" font="1|Lucida Grande|12.0|1|COCOA|1|LucidaGrande-Bold" fontColor="#f6f4f5" fillColor="#696b3b" imagePath="images/_ZtjpcJ4YEe-Bq6D0178Q-g.png" archimateElement="id-34b6952232f94959a809b0821c1b8d80">
         <bounds x="-145" width="205" height="85"/>
@@ -1404,27 +1427,42 @@ This Local Deployment Diagram provides a valuable overview of a microservices-ba
         <feature name="imageSource" value="1"/>
         <sourceConnection xsi:type="archimate:Connection" id="id-a8e7261be31e4420b8a6f5c0f719e805" source="id-cbb30f787fea4a2099e5c9c3d2d22f40" target="id-d21c0ea9e6cf426082a0f84c013302a2" archimateRelationship="id-4f06e1a0f4d94df9952ffb31dd31e51e"/>
       </child>
-      <child xsi:type="archimate:DiagramObject" id="id-37e44c94732c4f438d164615f652c13f" targetConnections="id-1031dbd7a46d4be3a6e37a9527c135c7" font="1|Lucida Grande|12.0|1|COCOA|1|LucidaGrande-Bold" fontColor="#f6f4f5" fillColor="#696b3b" imagePath="images/_h_LMQJ4WEe-Bq6D0178Q-g.png" archimateElement="id-9333c021a01049349a8c2cf164c22459">
-        <bounds x="336" y="780" width="180" height="85"/>
+      <child xsi:type="archimate:DiagramObject" id="id-37e44c94732c4f438d164615f652c13f" targetConnections="id-42f366d7c926426083655bfaeeee2062 id-e5a50a4092194a2ab4ad3bace2f4127f id-100a4a5d76824811b24eb3e2ff151ed8" font="1|Lucida Grande|12.0|1|COCOA|1|LucidaGrande-Bold" fontColor="#f6f4f5" fillColor="#696b3b" imagePath="images/_h_LMQJ4WEe-Bq6D0178Q-g.png" archimateElement="id-9333c021a01049349a8c2cf164c22459">
+        <bounds x="768" y="480" width="180" height="85"/>
         <feature name="labelExpression" value="${name}&#xA;&#xA;[${property:Stereotype}]&#xA;${documentation}"/>
         <feature name="iconColor" value="#f6f4f5"/>
         <feature name="imageSource" value="1"/>
-        <sourceConnection xsi:type="archimate:Connection" id="id-8770058a069a47208e6e3da157c4671e" source="id-37e44c94732c4f438d164615f652c13f" target="id-6b2b0480a4044996912ac5c60eafe425" archimateRelationship="id-3861906234cd42b08c3ecfd2f482dfe3"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-8770058a069a47208e6e3da157c4671e" source="id-37e44c94732c4f438d164615f652c13f" target="id-6b2b0480a4044996912ac5c60eafe425" archimateRelationship="id-3861906234cd42b08c3ecfd2f482dfe3">
+          <bendpoint startX="-246" startY="6" endX="257" endY="-84"/>
+        </sourceConnection>
       </child>
       <child xsi:type="archimate:DiagramObject" id="id-87056da354b84e52bceadd8d452e1e76" targetConnections="id-0e7ea5fe116c448c802264fa4dc6cdd1" font="1|Lucida Grande|12.0|1|COCOA|1|LucidaGrande-Bold" fontColor="#f6f4f5" fillColor="#696b3b" imagePath="images/_iY5RcMdjEe-GXIRjuNkhSA.png" archimateElement="id-4e007959cd554c56809c72cd6120feb8">
-        <bounds x="768" y="420" width="192" height="85"/>
+        <bounds x="780" y="84" width="192" height="85"/>
         <feature name="labelExpression" value="${name}&#xA;&#xA;[${property:Stereotype}]&#xA;${documentation}"/>
         <feature name="iconColor" value="#f6f4f5"/>
         <feature name="imageSource" value="1"/>
       </child>
-      <child xsi:type="archimate:DiagramObject" id="id-04ed11d5eac04cfb97b5d9bfc499ef40" targetConnections="id-3b9367adcd464dee873fd32162c6ca9b" font="1|Lucida Grande|12.0|1|COCOA|1|LucidaGrande-Bold" fontColor="#f6f4f5" fillColor="#696b3b" imagePath="images/_68Qo0MnwEe-5n4BlF9oFXQ.png" archimateElement="id-7c717da220df4d8091d78e0d0a2e5318">
-        <bounds x="756" y="180" width="192" height="109"/>
+      <child xsi:type="archimate:DiagramObject" id="id-04ed11d5eac04cfb97b5d9bfc499ef40" targetConnections="id-063d1e88017540bd993065949810841d" font="1|Lucida Grande|12.0|1|COCOA|1|LucidaGrande-Bold" fontColor="#f6f4f5" fillColor="#696b3b" imagePath="images/_68Qo0MnwEe-5n4BlF9oFXQ.png" archimateElement="id-7c717da220df4d8091d78e0d0a2e5318">
+        <bounds x="780" y="-60" width="192" height="109"/>
         <feature name="labelExpression" value="${name}&#xA;&#xA;[${property:Stereotype}]&#xA;${documentation}"/>
         <feature name="iconColor" value="#f6f4f5"/>
         <feature name="imageSource" value="1"/>
         <sourceConnection xsi:type="archimate:Connection" id="id-ec5ed53b7f0d4a1f9f829edeaad82b81" source="id-04ed11d5eac04cfb97b5d9bfc499ef40" target="id-d21c0ea9e6cf426082a0f84c013302a2" archimateRelationship="id-97841f48aa9f4cefa5c688242679d8d1">
-          <bendpoint startY="-246" endX="545" endY="-96"/>
+          <bendpoint startX="-276" startY="-18" endX="269" endY="-108"/>
         </sourceConnection>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="id-1dbed4bf8a49430eb973ab22fa44a59a" font="1|Lucida Grande|12.0|1|COCOA|1|LucidaGrande-Bold" fontColor="#f6f4f5" fillColor="#696b3b" imagePath="images/_TSl0QDkIEfGzPfrBEugpqg.png" archimateElement="id-9da10e13aa924424976832d325d73b28">
+        <bounds x="1177" y="811" width="180" height="85"/>
+        <feature name="labelExpression" value="${name}&#xA;&#xA;[${property:Stereotype}]&#xA;${documentation}"/>
+        <feature name="iconColor" value="#f6f4f5"/>
+        <feature name="imageSource" value="1"/>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="id-0e7b67162a5048b09a6cac9486da6f74" font="1|Lucida Grande|12.0|1|COCOA|1|LucidaGrande-Bold" fontColor="#f6f4f5" fillColor="#696b3b" imagePath="images/_TSl0QDkIEfGzPfrBEugpqg.png" archimateElement="id-da0fb7f511e54164ada5ac3b209b45d3">
+        <bounds x="768" y="624" width="180" height="85"/>
+        <feature name="labelExpression" value="${name}&#xA;&#xA;[${property:Stereotype}]&#xA;${documentation}"/>
+        <feature name="iconColor" value="#f6f4f5"/>
+        <feature name="imageSource" value="1"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-42f366d7c926426083655bfaeeee2062" source="id-0e7b67162a5048b09a6cac9486da6f74" target="id-37e44c94732c4f438d164615f652c13f" archimateRelationship="id-14bea3b3fcb4409e8a3962b3aaf61590"/>
       </child>
       <documentation>System architecture for the Unicorn project, which follows a Frontend/Backend pattern. The Frontend uses an Ionic framework with React (cf. ADR 0013-frontend-framework) and integrates Auth0 for secure user authentication via Authorization Code Flow with PKCE. It connects to Google Identity to obtain access tokens, enabling access to Google Drive for file storage and management.
 
