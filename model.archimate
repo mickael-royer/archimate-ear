@@ -416,11 +416,6 @@ Uvicorn's role and characteristics directly influence the overall system's perfo
       <documentation>Microservice to evaluate Architecture Models.</documentation>
       <property key="Stereotype" value="Container"/>
     </element>
-    <element xsi:type="archimate:ApplicationComponent" name="Archi" id="id-9da10e13aa924424976832d325d73b28">
-      <documentation>Archimate Tool</documentation>
-      <property key="Stereotype" value="System Software"/>
-      <property key="URL" value="https://aistudio.google.com/"/>
-    </element>
     <element xsi:type="archimate:ApplicationComponent" name="Archi" id="id-da0fb7f511e54164ada5ac3b209b45d3">
       <documentation>Archimate Tool</documentation>
       <property key="Stereotype" value="System Software"/>
@@ -1450,12 +1445,6 @@ This Local Deployment Diagram provides a valuable overview of a microservices-ba
         <sourceConnection xsi:type="archimate:Connection" id="id-ec5ed53b7f0d4a1f9f829edeaad82b81" source="id-04ed11d5eac04cfb97b5d9bfc499ef40" target="id-d21c0ea9e6cf426082a0f84c013302a2" archimateRelationship="id-97841f48aa9f4cefa5c688242679d8d1">
           <bendpoint startX="-276" startY="-18" endX="269" endY="-108"/>
         </sourceConnection>
-      </child>
-      <child xsi:type="archimate:DiagramObject" id="id-1dbed4bf8a49430eb973ab22fa44a59a" font="1|Lucida Grande|12.0|1|COCOA|1|LucidaGrande-Bold" fontColor="#f6f4f5" fillColor="#696b3b" imagePath="images/_TSl0QDkIEfGzPfrBEugpqg.png" archimateElement="id-9da10e13aa924424976832d325d73b28">
-        <bounds x="1177" y="811" width="180" height="85"/>
-        <feature name="labelExpression" value="${name}&#xA;&#xA;[${property:Stereotype}]&#xA;${documentation}"/>
-        <feature name="iconColor" value="#f6f4f5"/>
-        <feature name="imageSource" value="1"/>
       </child>
       <child xsi:type="archimate:DiagramObject" id="id-0e7b67162a5048b09a6cac9486da6f74" font="1|Lucida Grande|12.0|1|COCOA|1|LucidaGrande-Bold" fontColor="#f6f4f5" fillColor="#696b3b" imagePath="images/_TSl0QDkIEfGzPfrBEugpqg.png" archimateElement="id-da0fb7f511e54164ada5ac3b209b45d3">
         <bounds x="768" y="624" width="180" height="85"/>
