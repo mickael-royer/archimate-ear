@@ -421,6 +421,13 @@ Uvicorn's role and characteristics directly influence the overall system's perfo
       <property key="Stereotype" value="System Software"/>
       <property key="URL" value="https://aistudio.google.com/"/>
     </element>
+    <element xsi:type="archimate:ApplicationComponent" name="Neo4j" id="id-bbcbc5eb232e45639f9a76676fda4b36">
+      <documentation>Graph Database
+</documentation>
+      <property key="Stereotype" value="System Software"/>
+      <property key="URL" value="https://github.com/mickael-royer"/>
+      <property key="Registry" value="https://github.com/mickael-royer?tab=packages"/>
+    </element>
   </folder>
   <folder name="Technology &amp; Physical" id="id-b2b58d05903c4cf784e05add45cfb668" type="technology">
     <element xsi:type="archimate:Device" name="Mobile App" id="id-7fe80af30be34640977072f17770005a">
@@ -632,6 +639,8 @@ The presence and utilization of Docker in this local deployment architecture are
     <element xsi:type="archimate:FlowRelationship" name="REST API" id="id-c7eb4915c62440f7aa19d97a2decc994" source="id-ab9ea6b441824d92bba8d5499177cb59" target="id-ab5a0dc47c36458bbfd6a615b9db6d2c"/>
     <element xsi:type="archimate:FlowRelationship" name="Publish MADR" id="id-aded24c5ddf14dbeaa4df1b0d28f5e6a" source="id-34c73242241f42bdaed975a99acf57ec" target="id-24f99b41466d43eb8b0f54b097407765"/>
     <element xsi:type="archimate:TriggeringRelationship" name="pub/sub" id="id-340a20307fd546309620d0e3c57ef91e" source="id-ab9ea6b441824d92bba8d5499177cb59" target="id-3ba5666df0734eeea832631cb53c15a1"/>
+    <element xsi:type="archimate:FlowRelationship" name="Dashboard" id="id-860c3d641dd1409a90333485542ed5d1" source="id-24f99b41466d43eb8b0f54b097407765" target="id-cfa8d811c97746f6a0d7ab8e231c2b0c"/>
+    <element xsi:type="archimate:FlowRelationship" name="Store Metrics" id="id-a0acae4a462548deb508a6dc2401be71" source="id-cfa8d811c97746f6a0d7ab8e231c2b0c" target="id-bbcbc5eb232e45639f9a76676fda4b36"/>
   </folder>
   <folder name="Views" id="id-4702cbcb9cec4a37a4f70eda001ca4e6" type="diagrams">
     <element xsi:type="archimate:ArchimateDiagramModel" name="Infrastructure Diagram" id="id-aa6bba59bedc4902a09863ce94ee46c9">
@@ -1336,6 +1345,7 @@ This Local Deployment Diagram provides a valuable overview of a microservices-ba
           <feature name="imageSource" value="1"/>
           <feature name="iconColor" value="#f6f4f5"/>
           <sourceConnection xsi:type="archimate:Connection" id="id-f07a90bd5585469bb60e1eca1b068052" source="id-6b2b0480a4044996912ac5c60eafe425" target="id-e5d405446c074dca9bf5d6c565038fbf" archimateRelationship="id-db51dbd85bf044a09f806b1360a6615e"/>
+          <sourceConnection xsi:type="archimate:Connection" id="id-37a123a52d0c429cb1ff20bde44ebbd6" source="id-6b2b0480a4044996912ac5c60eafe425" target="id-7a54dd4bd03248fba10cc3de6a45f702" archimateRelationship="id-860c3d641dd1409a90333485542ed5d1"/>
           <child xsi:type="archimate:DiagramObject" id="id-e5d405446c074dca9bf5d6c565038fbf" targetConnections="id-f07a90bd5585469bb60e1eca1b068052" font="1|Lucida Grande|12.0|1|COCOA|1|LucidaGrande-Bold" fillColor="#c3baab" imagePath="images/_wwUr4LygEe-cRtvJaqPkAA.png" archimateElement="id-88414099f14b4655abbea3c1dd07944b">
             <bounds x="24" y="120" width="154" height="73"/>
             <feature name="labelExpression" value="${name}&#xA;&#xA;[${property:Stereotype}]&#xA;${documentation}"/>
@@ -1376,13 +1386,14 @@ This Local Deployment Diagram provides a valuable overview of a microservices-ba
             <feature name="imageSource" value="1"/>
           </child>
         </child>
-        <child xsi:type="archimate:DiagramObject" id="id-7a54dd4bd03248fba10cc3de6a45f702" targetConnections="id-ff47270d913c4968894de1a2eae38461" font="1|Lucida Grande|12.0|1|COCOA|1|LucidaGrande-Bold" fontColor="#f6f4f5" fillColor="#698199" imagePath="images/_IJtWYLufEe-cRtvJaqPkAA.png" archimateElement="id-cfa8d811c97746f6a0d7ab8e231c2b0c">
+        <child xsi:type="archimate:DiagramObject" id="id-7a54dd4bd03248fba10cc3de6a45f702" targetConnections="id-ff47270d913c4968894de1a2eae38461 id-37a123a52d0c429cb1ff20bde44ebbd6" font="1|Lucida Grande|12.0|1|COCOA|1|LucidaGrande-Bold" fontColor="#f6f4f5" fillColor="#698199" imagePath="images/_IJtWYLufEe-cRtvJaqPkAA.png" archimateElement="id-cfa8d811c97746f6a0d7ab8e231c2b0c">
           <bounds x="312" y="672" width="205" height="181"/>
           <feature name="labelExpression" value="${name}&#xA;&#xA;[${property:Stereotype}]&#xA;${documentation}&#xA;&#xA;"/>
           <feature name="imageSource" value="1"/>
           <feature name="iconColor" value="#f6f4f5"/>
           <sourceConnection xsi:type="archimate:Connection" id="id-65576980a32a4db2bf46fe628ec3565b" source="id-7a54dd4bd03248fba10cc3de6a45f702" target="id-43e8b0e4dedf4f8da3ed139ae42e63e3" archimateRelationship="id-ad5606942f5e44289306e1ba1b714ce0"/>
           <sourceConnection xsi:type="archimate:Connection" id="id-e5a50a4092194a2ab4ad3bace2f4127f" source="id-7a54dd4bd03248fba10cc3de6a45f702" target="id-37e44c94732c4f438d164615f652c13f" archimateRelationship="id-f791d6b2780744b39fe0ebf29457ce90"/>
+          <sourceConnection xsi:type="archimate:Connection" id="id-6f77375e32a346fda990111cc54c1d5c" source="id-7a54dd4bd03248fba10cc3de6a45f702" target="id-e7f88ad858944a1895e67385d7b3d7f8" archimateRelationship="id-a0acae4a462548deb508a6dc2401be71"/>
           <child xsi:type="archimate:DiagramObject" id="id-43e8b0e4dedf4f8da3ed139ae42e63e3" targetConnections="id-65576980a32a4db2bf46fe628ec3565b" font="1|Lucida Grande|12.0|1|COCOA|1|LucidaGrande-Bold" fillColor="#c3baab" imagePath="images/__hkmcLufEe-cRtvJaqPkAA.png" archimateElement="id-55a0a82acbb149efa2055ed638db5ee5">
             <bounds x="24" y="84" width="154" height="73"/>
             <feature name="labelExpression" value="${name}&#xA;&#xA;[${property:Stereotype}]&#xA;"/>
@@ -1447,11 +1458,17 @@ This Local Deployment Diagram provides a valuable overview of a microservices-ba
         </sourceConnection>
       </child>
       <child xsi:type="archimate:DiagramObject" id="id-0e7b67162a5048b09a6cac9486da6f74" font="1|Lucida Grande|12.0|1|COCOA|1|LucidaGrande-Bold" fontColor="#f6f4f5" fillColor="#696b3b" imagePath="images/_TSl0QDkIEfGzPfrBEugpqg.png" archimateElement="id-da0fb7f511e54164ada5ac3b209b45d3">
-        <bounds x="786" y="624" width="180" height="85"/>
+        <bounds x="780" y="312" width="180" height="85"/>
         <feature name="labelExpression" value="${name}&#xA;&#xA;[${property:Stereotype}]&#xA;${documentation}"/>
         <feature name="iconColor" value="#f6f4f5"/>
         <feature name="imageSource" value="1"/>
         <sourceConnection xsi:type="archimate:Connection" id="id-42f366d7c926426083655bfaeeee2062" source="id-0e7b67162a5048b09a6cac9486da6f74" target="id-37e44c94732c4f438d164615f652c13f" archimateRelationship="id-14bea3b3fcb4409e8a3962b3aaf61590"/>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="id-e7f88ad858944a1895e67385d7b3d7f8" targetConnections="id-6f77375e32a346fda990111cc54c1d5c" font="1|Lucida Grande|12.0|1|COCOA|1|LucidaGrande-Bold" fontColor="#f6f4f5" fillColor="#696b3b" imagePath="images/_ZKSEkDtyEfGzPfrBEugpqg.png" archimateElement="id-bbcbc5eb232e45639f9a76676fda4b36">
+        <bounds x="786" y="612" width="180" height="85"/>
+        <feature name="labelExpression" value="${name}&#xA;&#xA;[${property:Stereotype}]&#xA;${documentation}"/>
+        <feature name="iconColor" value="#f6f4f5"/>
+        <feature name="imageSource" value="1"/>
       </child>
       <documentation>System architecture for the Unicorn project, which follows a Frontend/Backend pattern. The Frontend uses an Ionic framework with React (cf. ADR 0013-frontend-framework) and integrates Auth0 for secure user authentication via Authorization Code Flow with PKCE. It connects to Google Identity to obtain access tokens, enabling access to Google Drive for file storage and management.
 
